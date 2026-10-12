@@ -6,7 +6,7 @@ Status: Approved in conversation, pending written-spec review
 ## 1. Intent
 
 **Who it's for (in priority order):**
-1. Recruiters and hiring managers — must understand who Yashal is, what he's shipped, and how to contact him within ~10 seconds.
+1. Recruiters and hiring managers — must understand who Yashal is, what they've shipped, and how to contact them within ~10 seconds.
 2. Other developers — should remember the site for its craft and personality.
 
 **Success criteria**
