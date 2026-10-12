@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="10" fill="#0b1f3a"/>
+  <path d="M6 14V6h8M50 6h8v8M58 50v8h-8M14 58H6v-8" fill="none" stroke="#ff7a3d" stroke-width="3"/>
+  <text x="32" y="41" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="22" font-weight="600" fill="#f2ead8">YN</text>
+</svg>
