@@ -63,7 +63,7 @@ Short timeline:
 
 ## 4. Assets
 
-- **Profile photo:** downloaded from Yashal's LinkedIn profile via his logged-in Chrome, stored at `static/img/yashal.webp` (plus a 2× variant), duotone processed at build-prep time (not at runtime). Original kept out of the repo.
+- **Profile photo:** downloaded from Yashal's LinkedIn profile via Yashal's logged-in Chrome, stored at `static/img/yashal.webp` (plus a 2× variant), duotone processed at build-prep time (not at runtime). Original kept out of the repo.
 - **Resume:** copy of `~/Developer/Yashal Najeeb Resume.pdf` with every line containing a confidential term rewritten generically (e.g. the shipped-product entry becomes "Healthcare records platform · MRI/CT viewing", and the contract role drops the agency name). The exact find/replace pairs live in the gitignored `.resume-redactions.json`. Saved to `static/Yashal-Najeeb-Resume.pdf`. The original PDF is not modified. If an in-place PDF text edit isn't clean, fall back to asking Yashal for an edited export.
 - **Social share image:** `static/og.png` (1200×630), a blueprint title-block design with name and role, generated once and committed.
 - **Favicon:** SVG monogram "YN" in a registration-mark frame.
