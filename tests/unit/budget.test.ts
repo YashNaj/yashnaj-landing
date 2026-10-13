@@ -17,3 +17,13 @@ describe('JS budget', () => {
 		expect(total).toBeLessThan(BUDGET);
 	});
 });
+
+describe('render-blocking CSS', () => {
+	it('home page inlines its CSS instead of linking a stylesheet', () => {
+		const html = readFileSync('build/index.html', 'utf8');
+		// SvelteKit keeps a `disabled` placeholder link for client navigation; only enabled ones block render
+		const blocking = [...html.matchAll(/<link[^>]+rel="stylesheet"[^>]*>/g)].filter((m) => !/\bdisabled\b/.test(m[0]));
+		expect(blocking).toEqual([]);
+		expect(html).toMatch(/<style[^>]*>[\s\S]*--color-ink/);
+	});
+});
