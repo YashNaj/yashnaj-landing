@@ -56,3 +56,11 @@ test('keyboard users reach the contact actions with a visible focus ring', async
 	}
 	expect(seen).toEqual(expect.arrayContaining(['Resume', 'GitHub', 'LinkedIn', 'Email']));
 });
+
+test('the brew command is fully readable at 360px', async ({ page }) => {
+	await page.setViewportSize({ width: 360, height: 800 });
+	await page.goto('/');
+	const code = page.locator('#chauffeur code');
+	const { scroll, client } = await code.evaluate((el) => ({ scroll: el.scrollWidth, client: el.clientWidth }));
+	expect(scroll).toBeLessThanOrEqual(client);
+});

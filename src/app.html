@@ -7,6 +7,11 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.svg" type="image/svg+xml" />
 		<script>
 			document.documentElement.classList.add('js');
+			// If enhance.js never runs (blocked, failed, stale), drop .js so drawings render finished.
+			setTimeout(function () {
+				var h = document.documentElement;
+				if (document.querySelector('[data-draw]') && !h.classList.contains('draw-ready')) h.classList.remove('js');
+			}, 2500);
 		</script>
 		%sveltekit.head%
 	</head>

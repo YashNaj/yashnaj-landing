@@ -70,3 +70,16 @@ test('copy button falls back to selecting text when clipboard is unavailable', a
 	);
 	expect(errors).toEqual([]);
 });
+
+test('drawings stay visible when enhance.js fails to load', async ({ page }) => {
+	await page.route('**/enhance.js', (route) => route.abort());
+	await page.goto('/');
+	await page.locator('#hard-pills').scrollIntoViewIfNeeded();
+	await expect.poll(() => dashOffset(page, 'hard-pills'), { timeout: 6000 }).toBe(0);
+});
+
+test('drawings are fully visible when printed', async ({ page }) => {
+	await page.goto('/');
+	await page.emulateMedia({ media: 'print' });
+	expect(await dashOffset(page, 'hard-pills')).toBe(0);
+});

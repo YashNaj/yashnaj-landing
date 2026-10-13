@@ -110,3 +110,14 @@ html.js [data-draw][data-drawn] .after {
 		transition: none;
 	}
 }
+
+@media print {
+	html.js [data-draw] .stroke {
+		stroke-dashoffset: 0;
+		transition: none;
+	}
+	html.js [data-draw] .after {
+		opacity: 1;
+		transition: none;
+	}
+}

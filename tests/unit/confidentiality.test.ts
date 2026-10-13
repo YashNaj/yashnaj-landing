@@ -44,6 +44,11 @@ describe.skipIf(terms.length === 0)('confidentiality', () => {
 		expect(text).toContain('Healthcare records platform');
 		expect(text).toContain('Myne Global');
 	});
+
+	it('the resume PDF title is Yashal’s name, not a template name', () => {
+		const info = execFileSync('pdfinfo', ['static/Yashal-Najeeb-Resume.pdf'], { encoding: 'utf8' });
+		expect(info).toMatch(/^Title:\s+Yashal Najeeb — Resume$/m);
+	});
 });
 
 if (terms.length === 0) console.warn('[confidentiality] .confidential-terms missing — scan skipped');

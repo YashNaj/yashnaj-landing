@@ -1,4 +1,5 @@
 (() => {
+	document.documentElement.classList.add('draw-ready');
 	const figs = document.querySelectorAll('[data-draw]');
 	const draw = (el) => el.setAttribute('data-drawn', '');
 	if (!('IntersectionObserver' in window)) {
