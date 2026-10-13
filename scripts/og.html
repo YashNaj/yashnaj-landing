@@ -21,9 +21,21 @@
 </head>
 <body>
   <div class="frame"><span class="k tl"></span><span class="k br"></span></div>
-  <div class="eyebrow">DRAWING NO. YN-001</div>
-  <h1>Yashal<br/>Najeeb</h1>
-  <div class="role">Full-Stack Product Engineer<br/>iOS · React Native · TypeScript · Postgres</div>
-  <div class="tb"><div>SITE</div><div>YASHNAJ.DEV</div><div>REV</div><div>2026</div></div>
+  <div class="eyebrow" id="eyebrow">DRAWING NO. YN-001</div>
+  <h1 id="title">Yashal<br/>Najeeb</h1>
+  <div class="role" id="role">Full-Stack Product Engineer<br/>iOS · React Native · TypeScript · Postgres</div>
+  <div class="tb"><div>SITE</div><div id="site">YASHNAJ.DEV</div><div>REV</div><div>2026</div></div>
+  <script>
+    const q = new URLSearchParams(location.search);
+    if (q.has('title')) {
+      document.getElementById('eyebrow').textContent = q.get('eyebrow');
+      const t = document.getElementById('title');
+      t.textContent = q.get('title');
+      t.style.fontSize = '92px';
+      t.style.maxWidth = '1000px';
+      document.getElementById('role').textContent = q.get('role');
+      document.getElementById('site').textContent = q.get('site');
+    }
+  </script>
 </body>
 </html>

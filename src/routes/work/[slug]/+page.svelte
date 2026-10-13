@@ -16,7 +16,13 @@
 	]);
 </script>
 
-<Seo title="{p.title} — Yashal Najeeb" description="{p.tagline} {p.metric}" path="/work/{p.slug}" />
+<Seo
+	title="{p.title} — Yashal Najeeb"
+	description="{p.tagline} {p.metric}"
+	path="/work/{p.slug}"
+	image="https://yashnaj.dev/og/{p.slug}.png"
+	imageAlt="{p.title} — a project by Yashal Najeeb, drawn as a blueprint title block"
+/>
 <svelte:head>
 	<script src="/enhance.js" defer></script>
 	<script src="/carousel.js" defer></script>

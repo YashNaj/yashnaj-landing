@@ -32,3 +32,11 @@ describe('slide media', () => {
 		}
 	}
 });
+
+describe('share cards', () => {
+	for (const p of projects) {
+		it(`og/${p.slug}.png is 1200×630`, () => {
+			expect(imageDims(`static/og/${p.slug}.png`)).toBe('1200 630');
+		});
+	}
+});

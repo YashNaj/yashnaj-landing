@@ -64,3 +64,14 @@ test('cross-document view transitions are enabled and disabled for reduced motio
 	expect(css).toMatch(/@view-transition\s*\{\s*navigation:\s*auto/);
 	expect(css).toMatch(/prefers-reduced-motion: reduce[\s\S]*::view-transition-group\(\*\)[\s\S]*animation: (none|auto ease 0s 1 normal none running none)/);
 });
+
+for (const slug of slugs) {
+	test(`/work/${slug} shares its own card`, async ({ page, request }) => {
+		await page.goto(`/work/${slug}`);
+		await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', `https://yashnaj.dev/og/${slug}.png`);
+		await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute('content', / — a project by Yashal Najeeb/);
+		const res = await request.get(`/og/${slug}.png`);
+		expect(res.status()).toBe(200);
+		expect(res.headers()['content-type']).toBe('image/png');
+	});
+}
