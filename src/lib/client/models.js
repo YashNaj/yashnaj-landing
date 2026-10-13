@@ -53,8 +53,10 @@
 
 		// the turn: from FROM into the build-time pose as the drawing draws (first visit only)
 		if (!restored && !fig.hasAttribute('data-drawn')) {
-			set(...from); // hidden until drawn, so the jump from the SSR pose is never seen
 			fig.addEventListener('draw:start', (e) => {
+				// once the safety net has dropped html.js the drawing is already showing finished: leave it there
+				if (!document.documentElement.classList.contains('js')) return;
+				set(...from); // strokes are still hidden at this point (data-drawn lands two frames later)
 				const ms = Math.min(e.detail.end, 1800), t0 = performance.now();
 				const tick = (now) => {
 					const p = Math.min(1, (now - t0) / ms), k = 1 - (1 - p) ** 3;

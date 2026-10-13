@@ -43,8 +43,9 @@ test.describe('the turn', () => {
 		const face = page.locator('#chauffeur [data-plane].face');
 		const ssr = await page.evaluate(async () => (await (await fetch('/')).text()).match(/class="face"[^>]*transform="([^"]+)"|transform="([^"]+)"[^>]*class="face"/)!.slice(1).find(Boolean));
 		const before = await face.getAttribute('transform');
-		expect(nums(before)[0]).not.toBeCloseTo(nums(ssr!)[0], 2); // sits at FROM until it draws
+		expect(before).toBe(ssr); // the build-time pose until the draw starts; the turn begins from FROM only then
 		await page.locator('#chauffeur').scrollIntoViewIfNeeded();
+		await expect.poll(() => face.getAttribute('transform'), { timeout: 1500, intervals: [20] }).not.toBe(ssr); // mid-turn
 		await expect.poll(async () => nums(await face.getAttribute('transform')).map((n, i) => Math.abs(n - nums(ssr!)[i])).every((d) => d < 0.01), { timeout: 4000 }).toBe(true);
 	});
 	test('reduced motion never turns', async ({ page }) => {
@@ -223,4 +224,31 @@ test.describe('everyone else sees finished final poses', () => {
 			expect(await page.locator(`#${slug} [data-plane]`).first().getAttribute('transform')).toBe(work);
 		});
 	}
+});
+
+test.describe('3D drawings never sit at the start angle in view', () => {
+	const ssrFace = (page: import('@playwright/test').Page) =>
+		page.evaluate(async () => {
+			const doc = new DOMParser().parseFromString(await (await fetch('/')).text(), 'text/html');
+			return doc.querySelector('#chauffeur [data-plane].face')!.getAttribute('transform');
+		});
+	test('enhance.js blocked: the safety net shows the build-time pose', async ({ page }) => {
+		await page.route('**/enhance*.js', (r) => r.abort());
+		await page.goto('/');
+		await expect(page.locator('html')).not.toHaveClass(/\bjs\b/, { timeout: 4000 });
+		expect(await page.locator('#chauffeur [data-plane].face').getAttribute('transform')).toBe(await ssrFace(page));
+	});
+	test('scripts arriving after the safety net do not snap drawings back or turn them in view', async ({ page }) => {
+		await page.route(/(models|enhance)[.-][\w-]+\.js$/, async (r) => { await new Promise((ok) => setTimeout(ok, 3200)); await r.continue(); });
+		await page.goto('/', { waitUntil: 'commit' });
+		await page.waitForTimeout(5500);
+		await page.locator('#chauffeur').scrollIntoViewIfNeeded();
+		await page.waitForTimeout(600);
+		expect(await page.locator('#chauffeur [data-plane].face').getAttribute('transform')).toBe(await ssrFace(page));
+	});
+	test('printing before the drawings are reached shows the build-time pose', async ({ page }) => {
+		await page.goto('/');
+		await page.emulateMedia({ media: 'print' });
+		expect(await page.locator('#chauffeur [data-plane].face').getAttribute('transform')).toBe(await ssrFace(page));
+	});
 });
