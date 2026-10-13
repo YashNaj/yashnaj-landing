@@ -10,3 +10,5 @@ build/
 .superpowers/
 test-results/
 playwright-report/
+filmstrips/
+morph/

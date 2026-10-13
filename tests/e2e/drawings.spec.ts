@@ -72,3 +72,29 @@ test.describe('without JavaScript', () => {
 		}
 	});
 });
+
+const slugs = ['chauffeur', 'myne', 'mri-viewer', 'hard-pills'];
+for (const slug of slugs) {
+	test(`${slug} drawing is layered and intricate`, async ({ page }) => {
+		await page.goto('/');
+		const fig = page.locator(`#${slug} figure.drawing`);
+		expect(await fig.locator('svg > g.layer').count()).toBeGreaterThanOrEqual(4);
+		expect(await fig.locator('.stroke, .after, .c, .type').count()).toBeGreaterThanOrEqual(30);
+		expect(await fig.locator('.live, .wobble, .bob, .march, .vp, .knob').count()).toBeGreaterThanOrEqual(1);
+	});
+}
+
+test('chauffeur dimension counts up to its final value', async ({ page }) => {
+	await page.goto('/');
+	await page.evaluate(() => {
+		(window as any).__seen = [];
+		const t = document.querySelector('#chauffeur text[data-count="260"]')!;
+		new MutationObserver(() => (window as any).__seen.push(t.textContent)).observe(t, { childList: true, characterData: true, subtree: true });
+	});
+	await page.locator('#chauffeur').scrollIntoViewIfNeeded();
+	// the label already reads its final value before its slot in the sequence, so wait for the count to start
+	await expect.poll(() => page.evaluate(() => (window as any).__seen.length), { timeout: 10000 }).toBeGreaterThan(0);
+	await expect(page.locator('#chauffeur text[data-count="260"]')).toHaveText('H 260', { timeout: 10000 });
+	const seen: string[] = await page.evaluate(() => (window as any).__seen);
+	expect(seen.some((s) => s !== 'H 260')).toBe(true);
+});
