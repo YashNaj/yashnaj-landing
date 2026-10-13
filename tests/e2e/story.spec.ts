@@ -198,3 +198,29 @@ test('hard-pills beats: a panel re-inks inside its border; the page is whole at 
 	expect((await panels())[0]).toBeLessThan(0.5);
 	expect(Math.max(...(await borders()))).toBe(0);
 });
+
+test.describe('everyone else sees finished final poses', () => {
+	for (const slug of ['chauffeur', 'mri-viewer', 'myne'] as const) {
+		test(`${slug}: reduced motion — final pose, drawn, nothing running`, async ({ page }) => {
+			await page.emulateMedia({ reducedMotion: 'reduce' });
+			await page.goto('/');
+			const fig = page.locator(`#${slug} figure.drawing`);
+			await fig.scrollIntoViewIfNeeded();
+			expect(await fig.evaluate((f) => f.getAnimations({ subtree: true }).filter((a) => a.playState === 'running').length)).toBe(0);
+			expect(await fig.locator('.stroke').first().evaluate((el) => parseFloat(getComputedStyle(el).strokeDashoffset))).toBe(0);
+			// and it is the build-time pose, not a turn's starting angle
+			const ssr = await page.evaluate(async (slug) => {
+				const doc = new DOMParser().parseFromString(await (await fetch('/')).text(), 'text/html');
+				return [...doc.querySelectorAll(`#${slug} [data-plane]`)].map((g) => g.getAttribute('transform'));
+			}, slug);
+			expect(await fig.locator('[data-plane]').evaluateAll((gs) => gs.map((g) => g.getAttribute('transform')))).toEqual(ssr);
+		});
+		test(`${slug}: "All work" return lands on the final pose`, async ({ page }) => {
+			await page.goto(`/work/${slug}`);
+			const work = await page.locator('header [data-plane]').first().getAttribute('transform');
+			await page.getByRole('link', { name: /All work/ }).click();
+			await expect(page.locator('html')).toHaveClass(/\brestored\b/);
+			expect(await page.locator(`#${slug} [data-plane]`).first().getAttribute('transform')).toBe(work);
+		});
+	}
+});
