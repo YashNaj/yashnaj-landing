@@ -18,7 +18,7 @@
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex — scroll containers must be focusable so keyboard users can scroll them -->
 	<div class="carousel-track" data-track role="group" tabindex="0" aria-label="{label} — use arrow keys to browse">
 		{#each slides as slide, i}
-			<figure class="slide" data-slide role="group" aria-roledescription="slide" aria-label="{i + 1} of {slides.length}">
+			<figure class="slide" data-slide aria-roledescription="slide" aria-label="{i + 1} of {slides.length}">
 				{#if slide.kind === 'cta'}
 					<a class="frame frame-cta" href={slide.href}>
 						<span class="font-mono text-xs tracking-[0.3em] text-signal uppercase">Live demo</span>

@@ -148,3 +148,12 @@ test('an arrow press that cannot move leaves no stale target behind', async ({ p
 	await c.locator('[data-prev]').click();
 	await expect(c.locator('[data-counter]')).toHaveText('FIG. 03 / 04');
 });
+
+test('slides are named figures, not figures forced into a disallowed role', async ({ page }) => {
+	await page.goto('/work/myne');
+	const slide = page.locator('[data-slide]').first();
+	expect(await slide.evaluate((s) => s.tagName)).toBe('FIGURE');
+	await expect(slide).not.toHaveAttribute('role', /.*/);
+	await expect(slide).toHaveAttribute('aria-roledescription', 'slide');
+	await expect(slide).toHaveAttribute('aria-label', '1 of 5');
+});

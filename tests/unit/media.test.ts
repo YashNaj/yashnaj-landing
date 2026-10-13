@@ -40,3 +40,15 @@ describe('share cards', () => {
 		});
 	}
 });
+
+describe('first slide (the LCP on a phone)', () => {
+	for (const p of projects) {
+		const s = p.slides[0];
+		if (s.kind === 'cta') continue;
+		// the candidates a phone can pick: anything up to 720 px wide (the 1440 px desktop file is never chosen there)
+		const files = s.kind === 'image' ? [s.src, s.src.replace(/\.webp$/, '-sm.webp')].filter((f) => Number(imageDims(file(f)).split(' ')[0]) <= 720) : [s.poster];
+		it(`${p.slug}: ${files.join(', ')} each ≤ 40 KB`, () => {
+			for (const f of files) expect(statSync(file(f)).size, f).toBeLessThanOrEqual(40 * 1024);
+		});
+	}
+});
