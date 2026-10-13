@@ -1,11 +1,11 @@
-<svg viewBox="0 0 400 300" aria-hidden="true">
-	<g class="layer" style="--depth: -2">
+<div class="stack">
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: -2">
 		<line class="c" x1="200" y1="8" x2="200" y2="292" />
 		<line class="c" x1="104" y1="184" x2="392" y2="184" />
 		<rect class="c" x="124" y="14" width="152" height="272" />
 		<circle class="c" cx="200" cy="184" r="28" />
-	</g>
-	<g class="layer" style="--depth: 0">
+	</svg>
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: 0">
 		<rect class="stroke" pathLength="1" x="130" y="20" width="140" height="260" rx="24" />
 		<rect class="stroke dim" pathLength="1" x="138" y="28" width="124" height="244" rx="17" />
 		<rect class="stroke" pathLength="1" x="181" y="36" width="38" height="10" rx="5" />
@@ -28,8 +28,8 @@
 		<rect class="stroke dim" pathLength="1" x="150" y="170" width="100" height="28" rx="7" />
 		<line class="stroke dim" pathLength="1" x1="182" y1="184" x2="218" y2="184" />
 		<line class="stroke" pathLength="1" x1="180" y1="264" x2="220" y2="264" />
-	</g>
-	<g class="layer" style="--depth: 2.5">
+	</svg>
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: 2.5">
 		<line class="stroke dim" pathLength="1" x1="112" y1="20" x2="112" y2="280" />
 		<path class="stroke dim" pathLength="1" d="M108 28 L112 20 L116 28" />
 		<path class="stroke dim" pathLength="1" d="M108 272 L112 280 L116 272" />
@@ -50,10 +50,10 @@
 			<text class="sig type" x="306" y="121">NO EFFECT</text>
 		</g>
 		<text class="dimtext type" x="300" y="146">0 CHANGES</text>
-	</g>
-	<g class="layer" style="--depth: 3.5">
+	</svg>
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: 3.5">
 		<circle class="ripple live" cx="200" cy="184" r="10" />
 		<circle class="ripple live" cx="200" cy="184" r="10" style="animation-delay: -1.3s" />
 		<path class="pulse live" pathLength="1" d="M214 177 L276 117 L298 117" />
-	</g>
-</svg>
+	</svg>
+</div>

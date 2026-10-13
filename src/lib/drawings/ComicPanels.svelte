@@ -1,16 +1,16 @@
-<svg viewBox="0 0 400 300" aria-hidden="true">
-	<defs>
-		<pattern id="halftone" width="8" height="8" patternUnits="userSpaceOnUse">
-			<circle cx="4" cy="4" r="1.6" fill="currentColor" />
-		</pattern>
-	</defs>
-	<g class="layer" style="--depth: -2">
+<div class="stack">
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: -2">
+		<defs>
+			<pattern id="halftone" width="8" height="8" patternUnits="userSpaceOnUse">
+				<circle cx="4" cy="4" r="1.6" fill="currentColor" />
+			</pattern>
+		</defs>
 		<rect class="c" x="32" y="22" width="336" height="256" />
 		<line class="c" x1="206" y1="22" x2="206" y2="138" />
 		<line class="c" x1="32" y1="138" x2="368" y2="138" />
 		<line class="c" x1="148" y1="138" x2="148" y2="278" />
-	</g>
-	<g class="layer" style="--depth: 0">
+	</svg>
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: 0">
 		<rect class="stroke ink" pathLength="1" x="40" y="30" width="320" height="240" />
 		<rect class="stroke" pathLength="1" x="48" y="38" width="154" height="96" />
 		<rect class="stroke" pathLength="1" x="210" y="38" width="142" height="96" />
@@ -45,8 +45,8 @@
 		<line class="after march" x1="316" y1="240" x2="182" y2="236" style="stroke: var(--color-line-dim); stroke-width: 1.5" />
 		<line class="after march" x1="322" y1="222" x2="232" y2="156" style="stroke: var(--color-line-dim); stroke-width: 1.5" />
 		<line class="after march" x1="328" y1="220" x2="282" y2="176" style="stroke: var(--color-line-dim); stroke-width: 1.5" />
-	</g>
-	<g class="layer" style="--depth: 2.5">
+	</svg>
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: 2.5">
 		<line class="stroke dim" pathLength="1" x1="28" y1="24" x2="40" y2="24" />
 		<line class="stroke dim" pathLength="1" x1="34" y1="18" x2="34" y2="30" />
 		<line class="stroke dim" pathLength="1" x1="360" y1="276" x2="372" y2="276" />
@@ -57,8 +57,8 @@
 			<rect class="stroke sig" pathLength="1" x="290" y="150" width="52" height="20" rx="2" />
 			<text class="sigtext" x="298" y="165">POW!</text>
 		</g>
-	</g>
-	<g class="layer" style="--depth: 3.5">
+	</svg>
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: 3.5">
 		<text class="sigtext live" x="322" y="58">!!</text>
-	</g>
-</svg>
+	</svg>
+</div>

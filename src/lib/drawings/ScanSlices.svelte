@@ -1,18 +1,18 @@
-<svg viewBox="0 0 400 300" aria-hidden="true">
-	<defs>
-		<linearGradient id="sweep-grad" x1="0" x2="1" y1="0" y2="0">
-			<stop offset="0" style="stop-color: var(--color-signal); stop-opacity: 0" />
-			<stop offset="0.5" style="stop-color: var(--color-signal); stop-opacity: 0.9" />
-			<stop offset="1" style="stop-color: var(--color-signal); stop-opacity: 0" />
-		</linearGradient>
-	</defs>
-	<g class="layer" style="--depth: -2">
+<div class="stack">
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: -2">
+		<defs>
+			<linearGradient id="sweep-grad" x1="0" x2="1" y1="0" y2="0">
+				<stop offset="0" style="stop-color: var(--color-signal); stop-opacity: 0" />
+				<stop offset="0.5" style="stop-color: var(--color-signal); stop-opacity: 0.9" />
+				<stop offset="1" style="stop-color: var(--color-signal); stop-opacity: 0" />
+			</linearGradient>
+		</defs>
 		<line class="c" x1="130" y1="36" x2="130" y2="262" />
 		<line class="c" x1="24" y1="248" x2="236" y2="248" />
 		<rect class="c" x="264" y="34" width="108" height="222" />
 		<line class="c" x1="222" y1="190" x2="282" y2="110" />
-	</g>
-	<g class="layer" style="--depth: 0">
+	</svg>
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: 0">
 		<path class="stroke dim" pathLength="1" d="M40 56 L170 36 L220 81 L90 101 Z" />
 		<path class="stroke dim" pathLength="1" d="M40 90 L170 70 L220 115 L90 135 Z" />
 		<path class="stroke dim" pathLength="1" d="M40 124 L170 104 L220 149 L90 169 Z" />
@@ -52,16 +52,16 @@
 		<rect class="stroke dim" pathLength="1" x="282" y="202" width="34" height="12" rx="6" />
 		<rect class="stroke dim" pathLength="1" x="320" y="202" width="34" height="12" rx="6" />
 		<line class="stroke" pathLength="1" x1="302" y1="238" x2="334" y2="238" />
-	</g>
-	<g class="layer" style="--depth: 2.5">
+	</svg>
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: 2.5">
 		<path class="stroke dim" pathLength="1" d="M222 192 C 246 172, 256 120, 282 110" />
 		<text class="dimtext type" x="226" y="104">BRIDGE</text>
 		<text class="dimtext type" x="24" y="30">AXIAL · T2</text>
 		<circle class="knob after" cx="318" cy="170" r="5" />
 		<text class="sigtext after" x="272" y="272" data-count="117" data-prefix="SLICE " data-suffix="/232">SLICE 117/232</text>
-	</g>
-	<g class="layer" style="--depth: 3.5">
+	</svg>
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: 3.5">
 		<line class="sweep live" x1="34" y1="0" x2="226" y2="0" stroke="url(#sweep-grad)" />
 		<path class="pulse live" pathLength="1" d="M222 192 C 246 172, 256 120, 282 110" />
-	</g>
-</svg>
+	</svg>
+</div>

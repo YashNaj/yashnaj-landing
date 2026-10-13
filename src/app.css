@@ -102,9 +102,11 @@ p { text-wrap: pretty; }
 .drawing :is(.stamp, .grow, .wobble, .bob, .ripple) { transform-box: fill-box; transform-origin: center; }
 .drawing .cursor { transform-box: fill-box; transform-origin: 0 0; }
 .drawing .unlock { transform-box: view-box; transform-origin: 140px 155px; }
+.drawing .stack { display: grid; }
+.drawing .stack > svg { grid-area: 1 / 1; }
 .drawing .layer {
-	transform: translate(calc(var(--px, 0) * var(--depth, 0) * 1.6px), calc(var(--py, 0) * var(--depth, 0) * 1.6px));
-	transition: transform 600ms var(--ease-out);
+	translate: calc(var(--px, 0) * var(--depth, 0) * 1.6px) calc(var(--py, 0) * var(--depth, 0) * 1.6px);
+	transition: translate 600ms var(--ease-out);
 }
 .drawing .live, .drawing .vp-b, .drawing .vp-c { opacity: 0; }
 [data-draw][data-live] .live { opacity: 1; }
@@ -165,7 +167,7 @@ html.restored :is([data-draw] :is(.c, .stroke, .after, .type tspan, .stamp, .cur
 		stroke-dashoffset: 0;
 		transform: none;
 	}
-	.drawing .layer { transition: none; transform: none; }
+	.drawing .layer { transition: none; translate: none; }
 }
 
 /* ---------- Carousel ---------- */

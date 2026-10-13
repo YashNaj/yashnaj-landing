@@ -46,8 +46,8 @@ test('fine pointer shifts depth layers; touch gets none', async ({ page, browser
 	await fig.scrollIntoViewIfNeeded();
 	const box = (await fig.boundingBox())!;
 	await page.mouse.move(box.x + box.width * 0.95, box.y + box.height * 0.95);
-	const top = fig.locator('svg > g.layer').last();
-	await expect.poll(() => top.evaluate((g) => getComputedStyle(g).transform)).not.toMatch(/^(none|matrix\(1, 0, 0, 1, 0, 0\))$/);
+	const top = fig.locator('.stack > svg.layer').last();
+	await expect.poll(() => top.evaluate((l) => getComputedStyle(l).translate)).not.toMatch(/^(none|0px( 0px)?)$/);
 	const touch = await browser.newContext({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
 	const p2 = await touch.newPage();
 	await p2.goto('/');
@@ -78,7 +78,14 @@ for (const slug of slugs) {
 	test(`${slug} drawing is layered and intricate`, async ({ page }) => {
 		await page.goto('/');
 		const fig = page.locator(`#${slug} figure.drawing`);
-		expect(await fig.locator('svg > g.layer').count()).toBeGreaterThanOrEqual(4);
+		const layers = fig.locator('.stack > svg.layer');
+		expect(await layers.count()).toBeGreaterThanOrEqual(4);
+		for (const l of await layers.all()) {
+			await expect(l).toHaveAttribute('aria-hidden', 'true');
+			await expect(l).toHaveAttribute('viewBox', '0 0 400 300');
+		}
+		expect(await fig.locator('[role="img"]').count()).toBe(0); // the figure is the one image
+		await expect(fig).toHaveAttribute('role', 'img');
 		expect(await fig.locator('.stroke, .after, .c, .type').count()).toBeGreaterThanOrEqual(30);
 		expect(await fig.locator('.live, .wobble, .bob, .march, .vp, .knob').count()).toBeGreaterThanOrEqual(1);
 	});

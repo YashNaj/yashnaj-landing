@@ -1,16 +1,16 @@
-<svg viewBox="0 0 400 300" aria-hidden="true">
-	<defs>
-		<pattern id="hatch-myne" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-			<line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1" opacity="0.45" />
-		</pattern>
-	</defs>
-	<g class="layer" style="--depth: -2">
+<div class="stack">
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: -2">
+		<defs>
+			<pattern id="hatch-myne" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+				<line x1="0" y1="0" x2="0" y2="6" stroke="currentColor" stroke-width="1" opacity="0.45" />
+			</pattern>
+		</defs>
 		<line class="c" x1="30" y1="155" x2="250" y2="155" />
 		<line class="c" x1="140" y1="45" x2="140" y2="265" />
 		<circle class="c" cx="140" cy="155" r="104" />
 		<rect class="c" x="242" y="79" width="124" height="162" />
-	</g>
-	<g class="layer" style="--depth: 0">
+	</svg>
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: 0">
 		<rect class="stroke" pathLength="1" x="30" y="122" width="12" height="66" rx="2" />
 		<line class="stroke dim" pathLength="1" x1="30" y1="140" x2="42" y2="140" />
 		<line class="stroke dim" pathLength="1" x1="30" y1="170" x2="42" y2="170" />
@@ -59,8 +59,8 @@
 			<line class="stroke dim" pathLength="1" x1="268" y1="210" x2="334" y2="210" />
 			<line class="stroke dim" pathLength="1" x1="266" y1="224" x2="344" y2="224" />
 		</g>
-	</g>
-	<g class="layer" style="--depth: 2.5">
+	</svg>
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: 2.5">
 		<line class="stroke dim" pathLength="1" x1="202" y1="160" x2="238" y2="160" />
 		<path class="stroke dim" pathLength="1" d="M231 154 L238 160 L231 166" />
 		<line class="stroke dim" pathLength="1" x1="140" y1="155" x2="72.8" y2="222.2" />
@@ -71,9 +71,9 @@
 		<polyline class="stroke sig" pathLength="1" points="92,72 72,34 18,34" />
 		<text class="type" x="18" y="27">VAULT</text>
 		<text class="dimtext type" x="18" y="48">16,830 RECORDS</text>
-	</g>
-	<g class="layer" style="--depth: 3.5">
+	</svg>
+	<svg class="layer" viewBox="0 0 400 300" aria-hidden="true" style="--depth: 3.5">
 		<path class="pulse live" pathLength="1" d="M140 155 C 190 118, 252 108, 304 138" />
 		<rect class="foil-shine live" x="330" y="94" width="20" height="14" rx="2" />
-	</g>
-</svg>
+	</svg>
+</div>
