@@ -76,3 +76,31 @@ test('the labelled scroller has a role so its name is valid ARIA', async ({ page
 	await page.goto('/work/myne');
 	await expect(page.locator('[data-track]')).toHaveAttribute('role', 'group');
 });
+
+test('dots have a touch target of at least 24×24', async ({ page }) => {
+	await page.goto('/work/myne');
+	for (const dot of await page.locator('[data-dot]').all()) {
+		const box = (await dot.boundingBox())!;
+		expect(box.width).toBeGreaterThanOrEqual(24);
+		expect(box.height).toBeGreaterThanOrEqual(24);
+	}
+});
+
+test('off-centre slides dim only their media, never their text', async ({ page }) => {
+	await page.goto('/work/mri-viewer');
+	await page.locator('[data-carousel]').scrollIntoViewIfNeeded();
+	const cta = page.locator('[data-slide]').last();
+	await expect(cta).not.toHaveAttribute('data-active', '');
+	const opacities = await cta.evaluate((el) => {
+		const chain = (n: Element | null): number[] => (n ? [Number(getComputedStyle(n).opacity), ...chain(n.parentElement)] : []);
+		return chain(el.querySelector('.frame-cta span')!);
+	});
+	expect(Math.min(...opacities)).toBe(1);
+});
+
+test('the first slide is fetched with high priority', async ({ page }) => {
+	await page.goto('/work/myne');
+	await expect(page.locator('[data-slide]').first().locator('img')).toHaveAttribute('fetchpriority', 'high');
+	await page.goto('/work/chauffeur');
+	await expect(page.locator('link[rel="preload"][as="image"][href="/media/chauffeur/honest.webp"]')).toHaveCount(1);
+});

@@ -8,6 +8,10 @@
 	const edge = $derived(first.kind !== 'cta' && first.frame === 'browser' ? 'min(43vw, 380px)' : 'min(36vw, 150px)');
 </script>
 
+<svelte:head>
+	{#if first.kind === 'video'}<link rel="preload" as="image" href={first.poster} fetchpriority="high" />{/if}
+</svelte:head>
+
 <section class="carousel" style:--edge={edge} data-carousel aria-roledescription="carousel" aria-label={label}>
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex — scroll containers must be focusable so keyboard users can scroll them -->
 	<div class="carousel-track" data-track role="group" tabindex="0" aria-label="{label} — use arrow keys to browse">
@@ -24,7 +28,7 @@
 							<div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i></div>
 						{/if}
 						{#if slide.kind === 'image'}
-							<img src={slide.src} alt={slide.alt} width={slide.width} height={slide.height} loading={i === 0 ? 'eager' : 'lazy'} decoding="async" />
+							<img src={slide.src} alt={slide.alt} width={slide.width} height={slide.height} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} decoding="async" />
 						{:else}
 							<video src={slide.src} poster={slide.poster} width={slide.width} height={slide.height} aria-label={slide.alt} muted playsinline loop preload="none"></video>
 						{/if}
@@ -39,7 +43,7 @@
 	<div class="carousel-controls" data-controls hidden>
 		<button type="button" data-prev aria-label="Previous slide">←</button>
 		<span data-counter class="font-mono text-xs tracking-[0.25em]">FIG. 01 / {pad(slides.length)}</span>
-		<span class="flex gap-2">
+		<span class="flex">
 			{#each slides as _, i}
 				<button type="button" data-dot aria-label="Go to slide {i + 1}" aria-current={i === 0 ? 'true' : 'false'}></button>
 			{/each}
