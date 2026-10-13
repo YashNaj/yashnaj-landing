@@ -90,6 +90,11 @@ p { text-wrap: pretty; }
 .drawing .sig { stroke: var(--color-signal); }
 .drawing .c { fill: none; stroke: var(--color-construct); stroke-width: 0.75; stroke-dasharray: 2 4; }
 .drawing text { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; fill: currentColor; }
+/* labels are solid tags (filter in +layout.svelte); a typed label's tag appears as its drawing starts, then the letters type in */
+.drawing text:not(.stamp text, .framed) { filter: url(#tag); }
+/* a label that already has its own drawn frame uses that frame as its solid tag */
+.drawing :is(.stamp rect.stroke, .framed-tag) { fill: var(--color-ink); }
+@media screen and (prefers-reduced-motion: no-preference) { html.js:not(.restored) [data-draw]:not([data-drawn]) text.type { filter: none; } }
 .drawing .dimtext { fill: rgb(242 234 216 / 0.62); font-size: 8.5px; letter-spacing: 0.14em; }
 .drawing text.sig, .drawing .sigtext { fill: var(--color-signal); stroke: none; }
 .drawing .tapdot { fill: var(--color-signal); }

@@ -47,8 +47,8 @@
 		</g>
 		<!-- panel 4: later… -->
 		<g class="st-panel" style="--i: 3">
-			<rect class="stroke dim" pathLength="1" x="158" y="148" width="66" height="16" />
-			<text class="dimtext type" x="164" y="159">LATER…</text>
+			<rect class="stroke dim framed-tag" pathLength="1" x="158" y="148" width="66" height="16" />
+			<text class="dimtext type framed" x="164" y="159">LATER…</text>
 			<path class="stroke st-arc" pathLength="1" d="M170 236 C 210 176 280 176 340 236" />
 			<rect class="after" x="152" y="206" width="200" height="56" fill="url(#halftone)" fill-opacity="0.3" />
 			<line class="after march" x1="316" y1="226" x2="186" y2="168" style="stroke: var(--color-line-dim); stroke-width: 1.5" />

@@ -274,3 +274,19 @@ test.describe('3D drawings never sit at the start angle in view', () => {
 		expect(await page.locator('#chauffeur [data-plane].face').getAttribute('transform')).toBe(await ssrFace(page));
 	});
 });
+
+test.describe('labels are solid tags above the drawing', () => {
+	for (const url of ['/', '/work/myne']) {
+		test(`every drawing label sits on a solid tag (${url})`, async ({ page }) => {
+			await page.emulateMedia({ reducedMotion: 'reduce' });
+			await page.goto(url);
+			expect(await page.locator('filter#tag feFlood').count()).toBe(1);
+			const filters = await page.locator('figure.drawing text:not(.stamp text, .framed)').evaluateAll((ts) => ts.map((t) => getComputedStyle(t).filter));
+			expect(filters.length).toBeGreaterThan(5);
+			for (const f of filters) expect(f).toMatch(/url\(.*#tag.*\)/);
+			// labels with their own drawn frame: the frame is filled solid instead
+			for (const fill of await page.locator('figure.drawing :is(.stamp rect.stroke, .framed-tag)').evaluateAll((rs) => rs.map((r) => getComputedStyle(r).fill)))
+				expect(fill).not.toBe('none');
+		});
+	}
+});
