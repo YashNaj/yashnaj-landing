@@ -318,23 +318,81 @@ html.js .is-enhanced .slide:not([data-active]) .frame video { filter: brightness
 [data-dot][aria-current='true']::before { background: var(--color-signal); border-color: var(--color-signal); }
 @media (prefers-reduced-motion: reduce) { .slide { transition: none; } }
 
-/* ---------- Cross-document morph ---------- */
+/* ---------- Cross-document transitions ----------
+   The new page's CSS styles the transition. Types come from the head script in app.html
+   (forward / back / next / prev). data-vt-page on <main> says where we landed:
+     case  ← forward: home folds away, the drawing leads, the case study arrives in two beats
+     home  ← back: the beats fade, the drawing glides home, home unfolds
+     case  ← next / prev: the one-sided sheet groups slide sideways
+   Anything else (MRI demo, 404) keeps a root crossfade. Times are literal: tests/unit/css.test.ts
+   holds every duration + delay in this block to 800 ms. */
 @view-transition { navigation: auto; }
-::view-transition-group(*) { animation-duration: 420ms; animation-timing-function: var(--ease-out); }
-::view-transition-group(*.vt-sheet) { animation-duration: 560ms; }
-::view-transition-group(*.vt-title) { animation-duration: 480ms; }
-::view-transition-group(*.vt-drawing) { animation-duration: 620ms; animation-delay: 40ms; }
-::view-transition-old(*.vt-title) { animation-duration: 160ms; }
-::view-transition-old(root) { animation: vt-out var(--dur-m) var(--ease-out) both; }
-::view-transition-new(root) { animation: vt-in-fwd 640ms var(--ease-out) both; }
-html:active-view-transition-type(back)::view-transition-new(root) { animation-name: vt-in-back; }
+@media (prefers-reduced-motion: no-preference) {
+	::view-transition-group(*) { animation-duration: 420ms; animation-timing-function: var(--ease-out); }
+	::view-transition-group(*.vt-sheet) { animation-duration: 500ms; }
+	::view-transition-group(*.vt-title) { animation-duration: 480ms; }
+	::view-transition-old(*.vt-title) { animation-duration: 160ms; }
+	::view-transition-group(*.vt-drawing) { animation-duration: 550ms; }
+	::view-transition-old(root) { animation: vt-out 420ms var(--ease-out) both; }
+	::view-transition-new(root) { animation: vt-in-fwd 640ms var(--ease-out) both; }
+	html:active-view-transition-type(back)::view-transition-new(root) { animation-name: vt-in-back; }
+
+	/* the case study arrives in two beats; going away, both fade fast */
+	::view-transition-new(case-head) { animation: vt-rise 300ms var(--ease-out) 350ms both; }
+	::view-transition-new(case-body) { animation: vt-rise-far 350ms var(--ease-out) 450ms both; }
+	::view-transition-old(case-head), ::view-transition-old(case-body) { animation: vt-fade-out 200ms var(--ease-out) both; }
+
+	/* forward into a case study: home (root and the unclicked sheets) folds back; the drawing lifts and settles */
+	html:has([data-vt-page='case']):not(:active-view-transition-type(back, next, prev))::view-transition-old(root),
+	html:has([data-vt-page='case']):not(:active-view-transition-type(back, next, prev))::view-transition-old(*):only-child { animation: vt-fold 250ms var(--ease-out) both; transform-origin: 50% 100%; }
+	html:has([data-vt-page='case']):not(:active-view-transition-type(back, next, prev))::view-transition-new(root) { animation: vt-fade-in 250ms var(--ease-out) both; }
+	html:has([data-vt-page='case']):not(:active-view-transition-type(back, next, prev))::view-transition-image-pair(*.vt-drawing) { animation: vt-lift 550ms var(--ease-out); }
+	html:has([data-vt-page='case']):not(:active-view-transition-type(back, next, prev))::view-transition-new(*.vt-drawing) { animation: vt-settle 550ms var(--ease-out) both; }
+
+	/* back to home: the old page fades, home (root and the other sheets) unfolds from just above */
+	html:active-view-transition-type(back):has([data-vt-page='home'])::view-transition-old(root) { animation: vt-fade-out 200ms var(--ease-out) both; }
+	html:active-view-transition-type(back):has([data-vt-page='home'])::view-transition-new(root),
+	html:active-view-transition-type(back):has([data-vt-page='home'])::view-transition-new(*):only-child { animation: vt-unfold 450ms var(--ease-out) 100ms both; transform-origin: 50% 100%; }
+	html:active-view-transition-type(back):has([data-vt-page='home'])::view-transition-group(*.vt-drawing) { animation-duration: 450ms; }
+
+	/* next / prev (≤ 500 ms): every sheet group is one-sided (names carry the slug), and the beats ride along
+	   with the sheet instead of arriving late; next flips leftward, prev mirrors.
+	   The root (background, "All work", footer) is the same on both pages: swap it without a fade. */
+	html:active-view-transition-type(next, prev)::view-transition-old(root),
+	html:active-view-transition-type(next, prev)::view-transition-new(root) { animation: none; }
+	html:active-view-transition-type(next)::view-transition-old(*):only-child,
+	html:active-view-transition-type(next)::view-transition-old(case-head),
+	html:active-view-transition-type(next)::view-transition-old(case-body) { animation: vt-slide-out-left 450ms var(--ease-out) both; }
+	html:active-view-transition-type(next)::view-transition-new(*):only-child,
+	html:active-view-transition-type(next)::view-transition-new(case-head),
+	html:active-view-transition-type(next)::view-transition-new(case-body) { animation: vt-slide-in-right 450ms var(--ease-out) both; }
+	html:active-view-transition-type(prev)::view-transition-old(*):only-child,
+	html:active-view-transition-type(prev)::view-transition-old(case-head),
+	html:active-view-transition-type(prev)::view-transition-old(case-body) { animation: vt-slide-out-right 450ms var(--ease-out) both; }
+	html:active-view-transition-type(prev)::view-transition-new(*):only-child,
+	html:active-view-transition-type(prev)::view-transition-new(case-head),
+	html:active-view-transition-type(prev)::view-transition-new(case-body) { animation: vt-slide-in-left 450ms var(--ease-out) both; }
+}
 @keyframes vt-out { to { opacity: 0; transform: scale(0.985); } }
 @keyframes vt-in-fwd { from { opacity: 0; transform: translateY(18px); } }
 @keyframes vt-in-back { from { opacity: 0; transform: translateY(-18px); } }
+@keyframes vt-fade-in { from { opacity: 0; } }
+@keyframes vt-fade-out { to { opacity: 0; } }
+@keyframes vt-fold { to { opacity: 0; transform: perspective(1200px) translateY(-24px) rotateX(10deg) scale(0.97); } }
+@keyframes vt-unfold { from { opacity: 0; transform: perspective(1200px) translateY(-24px) rotateX(10deg) scale(0.97); } }
+@keyframes vt-lift { 50% { transform: scale(1.04); filter: drop-shadow(0 0 18px rgb(255 122 61 / 0.35)); } }
+@keyframes vt-settle { from { opacity: 0; transform: perspective(900px) rotateY(8deg); } }
+@keyframes vt-rise { from { opacity: 0; transform: translateY(12px); } }
+@keyframes vt-rise-far { from { opacity: 0; transform: translateY(20px); } }
+@keyframes vt-slide-out-left { to { opacity: 0; transform: translateX(-40px); } }
+@keyframes vt-slide-in-right { from { opacity: 0; transform: translateX(40px); } }
+@keyframes vt-slide-out-right { to { opacity: 0; transform: translateX(40px); } }
+@keyframes vt-slide-in-left { from { opacity: 0; transform: translateX(-40px); } }
 @media (prefers-reduced-motion: reduce) {
 	::view-transition-group(*),
+	::view-transition-image-pair(*),
 	::view-transition-old(*),
-	::view-transition-new(*) { animation: none; }
+	::view-transition-new(*) { animation: none !important; }
 }
 
 /* the copy button needs enhance.js; html.js is dropped when it fails to run */

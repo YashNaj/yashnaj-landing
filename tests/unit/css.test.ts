@@ -16,13 +16,33 @@ describe('motion tokens', () => {
 
 describe('morph choreography', () => {
 	const html = readFileSync('src/app.html', 'utf8');
-	it('tags each navigation forward or back before first render', () => {
+	const block = css.slice(css.indexOf('/* ---------- Cross-document transitions'), css.indexOf('/* the copy button'));
+	const ms = (s: string) => [...s.matchAll(/(\d+(?:\.\d+)?)(ms|s)\b/g)].map((m) => Number(m[1]) * (m[2] === 's' ? 1000 : 1));
+
+	it('tags each navigation by direction before first render', () => {
 		expect(html).toContain("addEventListener('pagereveal'");
 		expect(html).toContain("types.add(dir || (back ? 'back' : 'forward'))");
 	});
-	it('animates root by direction and groups by class', () => {
-		expect(css).toMatch(/:active-view-transition-type\(back\)/);
-		for (const c of ['vt-sheet', 'vt-title', 'vt-drawing']) expect(css).toContain(`*.${c}`);
+	it('styles every direction and the two beats', () => {
+		for (const t of ['back', 'next', 'prev']) expect(block).toContain(`:active-view-transition-type(${t})`);
+		for (const n of ['case-head', 'case-body', '*.vt-sheet', '*.vt-title', '*.vt-drawing']) expect(block).toContain(n);
+		for (const k of ['vt-fold', 'vt-unfold', 'vt-lift', 'vt-settle', 'vt-rise', 'vt-rise-far']) expect(block).toContain(`@keyframes ${k} `);
+	});
+	it('no animation in the block runs past 800 ms (duration + delay)', () => {
+		expect(block.length).toBeGreaterThan(500);
+		expect(block).not.toMatch(/var\(--dur-/); // times are literal so this test can read them
+		for (const [, body] of block.matchAll(/\{([^{}]*)\}/g)) {
+			const short = body.match(/(?:^|;)\s*animation:\s*([^;]+)/);
+			const total = short
+				? ms(short[1]).slice(0, 2).reduce((a, b) => a + b, 0)
+				: Math.max(...ms(body.match(/animation-duration:\s*([^;]+)/)?.[1] ?? '0ms')) + Math.max(...ms(body.match(/animation-delay:\s*([^;]+)/)?.[1] ?? '0ms'));
+			expect(total, body.trim()).toBeLessThanOrEqual(800);
+		}
+	});
+	it('every animation sits behind no-preference, and reduced motion stops them all', () => {
+		const outside = block.replace(/@media \(prefers-reduced-motion: (no-preference|reduce)\) \{[\s\S]*?\n\}/g, '');
+		expect(outside).not.toMatch(/animation(-name)?:\s*vt-/);
+		expect(block).toMatch(/@media \(prefers-reduced-motion: reduce\) \{\s*::view-transition-group\(\*\),\s*::view-transition-image-pair\(\*\),\s*::view-transition-old\(\*\),\s*::view-transition-new\(\*\) \{ animation: none !important; \}/);
 	});
 });
 
