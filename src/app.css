@@ -44,7 +44,7 @@ body {
 	font-family: var(--font-sans);
 	background: transparent;
 	-webkit-font-smoothing: antialiased;
-	overflow-x: hidden;
+	overflow-x: clip; /* clip, not hidden: hidden makes body a scroll container and breaks the sheet pin (sticky) */
 }
 
 /* film grain above everything (inert), vignette behind content */
@@ -112,24 +112,24 @@ p { text-wrap: pretty; }
 [data-draw][data-live] .live { opacity: 1; }
 
 /* hidden-until-drawn states — JS only; the inline fallback drops html.js if enhance.js never runs */
-html.js:not(.restored) [data-draw]:not([data-drawn]) .c { opacity: 0; }
-html.js [data-draw] .c { transition: opacity var(--dur-m) var(--ease-out) var(--t, 0ms); }
-html.js [data-draw] .stroke { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--d, 900ms) var(--ease-draw) var(--t, 0ms); }
-html.js [data-draw][data-drawn] .stroke { stroke-dashoffset: 0; }
-html.js:not(.restored) [data-draw]:not([data-drawn]) .after:not(.stroke) { opacity: 0; }
-html.js [data-draw] .after:not(.stroke) { transition: opacity var(--dur-m) var(--ease-out) var(--t, 0ms); }
-html.js:not(.restored) [data-draw]:not([data-drawn]) .type tspan { opacity: 0; }
-html.js [data-draw] .type tspan { transition: opacity 80ms linear calc(var(--t, 0ms) + var(--ci, 0) * 32ms); }
-html.js:not(.restored) [data-draw]:not([data-drawn]) .stamp { opacity: 0; transform: scale(1.5) rotate(-10deg); }
-html.js [data-draw] .stamp { transform: rotate(-3deg); transition: opacity 120ms linear var(--t, 0ms), transform var(--dur-m) var(--ease-pop) var(--t, 0ms); }
-html.js:not(.restored) [data-draw]:not([data-drawn]) .cursor { opacity: 0; transform: translate(36px, 30px); }
-html.js [data-draw] .cursor { transition: opacity var(--dur-s) linear var(--t, 0ms), transform var(--dur-l) var(--ease-out) var(--t, 0ms); }
-html.js:not(.restored) [data-draw]:not([data-drawn]) .unlock { transform: rotate(-120deg); }
-html.js [data-draw] .unlock { transition: transform 1400ms var(--ease-pop) var(--t, 0ms); }
-html.js:not(.restored) [data-draw]:not([data-drawn]) .slide-out { transform: translateX(-40px); }
-html.js [data-draw] .slide-out { transition: transform 1200ms var(--ease-out) var(--t, 0ms); }
-html.js:not(.restored) [data-draw]:not([data-drawn]) .grow { transform: scale(0); }
-html.js [data-draw] .grow { transition: transform 1100ms var(--ease-out) var(--t, 0ms); }
+html.js:not(.restored):where(:not(.scrub)) [data-draw]:not([data-drawn]) .c { opacity: 0; }
+html.js:where(:not(.scrub)) [data-draw] .c { transition: opacity var(--dur-m) var(--ease-out) var(--t, 0ms); }
+html.js:where(:not(.scrub)) [data-draw] .stroke { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--d, 900ms) var(--ease-draw) var(--t, 0ms); }
+html.js:where(:not(.scrub)) [data-draw][data-drawn] .stroke { stroke-dashoffset: 0; }
+html.js:not(.restored):where(:not(.scrub)) [data-draw]:not([data-drawn]) .after:not(.stroke) { opacity: 0; }
+html.js:where(:not(.scrub)) [data-draw] .after:not(.stroke) { transition: opacity var(--dur-m) var(--ease-out) var(--t, 0ms); }
+html.js:not(.restored):where(:not(.scrub)) [data-draw]:not([data-drawn]) .type tspan { opacity: 0; }
+html.js:where(:not(.scrub)) [data-draw] .type tspan { transition: opacity 80ms linear calc(var(--t, 0ms) + var(--ci, 0) * 32ms); }
+html.js:not(.restored):where(:not(.scrub)) [data-draw]:not([data-drawn]) .stamp { opacity: 0; transform: scale(1.5) rotate(-10deg); }
+html.js:where(:not(.scrub)) [data-draw] .stamp { transform: rotate(-3deg); transition: opacity 120ms linear var(--t, 0ms), transform var(--dur-m) var(--ease-pop) var(--t, 0ms); }
+html.js:not(.restored):where(:not(.scrub)) [data-draw]:not([data-drawn]) .cursor { opacity: 0; transform: translate(36px, 30px); }
+html.js:where(:not(.scrub)) [data-draw] .cursor { transition: opacity var(--dur-s) linear var(--t, 0ms), transform var(--dur-l) var(--ease-out) var(--t, 0ms); }
+html.js:not(.restored):where(:not(.scrub)) [data-draw]:not([data-drawn]) .unlock { transform: rotate(-120deg); }
+html.js:where(:not(.scrub)) [data-draw] .unlock { transition: transform 1400ms var(--ease-pop) var(--t, 0ms); }
+html.js:not(.restored):where(:not(.scrub)) [data-draw]:not([data-drawn]) .slide-out { transform: translateX(-40px); }
+html.js:where(:not(.scrub)) [data-draw] .slide-out { transition: transform 1200ms var(--ease-out) var(--t, 0ms); }
+html.js:not(.restored):where(:not(.scrub)) [data-draw]:not([data-drawn]) .grow { transform: scale(0); }
+html.js:where(:not(.scrub)) [data-draw] .grow { transition: transform 1100ms var(--ease-out) var(--t, 0ms); }
 
 /* history traversal (Back/Forward) restores the finished page instead of replaying it */
 html.restored [data-draw] .stroke { stroke-dashoffset: 0; }
@@ -305,3 +305,17 @@ html.js .copy-btn { display: block; }
 }
 @keyframes slide-depth { 0% { transform: perspective(900px) rotateY(10deg) scale(0.9); } 50% { transform: none; } 100% { transform: perspective(900px) rotateY(-10deg) scale(0.9); } }
 @keyframes slide-dim { 0%, 100% { filter: brightness(0.5) saturate(0.7); } 50% { filter: none; } }
+
+/* ---------- Scroll-assembled drawings (html.scrub is set in app.html before first paint) ---------- */
+@property --sp { syntax: '<number>'; inherits: true; initial-value: 100; }
+@keyframes sp { from { --sp: 0; } to { --sp: 100; } }
+@media screen and (prefers-reduced-motion: no-preference) {
+	/* --sp runs 0 → 100 over cover r0 → r0+span: phones while the sheet crosses the screen, desktop while it is pinned */
+	html.js.scrub .pin { --r0: 20vh; --span: 50vh; view-timeline: --sheet; animation: sp linear both; animation-timeline: --sheet; animation-range: cover var(--r0) cover calc(var(--r0) + var(--span)); }
+	@media (min-width: 768px) and (min-height: 760px) {
+		html.js.scrub .pin { --r0: 90vh; }
+		/* a spacer, not padding: a sticky sheet can only travel inside its parent's content box */
+		html.js.scrub .pin::after { content: ''; display: block; height: var(--span); }
+		html.js.scrub .pin > article { position: sticky; top: 10vh; }
+	}
+}

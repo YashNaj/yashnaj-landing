@@ -18,6 +18,8 @@
 			var from = document.referrer && new URL(document.referrer);
 			var fromWork = from && from.origin === location.origin && from.pathname.indexOf('/work/') === 0 && location.pathname === '/';
 			if (nav && (nav.type === 'back_forward' || (nav.type === 'navigate' && fromWork))) document.documentElement.classList.add('restored');
+			// Scroll drives the home drawings where the browser can (app.css "Scroll-assembled drawings").
+			if (!document.documentElement.classList.contains('restored') && window.CSS && CSS.supports('animation-timeline: view()') && matchMedia('(prefers-reduced-motion: no-preference)').matches) document.documentElement.classList.add('scrub');
 			// Tag cross-document view transitions with their direction before first render.
 			window.addEventListener('pagereveal', function (e) {
 				if (!e.viewTransition) return;

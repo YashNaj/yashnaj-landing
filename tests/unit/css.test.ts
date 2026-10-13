@@ -32,3 +32,15 @@ describe('MRI scrubber loop', () => {
 		expect(css).toMatch(/100% \{ transform: translateX\(0\); \} \}/);
 	});
 });
+
+describe('scrub switch', () => {
+	const html = readFileSync('src/app.html', 'utf8');
+	it('is decided in the head before first render, from the same three conditions as the spec', () => {
+		expect(html).toContain("CSS.supports('animation-timeline: view()')");
+		expect(html).toContain("matchMedia('(prefers-reduced-motion: no-preference)')");
+		expect(html).toMatch(/!document\.documentElement\.classList\.contains\('restored'\)[\s\S]*classList\.add\('scrub'\)/);
+	});
+	it('registers --sp with a finished default', () => {
+		expect(css).toMatch(/@property --sp \{ syntax: '<number>'; inherits: true; initial-value: 100; \}/);
+	});
+});

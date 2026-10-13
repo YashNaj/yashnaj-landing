@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
+import { timedMode } from './helpers';
 
 test('stroke timing follows real path length and plays in document order', async ({ page }) => {
+	await timedMode(page);
 	await page.goto('/');
 	const fig = page.locator('#myne figure.drawing');
 	await fig.scrollIntoViewIfNeeded();
@@ -18,6 +20,7 @@ test('stroke timing follows real path length and plays in document order', async
 });
 
 test('loops run only while a finished drawing is on screen, and a revisit is not restarted', async ({ page }) => {
+	await timedMode(page);
 	await page.goto('/');
 	const fig = page.locator('#chauffeur figure.drawing');
 	await fig.scrollIntoViewIfNeeded();
@@ -31,6 +34,7 @@ test('loops run only while a finished drawing is on screen, and a revisit is not
 });
 
 test('a drawing scrolled past before it finishes never goes live off-screen', async ({ page }) => {
+	await timedMode(page);
 	await page.goto('/');
 	const fig = page.locator('#myne figure.drawing');
 	await fig.scrollIntoViewIfNeeded();
@@ -92,6 +96,7 @@ for (const slug of slugs) {
 }
 
 test('chauffeur dimension counts up to its final value', async ({ page }) => {
+	await timedMode(page);
 	await page.goto('/');
 	await page.evaluate(() => {
 		(window as any).__seen = [];

@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
+import { timedMode } from './helpers';
 
 const dashOffset = (page: Page, slug: string) =>
 	page
@@ -23,6 +24,7 @@ test('renders four project sheets in order with labelled drawings', async ({ pag
 });
 
 test('a drawing starts undrawn and draws when scrolled into view', async ({ page }) => {
+	await timedMode(page);
 	await page.setViewportSize({ width: 1280, height: 700 });
 	await page.goto('/');
 	expect(await dashOffset(page, 'hard-pills')).toBeGreaterThan(0.5);
