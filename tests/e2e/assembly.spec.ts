@@ -161,3 +161,75 @@ test.describe('assembly (desktop)', () => {
 		expect(await page.locator('#myne figure.drawing .c').first().evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
 	});
 });
+
+test.describe('everyone else gets finished, flat drawings and no pin', () => {
+	test.use({ viewport: { width: 1280, height: 900 } });
+	const flatAndFinished = async (page: import('@playwright/test').Page, slug = 'myne') => {
+		await page.locator(`#${slug}`).scrollIntoViewIfNeeded();
+		await expect.poll(() => layerSpread(page, slug)).toBeLessThan(1);
+		await expect
+			.poll(() => page.locator(`#${slug} figure.drawing .stroke`).evaluateAll((els) => Math.max(...els.map((el) => parseFloat(getComputedStyle(el).strokeDashoffset.replace('calc(', ''))))), { timeout: 10000 })
+			.toBe(0);
+		expect(await pinExtra(page, slug)).toBeLessThan(1);
+	};
+
+	test('reduced motion', async ({ page }) => {
+		await page.emulateMedia({ reducedMotion: 'reduce' });
+		await page.goto('/');
+		await flatAndFinished(page);
+	});
+	test('reduced motion switched on after load', async ({ page }) => {
+		await page.goto('/');
+		await scrubTo(page, 'myne', 0);
+		await page.emulateMedia({ reducedMotion: 'reduce' });
+		await flatAndFinished(page);
+	});
+	test('no scroll-driven animations (timed draw-in instead)', async ({ page }) => {
+		await timedMode(page);
+		await page.goto('/');
+		await flatAndFinished(page);
+		await expect(page.locator('#myne figure.drawing')).toHaveAttribute('data-drawn', '');
+	});
+	test('print', async ({ page }) => {
+		await page.goto('/');
+		await page.emulateMedia({ media: 'print' });
+		await flatAndFinished(page);
+	});
+	test('the project page drawing', async ({ page }) => {
+		await page.goto('/work/myne');
+		const fig = page.locator('header figure.drawing');
+		const tops = await fig.evaluate((f) => [...f.querySelectorAll('.stack > svg.layer')].map((l) => l.getBoundingClientRect().top));
+		expect(Math.max(...tops) - Math.min(...tops)).toBeLessThan(1);
+	});
+	test('clicking through mid-assembly, then Back', async ({ page }) => {
+		await page.goto('/');
+		await scrubTo(page, 'myne', 60);
+		await page.locator('#myne').getByRole('link', { name: /View project/ }).click();
+		await expect(page).toHaveURL('/work/myne');
+		const fig = page.locator('header figure.drawing');
+		const tops = await fig.evaluate((f) => [...f.querySelectorAll('.stack > svg.layer')].map((l) => l.getBoundingClientRect().top));
+		expect(Math.max(...tops) - Math.min(...tops)).toBeLessThan(1);
+		await page.goBack();
+		await expect(page.locator('html')).toHaveClass(/\brestored\b/);
+		await flatAndFinished(page);
+	});
+});
+
+test.describe('without JavaScript', () => {
+	test.use({ javaScriptEnabled: false, viewport: { width: 1280, height: 900 } });
+	test('drawings are finished and flat, and nothing pins', async ({ page }) => {
+		await page.goto('/');
+		await page.locator('#myne').scrollIntoViewIfNeeded();
+		expect(await layerSpread(page, 'myne')).toBeLessThan(1);
+		expect(await pinExtra(page)).toBeLessThan(1);
+		expect(await page.locator('#myne figure.drawing .stroke').first().evaluate((el) => getComputedStyle(el).strokeDashoffset)).toMatch(/^0(px)?$/);
+	});
+});
+
+test('a deep link to a sheet lands before its pin, and scrolling on completes it', async ({ page }) => {
+	await page.setViewportSize({ width: 1280, height: 900 });
+	await page.goto('/#myne');
+	await expect.poll(() => sp(page, 'myne')).toBeLessThan(10);
+	await scrubTo(page, 'myne', 100);
+	await expect.poll(() => layerSpread(page, 'myne')).toBeLessThan(1);
+});
