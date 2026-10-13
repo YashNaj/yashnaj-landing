@@ -82,78 +82,85 @@ p { text-wrap: pretty; }
 }
 
 /* ---------- Self-drawing illustrations ---------- */
-.drawing {
-	margin: 0;
-	color: var(--color-paper);
+.drawing { margin: 0; color: var(--color-paper); }
+.drawing svg { display: block; width: 100%; height: auto; overflow: visible; }
+.drawing .stroke { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.drawing .ink { stroke-width: 2.4; }
+.drawing .dim { stroke: var(--color-line-dim); }
+.drawing .sig { stroke: var(--color-signal); }
+.drawing .c { fill: none; stroke: var(--color-construct); stroke-width: 0.75; stroke-dasharray: 2 4; }
+.drawing text { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; fill: currentColor; }
+.drawing .dimtext { fill: rgb(242 234 216 / 0.62); font-size: 8.5px; letter-spacing: 0.14em; }
+.drawing text.sig, .drawing .sigtext { fill: var(--color-signal); stroke: none; }
+.drawing .tapdot { fill: var(--color-signal); }
+.drawing .capsule-fill { fill: var(--color-signal); fill-opacity: 0.85; stroke: none; }
+.drawing .knob { fill: var(--color-ink); stroke: var(--color-signal); stroke-width: 1.5; }
+.drawing .foil-shine { fill: rgb(255 255 255 / 0.55); stroke: none; }
+.drawing .ripple { fill: none; stroke: var(--color-signal); stroke-width: 1.2; }
+.drawing .pulse { fill: none; stroke: var(--color-signal); stroke-width: 2.4; stroke-linecap: round; stroke-dasharray: 0.08 1.2; stroke-dashoffset: 1.08; filter: drop-shadow(0 0 3px rgb(255 122 61 / 0.9)); }
+.drawing .sweep { stroke-width: 1.5; }
+.drawing :is(.stamp, .grow, .wobble, .bob, .ripple) { transform-box: fill-box; transform-origin: center; }
+.drawing .cursor { transform-box: fill-box; transform-origin: 0 0; }
+.drawing .unlock { transform-box: view-box; transform-origin: 140px 155px; }
+.drawing .layer {
+	transform: translate(calc(var(--px, 0) * var(--depth, 0) * 1.6px), calc(var(--py, 0) * var(--depth, 0) * 1.6px));
+	transition: transform 600ms var(--ease-out);
 }
-.drawing svg {
-	display: block;
-	width: 100%;
-	height: auto;
-	overflow: visible;
-}
-.drawing .stroke {
-	fill: none;
-	stroke: currentColor;
-	stroke-width: 1.6;
-	stroke-linecap: round;
-	stroke-linejoin: round;
-}
-.drawing .dim {
-	stroke: var(--color-line-dim);
-}
-.drawing .sig {
-	stroke: var(--color-signal);
-}
-.drawing text {
-	font-family: var(--font-mono);
-	font-size: 11px;
-	letter-spacing: 0.08em;
-	fill: currentColor;
-}
-.drawing text.sig {
-	fill: var(--color-signal);
-	stroke: none;
-}
+.drawing .live, .drawing .vp-b, .drawing .vp-c { opacity: 0; }
+[data-draw][data-live] .live { opacity: 1; }
 
-html.js [data-draw] .stroke {
-	stroke-dasharray: 1;
-	stroke-dashoffset: 1;
-	transition: stroke-dashoffset 900ms var(--ease-draw);
-	transition-delay: calc(var(--i, 0) * 90ms);
-}
-html.js [data-draw][data-drawn] .stroke {
-	stroke-dashoffset: 0;
-}
-html.js [data-draw] .after {
-	opacity: 0;
-	transition: opacity 400ms ease-out;
-	transition-delay: calc(var(--i, 0) * 90ms + 900ms);
-}
-html.js [data-draw][data-drawn] .after {
-	opacity: 1;
-}
+/* hidden-until-drawn states — JS only; the inline fallback drops html.js if enhance.js never runs */
+html.js [data-draw]:not([data-drawn]) .c { opacity: 0; }
+html.js [data-draw] .c { transition: opacity var(--dur-m) var(--ease-out) var(--t, 0ms); }
+html.js [data-draw] .stroke { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--d, 900ms) var(--ease-draw) var(--t, 0ms); }
+html.js [data-draw][data-drawn] .stroke { stroke-dashoffset: 0; }
+html.js [data-draw]:not([data-drawn]) .after:not(.stroke) { opacity: 0; }
+html.js [data-draw] .after:not(.stroke) { transition: opacity var(--dur-m) var(--ease-out) var(--t, 0ms); }
+html.js [data-draw]:not([data-drawn]) .type tspan { opacity: 0; }
+html.js [data-draw] .type tspan { transition: opacity 80ms linear calc(var(--t, 0ms) + var(--ci, 0) * 32ms); }
+html.js [data-draw]:not([data-drawn]) .stamp { opacity: 0; transform: scale(1.5) rotate(-10deg); }
+html.js [data-draw] .stamp { transform: rotate(-3deg); transition: opacity 120ms linear var(--t, 0ms), transform var(--dur-m) var(--ease-pop) var(--t, 0ms); }
+html.js [data-draw]:not([data-drawn]) .cursor { opacity: 0; transform: translate(36px, 30px); }
+html.js [data-draw] .cursor { transition: opacity var(--dur-s) linear var(--t, 0ms), transform var(--dur-l) var(--ease-out) var(--t, 0ms); }
+html.js [data-draw]:not([data-drawn]) .unlock { transform: rotate(-120deg); }
+html.js [data-draw] .unlock { transition: transform 1400ms var(--ease-pop) var(--t, 0ms); }
+html.js [data-draw]:not([data-drawn]) .slide-out { transform: translateX(-40px); }
+html.js [data-draw] .slide-out { transition: transform 1200ms var(--ease-out) var(--t, 0ms); }
+html.js [data-draw]:not([data-drawn]) .grow { transform: scale(0); }
+html.js [data-draw] .grow { transition: transform 1100ms var(--ease-out) var(--t, 0ms); }
 
-@media (prefers-reduced-motion: reduce) {
-	html.js [data-draw] .stroke {
-		stroke-dashoffset: 0;
-		transition: none;
-	}
-	html.js [data-draw] .after {
+/* alive — only while on screen (data-live), never under reduced motion */
+[data-draw][data-live] .ripple { animation: d-ripple 2.6s var(--ease-out) infinite; }
+[data-draw][data-live] .pulse { animation: d-pulse 3.2s var(--ease-in-out) infinite; }
+[data-draw][data-live] .sweep { animation: d-sweep 3.6s var(--ease-in-out) infinite alternate; }
+[data-draw][data-live] .cursor { animation: d-press 2.6s var(--ease-out) infinite; }
+[data-draw][data-live] .wobble { animation: d-wobble 3.4s var(--ease-in-out) infinite alternate; }
+[data-draw][data-live] .bob { animation: d-bob 2.4s var(--ease-in-out) infinite alternate; }
+[data-draw][data-live] .march { stroke-dasharray: 6 10; animation: d-march 1.1s linear infinite; }
+[data-draw][data-live] .foil-shine { animation: d-shine 2.8s var(--ease-in-out) infinite; }
+[data-draw][data-live] .vp { animation: d-vp 4.8s var(--ease-in-out) infinite; }
+[data-draw][data-live] .vp-b { animation-delay: -3.2s; }
+[data-draw][data-live] .vp-c { animation-delay: -1.6s; }
+[data-draw][data-live] .knob { animation: d-knob 4.8s var(--ease-in-out) infinite; }
+@keyframes d-ripple { from { transform: scale(0.4); opacity: 0.9; } to { transform: scale(2.6); opacity: 0; } }
+@keyframes d-pulse { 0% { stroke-dashoffset: 1.08; opacity: 0; } 12% { opacity: 1; } 70% { stroke-dashoffset: 0; opacity: 1; } 82%, 100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes d-sweep { from { transform: translateY(56px); } to { transform: translateY(240px); } }
+@keyframes d-press { 0%, 100% { transform: none; } 5% { transform: scale(0.86); } 12% { transform: none; } }
+@keyframes d-wobble { from { transform: rotate(-4deg); } to { transform: rotate(4deg); } }
+@keyframes d-bob { from { transform: translateY(-2px); } to { transform: translateY(2px); } }
+@keyframes d-march { to { stroke-dashoffset: -16; } }
+@keyframes d-shine { 0%, 100% { opacity: 0; } 45% { opacity: 0.6; } 55% { opacity: 0; } }
+@keyframes d-vp { 0%, 28% { opacity: 1; } 33%, 95% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes d-knob { 0%, 28% { transform: translateX(-22px); } 33%, 61% { transform: translateX(0); } 66%, 94% { transform: translateX(22px); } 100% { transform: translateX(-22px); } }
+
+@media (prefers-reduced-motion: reduce), print {
+	html.js [data-draw] :is(.c, .stroke, .after, .type tspan, .stamp, .cursor, .unlock, .slide-out, .grow) {
+		transition: none !important;
 		opacity: 1;
-		transition: none;
-	}
-}
-
-@media print {
-	html.js [data-draw] .stroke {
 		stroke-dashoffset: 0;
-		transition: none;
+		transform: none;
 	}
-	html.js [data-draw] .after {
-		opacity: 1;
-		transition: none;
-	}
+	.drawing .layer { transition: none; transform: none; }
 }
 
 /* ---------- Carousel ---------- */

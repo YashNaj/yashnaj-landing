@@ -36,7 +36,7 @@
 	<header class="relative mt-6 grid gap-8 border border-line-dim bg-ink/70 p-5 md:grid-cols-2 md:items-center md:p-10" style:view-transition-name="sheet-{p.slug}">
 		<span class="absolute top-3 right-4 font-mono text-xs tracking-widest text-paper/70" style:view-transition-name="sheetno-{p.slug}">SHEET {p.sheet} / 04</span>
 		<div style:view-transition-name="drawing-{p.slug}">
-			<DrawOnView label={p.drawingLabel}><Drawing /></DrawOnView>
+			<DrawOnView label={p.drawingLabel} drawn><Drawing /></DrawOnView>
 		</div>
 		<div class="min-w-0">
 			<h1 class="text-4xl font-semibold tracking-tight md:text-5xl" style:view-transition-name="title-{p.slug}">{p.title}</h1>
