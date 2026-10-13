@@ -19,8 +19,6 @@
 	};
 </script>
 
-<svelte:head><title>Yashal Najeeb</title></svelte:head>
-
 <main class="mx-auto max-w-6xl px-4 md:px-8">
 	<Hero />
 
