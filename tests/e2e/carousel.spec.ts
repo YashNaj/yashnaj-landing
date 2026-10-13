@@ -169,9 +169,14 @@ test('active dot becomes a pill and the counter ticks', async ({ page }) => {
 	await page.goto('/work/myne');
 	const w = (i: number) => page.locator('[data-dot]').nth(i).evaluate((d) => parseFloat(getComputedStyle(d, '::before').width));
 	expect(await w(0)).toBeGreaterThan(await w(1));
+	// the counter ticks when the smooth scroll reaches the next slide; the 260 ms tick is easy to miss by polling,
+	// so record the animation count the moment the counter's text changes (same task as the animate() call)
+	await page.locator('[data-counter]').evaluate((c) => {
+		(window as any).__ticks = [];
+		new MutationObserver(() => (window as any).__ticks.push(c.getAnimations().length)).observe(c, { childList: true, characterData: true, subtree: true });
+	});
 	await page.locator('[data-next]').click();
-	// the counter ticks when the smooth scroll reaches the next slide, not on the click itself
-	await expect.poll(() => page.locator('[data-counter]').evaluate((c) => c.getAnimations().length)).toBeGreaterThan(0);
+	await expect.poll(() => page.evaluate(() => (window as any).__ticks as number[])).toContainEqual(1);
 });
 
 test('slides use a scroll-linked depth timeline where supported', async ({ page }) => {
