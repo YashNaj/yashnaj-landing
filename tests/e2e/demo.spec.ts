@@ -35,3 +35,18 @@ test('demo page is full-bleed on phones', async ({ page }) => {
 	const box = await page.locator('iframe[title="MRI/CT viewer demo"]').boundingBox();
 	expect(box!.width).toBeGreaterThanOrEqual(380);
 });
+
+test('viewer bundle loads from the extensionless URL Cloudflare redirects to', async ({ page }) => {
+	const failed: string[] = [];
+	page.on('response', (r) => r.status() >= 400 && failed.push(`${r.status()} ${r.url()}`));
+	await page.goto('/demo/mri/mobile');
+	await expect.poll(() => page.evaluate(() => typeof (window as any).MV_CMD), { timeout: 15000 }).toBe('function');
+	expect(failed).toEqual([]);
+});
+
+test('the demo page iframe and inner viewer use redirect-free URLs', async ({ page }) => {
+	await page.goto('/work/mri-viewer/demo');
+	await expect(page.locator('iframe[title="MRI/CT viewer demo"]')).toHaveAttribute('src', '/demo/mri');
+	await page.goto('/demo/mri');
+	await expect(page.locator('#viewer')).toHaveAttribute('src', '/demo/mri/mobile');
+});

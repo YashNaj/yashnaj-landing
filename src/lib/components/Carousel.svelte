@@ -10,7 +10,7 @@
 
 <section class="carousel" style:--edge={edge} data-carousel aria-roledescription="carousel" aria-label={label}>
 	<!-- svelte-ignore a11y_no_noninteractive_tabindex — scroll containers must be focusable so keyboard users can scroll them -->
-	<div class="carousel-track" data-track tabindex="0" aria-label="{label} — use arrow keys to browse">
+	<div class="carousel-track" data-track role="group" tabindex="0" aria-label="{label} — use arrow keys to browse">
 		{#each slides as slide, i}
 			<figure class="slide" data-slide role="group" aria-roledescription="slide" aria-label="{i + 1} of {slides.length}">
 				{#if slide.kind === 'cta'}

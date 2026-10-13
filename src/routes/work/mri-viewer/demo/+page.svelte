@@ -13,7 +13,7 @@
 		<p class="mt-4 font-mono text-xs text-paper/70">Loads ~6 MB of viewer code plus scan slices as you browse.</p>
 	</div>
 	<div class="demo-frame">
-		<iframe src="/demo/mri/index.html" title="MRI/CT viewer demo" loading="eager"></iframe>
+		<iframe src="/demo/mri" title="MRI/CT viewer demo" loading="eager"></iframe>
 	</div>
 </main>
 

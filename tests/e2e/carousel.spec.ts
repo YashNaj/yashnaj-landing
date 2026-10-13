@@ -71,3 +71,8 @@ test('carousel does not cause horizontal page overflow at 360px', async ({ page 
 	);
 	expect(offenders).toEqual([]);
 });
+
+test('the labelled scroller has a role so its name is valid ARIA', async ({ page }) => {
+	await page.goto('/work/myne');
+	await expect(page.locator('[data-track]')).toHaveAttribute('role', 'group');
+});
