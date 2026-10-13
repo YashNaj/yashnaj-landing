@@ -29,8 +29,12 @@ function boot({ stored = null, blocked = false, traverseBack = false }: Opts = {
 		handlers['win:pagereveal']({ viewTransition: withTransition ? { types } : null });
 		return [...types];
 	};
-	const click = (dir: string | null, mods: Partial<MouseEvent> = {}) =>
-		handlers['doc:click']({ button: 0, defaultPrevented: false, ...mods, target: { closest: () => (dir ? { getAttribute: () => dir } : null) } });
+	const URL_NEXT = 'https://yashnaj.dev/work/mri-viewer';
+	// a click, then (optionally) the page swap that commits its navigation
+	const click = (dir: string | null, mods: Partial<MouseEvent> = {}, swap: { type: string; url: string } | null = { type: 'push', url: URL_NEXT }) => {
+		handlers['doc:click']({ button: 0, defaultPrevented: false, ...mods, target: { closest: () => (dir ? { getAttribute: () => dir, href: URL_NEXT } : null) } });
+		if (swap) handlers['win:pageswap']({ activation: { navigationType: swap.type, entry: { url: swap.url } } });
+	};
 	return { store, reveal, click };
 }
 
@@ -64,6 +68,20 @@ describe('view-transition direction hand-off', () => {
 		const b = boot();
 		b.click(null);
 		expect(b.store.has('vt-dir')).toBe(false);
+	});
+	it('a click whose navigation never commits leaves nothing behind', () => {
+		const b = boot();
+		b.click('next', {}, null);
+		expect(b.store.has('vt-dir')).toBe(false);
+	});
+	it('only the navigation the click started carries its direction', () => {
+		const traverse = boot();
+		traverse.click('next', {}, null);
+		traverse.click(null, {}, { type: 'traverse', url: 'https://yashnaj.dev/' });
+		expect(traverse.store.has('vt-dir')).toBe(false);
+		const elsewhere = boot();
+		elsewhere.click('next', {}, { type: 'push', url: 'https://yashnaj.dev/' });
+		expect(elsewhere.store.has('vt-dir')).toBe(false);
 	});
 	it('blocked storage falls back to forward/back without throwing', () => {
 		const b = boot({ blocked: true });

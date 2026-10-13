@@ -18,11 +18,17 @@
 			var from = document.referrer && new URL(document.referrer);
 			var fromWork = from && from.origin === location.origin && from.pathname.indexOf('/work/') === 0 && location.pathname === '/';
 			if (nav && (nav.type === 'back_forward' || (nav.type === 'navigate' && fromWork))) document.documentElement.classList.add('restored');
-			// Prev/next and "All work" tell the next page which way to move.
+			// Prev/next and "All work" tell the next page which way to move, but only once their own
+			// navigation commits (pageswap), so an aborted click can't mis-type a later one.
+			var pend = null;
 			document.addEventListener('click', function (e) {
 				var a = e.target.closest && e.target.closest('[data-vt-dir]');
-				if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-				try { sessionStorage.setItem('vt-dir', a.getAttribute('data-vt-dir')); } catch (_) {}
+				pend = !a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey ? null : [a.getAttribute('data-vt-dir'), a.href];
+			});
+			window.addEventListener('pageswap', function (e) {
+				var a = e.activation;
+				if (pend && a && a.navigationType === 'push' && a.entry.url === pend[1]) try { sessionStorage.setItem('vt-dir', pend[0]); } catch (_) {}
+				pend = null;
 			});
 			// Tag cross-document view transitions with their direction before first render.
 			window.addEventListener('pagereveal', function (e) {

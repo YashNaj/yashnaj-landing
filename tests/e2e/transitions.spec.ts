@@ -58,10 +58,10 @@ test('case studies expose the two beats once each, and pages mark themselves', a
 		await page.goto(`/work/${slug}`);
 		await expect(page.locator('main[data-vt-page="case"]')).toHaveCount(1);
 		const names = await page.evaluate(() => [...document.querySelectorAll('*')].map((n) => getComputedStyle(n).viewTransitionName));
-		expect(names.filter((n) => n === 'case-head'), slug).toHaveLength(1);
-		expect(names.filter((n) => n === 'case-body'), slug).toHaveLength(1);
+		expect(names.filter((n) => n === `case-head-${slug}`), slug).toHaveLength(1);
+		expect(names.filter((n) => n === `case-body-${slug}`), slug).toHaveLength(1);
 		// the footer stays in the root snapshot
-		expect(await page.locator('footer').evaluate((f) => !!f.closest('[style*="case-body"]'))).toBe(false);
+		expect(await page.locator('footer').evaluate((f) => !!f.closest('[style*="case-body-"]'))).toBe(false);
 	}
 });
 
@@ -91,14 +91,14 @@ test('every transition finishes within 800 ms and runs the intended moves', asyn
 	expect(has(fwd, '::view-transition-old(sheet-chauffeur)', 'vt-fold')).toBe(true); // the unclicked sheets fold too
 	expect(has(fwd, '::view-transition-new(drawing-myne)', 'vt-settle')).toBe(true);
 	expect(has(fwd, '::view-transition-image-pair(drawing-myne)', 'vt-lift')).toBe(true);
-	expect(has(fwd, '::view-transition-new(case-head)', 'vt-rise')).toBe(true);
-	expect(has(fwd, '::view-transition-new(case-body)', 'vt-rise-far')).toBe(true);
+	expect(has(fwd, '::view-transition-new(case-head-myne)', 'vt-rise')).toBe(true);
+	expect(has(fwd, '::view-transition-new(case-body-myne)', 'vt-rise-far')).toBe(true);
 	expect(has(next, '::view-transition-old(drawing-myne)', 'vt-slide-out-left')).toBe(true);
 	expect(has(next, '::view-transition-new(sheet-mri-viewer)', 'vt-slide-in-right')).toBe(true);
 	expect(has(prev, '::view-transition-old(title-mri-viewer)', 'vt-slide-out-right')).toBe(true);
 	expect(has(prev, '::view-transition-new(drawing-myne)', 'vt-slide-in-left')).toBe(true);
 	expect(has(back, '::view-transition-new(root)', 'vt-unfold')).toBe(true);
-	expect(has(back, '::view-transition-old(case-body)', 'vt-fade-out')).toBe(true);
+	expect(has(back, '::view-transition-old(case-body-myne)', 'vt-fade-out')).toBe(true);
 	expect(back.anims.some((a) => a.name === 'vt-settle' || a.name === 'vt-lift')).toBe(false);
 });
 
@@ -117,4 +117,24 @@ test('reduced motion: a real transition runs no animations', async ({ page }) =>
 	await page.goto('/');
 	await page.locator('#myne').getByRole('link', { name: /View project/ }).click();
 	expect((await lastLog(page, '/work/myne')).anims).toEqual([]);
+});
+
+test('Next clicked where it lives (page bottom) slides in place: the beats never travel', async ({ page }) => {
+	await watch(page);
+	await page.goto('/work/myne');
+	const link = page.getByRole('link', { name: /^Next:/ });
+	await link.scrollIntoViewIfNeeded();
+	await link.click();
+	const log = await lastLog(page, '/work/mri-viewer');
+	expect(log.anims.filter((a) => /^::view-transition-group\(case-/.test(a.el))).toEqual([]);
+	expect(log.anims.some((a) => a.name === 'vt-slide-in-right')).toBe(true);
+});
+
+test('the demo\'s link back to its case study is a return trip, not a fold', async ({ page }) => {
+	await watch(page);
+	await page.goto('/work/mri-viewer/demo');
+	await page.getByRole('link', { name: /Back to/ }).click();
+	const log = await lastLog(page, '/work/mri-viewer');
+	expect(log.types).toEqual(['back']);
+	expect(log.anims.some((a) => a.name === 'vt-fold')).toBe(false);
 });

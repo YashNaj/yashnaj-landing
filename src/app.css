@@ -337,10 +337,11 @@ html.js .is-enhanced .slide:not([data-active]) .frame video { filter: brightness
 	::view-transition-new(root) { animation: vt-in-fwd 640ms var(--ease-out) both; }
 	html:active-view-transition-type(back)::view-transition-new(root) { animation-name: vt-in-back; }
 
-	/* the case study arrives in two beats; going away, both fade fast */
-	::view-transition-new(case-head) { animation: vt-rise 300ms var(--ease-out) 350ms both; }
-	::view-transition-new(case-body) { animation: vt-rise-far 350ms var(--ease-out) 450ms both; }
-	::view-transition-old(case-head), ::view-transition-old(case-body) { animation: vt-fade-out 200ms var(--ease-out) both; }
+	/* the case study arrives in two beats; going away, both fade fast. Their names carry the slug, so the
+	   beats are one-sided on every navigation and never travel between two case pages. */
+	::view-transition-new(*.vt-head) { animation: vt-rise 300ms var(--ease-out) 350ms both; }
+	::view-transition-new(*.vt-body) { animation: vt-rise-far 350ms var(--ease-out) 450ms both; }
+	::view-transition-old(*.vt-head), ::view-transition-old(*.vt-body) { animation: vt-fade-out 200ms var(--ease-out) both; }
 
 	/* forward into a case study: home (root and the unclicked sheets) folds back; the drawing lifts and settles */
 	html:has([data-vt-page='case']):not(:active-view-transition-type(back, next, prev))::view-transition-old(root),
@@ -355,23 +356,15 @@ html.js .is-enhanced .slide:not([data-active]) .frame video { filter: brightness
 	html:active-view-transition-type(back):has([data-vt-page='home'])::view-transition-new(*):only-child { animation: vt-unfold 450ms var(--ease-out) 100ms both; transform-origin: 50% 100%; }
 	html:active-view-transition-type(back):has([data-vt-page='home'])::view-transition-group(*.vt-drawing) { animation-duration: 450ms; }
 
-	/* next / prev (≤ 500 ms): every sheet group is one-sided (names carry the slug), and the beats ride along
-	   with the sheet instead of arriving late; next flips leftward, prev mirrors.
+	/* next / prev (≤ 500 ms): every named group is one-sided (names carry the slug), so the sheet
+	   and both beats slide together; next flips leftward, prev mirrors.
 	   The root (background, "All work", footer) is the same on both pages: swap it without a fade. */
 	html:active-view-transition-type(next, prev)::view-transition-old(root),
 	html:active-view-transition-type(next, prev)::view-transition-new(root) { animation: none; }
-	html:active-view-transition-type(next)::view-transition-old(*):only-child,
-	html:active-view-transition-type(next)::view-transition-old(case-head),
-	html:active-view-transition-type(next)::view-transition-old(case-body) { animation: vt-slide-out-left 450ms var(--ease-out) both; }
-	html:active-view-transition-type(next)::view-transition-new(*):only-child,
-	html:active-view-transition-type(next)::view-transition-new(case-head),
-	html:active-view-transition-type(next)::view-transition-new(case-body) { animation: vt-slide-in-right 450ms var(--ease-out) both; }
-	html:active-view-transition-type(prev)::view-transition-old(*):only-child,
-	html:active-view-transition-type(prev)::view-transition-old(case-head),
-	html:active-view-transition-type(prev)::view-transition-old(case-body) { animation: vt-slide-out-right 450ms var(--ease-out) both; }
-	html:active-view-transition-type(prev)::view-transition-new(*):only-child,
-	html:active-view-transition-type(prev)::view-transition-new(case-head),
-	html:active-view-transition-type(prev)::view-transition-new(case-body) { animation: vt-slide-in-left 450ms var(--ease-out) both; }
+	html:active-view-transition-type(next)::view-transition-old(*):only-child { animation: vt-slide-out-left 450ms var(--ease-out) both; }
+	html:active-view-transition-type(next)::view-transition-new(*):only-child { animation: vt-slide-in-right 450ms var(--ease-out) both; }
+	html:active-view-transition-type(prev)::view-transition-old(*):only-child { animation: vt-slide-out-right 450ms var(--ease-out) both; }
+	html:active-view-transition-type(prev)::view-transition-new(*):only-child { animation: vt-slide-in-left 450ms var(--ease-out) both; }
 }
 @keyframes vt-out { to { opacity: 0; transform: scale(0.985); } }
 @keyframes vt-in-fwd { from { opacity: 0; transform: translateY(18px); } }

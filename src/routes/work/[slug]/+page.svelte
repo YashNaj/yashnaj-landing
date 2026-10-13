@@ -42,7 +42,7 @@
 		<div style:view-transition-name="drawing-{p.slug}" style:view-transition-class="vt-drawing">
 			<DrawOnView label={p.drawingLabel} drawn><Drawing /></DrawOnView>
 		</div>
-		<div class="min-w-0" style:view-transition-name="case-head">
+		<div class="min-w-0" style:view-transition-name="case-head-{p.slug}" style:view-transition-class="vt-head">
 			<h1 class="text-4xl font-semibold tracking-tight md:text-5xl" style:view-transition-name="title-{p.slug}" style:view-transition-class="vt-title">{p.title}</h1>
 			<p class="mt-2 font-mono text-sm text-paper/80">{p.tagline}</p>
 			<p class="metric mt-5 border-l-2 border-signal pl-3 font-mono text-sm">{p.metric}</p>
@@ -56,7 +56,7 @@
 		</div>
 	</header>
 
-	<div style:view-transition-name="case-body">
+	<div style:view-transition-name="case-body-{p.slug}" style:view-transition-class="vt-body">
 		<section class="py-12" aria-labelledby="gallery-heading">
 			<h2 id="gallery-heading" class="sr-only">Gallery</h2>
 			<Carousel slides={p.slides} label="{p.title} gallery" />

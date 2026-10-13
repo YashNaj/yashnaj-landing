@@ -25,7 +25,7 @@ describe('morph choreography', () => {
 	});
 	it('styles every direction and the two beats', () => {
 		for (const t of ['back', 'next', 'prev']) expect(block).toContain(`:active-view-transition-type(${t})`);
-		for (const n of ['case-head', 'case-body', '*.vt-sheet', '*.vt-title', '*.vt-drawing']) expect(block).toContain(n);
+		for (const n of ['*.vt-head', '*.vt-body', '*.vt-sheet', '*.vt-title', '*.vt-drawing']) expect(block).toContain(n);
 		for (const k of ['vt-fold', 'vt-unfold', 'vt-lift', 'vt-settle', 'vt-rise', 'vt-rise-far']) expect(block).toContain(`@keyframes ${k} `);
 	});
 	it('no animation in the block runs past 800 ms (duration + delay)', () => {
