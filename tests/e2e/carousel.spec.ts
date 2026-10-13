@@ -138,3 +138,13 @@ test('a video waits until its slide is at least 60% visible', async ({ page }) =
 	await page.locator('[data-slide]').first().scrollIntoViewIfNeeded();
 	await expect.poll(() => video.evaluate((v: HTMLVideoElement) => !v.paused), { timeout: 5000 }).toBe(true);
 });
+
+test('an arrow press that cannot move leaves no stale target behind', async ({ page }) => {
+	await page.goto('/work/mri-viewer');
+	const c = page.locator('[data-carousel]');
+	await c.locator('[data-prev]').click(); // already on the first slide
+	await c.locator('[data-slide]').last().getByRole('link').focus(); // focus scrolls the track to the last slide
+	await expect(c.locator('[data-counter]')).toHaveText('FIG. 04 / 04');
+	await c.locator('[data-prev]').click();
+	await expect(c.locator('[data-counter]')).toHaveText('FIG. 03 / 04');
+});

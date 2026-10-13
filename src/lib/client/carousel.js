@@ -40,8 +40,9 @@
 			return best;
 		};
 		const go = (i) => {
-			target = clamp(i);
-			const s = slides[target];
+			const to = clamp(i);
+			target = to === active ? null : to; // a press that cannot move must not leave a target behind
+			const s = slides[to];
 			track.scrollTo({ left: s.offsetLeft - (track.clientWidth - s.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
 		};
 		const step = (delta) => go((target ?? active) + delta);
@@ -55,8 +56,8 @@
 				step(e.key === 'ArrowRight' ? 1 : -1);
 			}
 		});
-		// a hand on the track cancels any pending button target
-		for (const ev of ['pointerdown', 'wheel', 'touchstart']) track.addEventListener(ev, () => (target = null), { passive: true });
+		// a hand (or focus) on the track cancels any pending button target
+		for (const ev of ['pointerdown', 'wheel', 'touchstart', 'focusin']) track.addEventListener(ev, () => (target = null), { passive: true });
 		let raf = 0;
 		track.addEventListener(
 			'scroll',
