@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { scrubTo, sp, timedMode } from './helpers';
+import { layerSpread, scrubTo, sp, timedMode } from './helpers';
 
 /** Extra scroll room the pin adds below the sheet (0 when not pinned). */
 const pinExtra = (page: import('@playwright/test').Page, slug = 'myne') =>
@@ -75,5 +75,89 @@ test.describe('pin', () => {
 		expect(v).toBeLessThanOrEqual(100);
 		await page.evaluate(() => scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }));
 		await expect.poll(() => sp(page, 'myne')).toBe(100);
+	});
+});
+
+test.describe('assembly (desktop)', () => {
+	test.use({ viewport: { width: 1280, height: 900 } });
+	const dash = (page: import('@playwright/test').Page) =>
+		page.locator('#myne figure.drawing .stroke').evaluateAll((els) => els.map((el) => parseFloat(getComputedStyle(el).strokeDashoffset.replace('calc(', ''))));
+
+	test('scroll assembles the drawing, and scrolling back takes it apart', async ({ page }) => {
+		await page.goto('/');
+		await scrubTo(page, 'myne', 0);
+		await expect.poll(() => sp(page, 'myne')).toBeLessThan(1);
+		expect(await layerSpread(page, 'myne')).toBeGreaterThan(20);
+		expect(Math.min(...(await dash(page)))).toBeGreaterThan(0.9);
+		await scrubTo(page, 'myne', 40);
+		await expect.poll(() => sp(page, 'myne')).toBeCloseTo(40, -1);
+		const mid = await dash(page);
+		expect(mid.some((d) => d === 0)).toBe(true); // early strokes done
+		expect(mid.some((d) => d > 0.5)).toBe(true); // late strokes still to come
+		expect(await layerSpread(page, 'myne')).toBeGreaterThan(20); // still exploded before 55%
+		await scrubTo(page, 'myne', 100);
+		await expect.poll(() => sp(page, 'myne')).toBeGreaterThan(99);
+		await expect.poll(() => layerSpread(page, 'myne')).toBeLessThan(1);
+		expect(Math.max(...(await dash(page)))).toBe(0);
+		await scrubTo(page, 'myne', 0);
+		await expect.poll(() => layerSpread(page, 'myne')).toBeGreaterThan(20);
+		expect(Math.min(...(await dash(page)))).toBeGreaterThan(0.9);
+	});
+
+	test('each part gets a scroll slot in document order inside the 0–65 window; counts land at 85–100', async ({ page }) => {
+		await page.goto('/');
+		const slots = await page.locator('#chauffeur figure.drawing').evaluate((f) =>
+			[...f.querySelectorAll('.stroke, .after, .type, .stamp, .cursor, .unlock, .slide-out, .grow, [data-count]')].map((el) => ({
+				a0: parseFloat((el as HTMLElement).style.getPropertyValue('--a0')),
+				a1: parseFloat((el as HTMLElement).style.getPropertyValue('--a1')),
+				count: el.hasAttribute('data-count')
+			}))
+		);
+		const parts = slots.filter((s) => !s.count);
+		for (let i = 0; i < parts.length; i++) {
+			expect(parts[i].a0).toBeGreaterThanOrEqual(0);
+			expect(parts[i].a1).toBeLessThanOrEqual(65);
+			expect(parts[i].a1).toBeGreaterThan(parts[i].a0);
+			if (i) expect(parts[i].a0).toBeGreaterThanOrEqual(parts[i - 1].a0);
+		}
+		for (const c of slots.filter((s) => s.count)) expect([c.a0, c.a1]).toEqual([85, 100]);
+	});
+
+	test('typed labels type with scroll; counts, callouts and live parts land last at their final value', async ({ page }) => {
+		await page.goto('/');
+		await page.evaluate(() => {
+			(window as any).__seen = [];
+			const t = document.querySelector('#chauffeur text[data-count="260"]')!;
+			new MutationObserver(() => (window as any).__seen.push(t.textContent)).observe(t, { childList: true, characterData: true, subtree: true });
+		});
+		const label = page.locator('#chauffeur text.type').first();
+		const count = page.locator('#chauffeur text[data-count="260"]');
+		const live = page.locator('#chauffeur .live').first();
+		const op = (l: import('@playwright/test').Locator) => l.evaluate((el) => parseFloat(getComputedStyle(el).opacity));
+		// live loops own their opacity; the band shows through filter: opacity()
+		const band = (l: import('@playwright/test').Locator) =>
+			l.evaluate((el) => parseFloat(/opacity\((?:calc\()?([\d.]+)/.exec(getComputedStyle(el).filter)?.[1] ?? 'NaN'));
+		await scrubTo(page, 'chauffeur', 0);
+		await expect.poll(() => sp(page, 'chauffeur')).toBeLessThan(1);
+		expect(await label.locator('tspan').evaluateAll((ts) => ts.map((t) => getComputedStyle(t).opacity))).not.toContain('1');
+		await scrubTo(page, 'chauffeur', 80);
+		await expect.poll(() => sp(page, 'chauffeur')).toBeCloseTo(80, -1);
+		expect(await op(count)).toBe(0);
+		expect(await band(live)).toBe(0);
+		await scrubTo(page, 'chauffeur', 100);
+		await expect.poll(() => sp(page, 'chauffeur')).toBeGreaterThan(99);
+		expect(new Set(await label.locator('tspan').evaluateAll((ts) => ts.map((t) => getComputedStyle(t).opacity)))).toEqual(new Set(['1']));
+		expect(await op(count)).toBe(1);
+		expect(await band(live)).toBe(1);
+		await expect(count).toHaveText('H 260');
+		expect(await page.evaluate(() => (window as any).__seen.length)).toBe(0); // never counted
+		await expect(page.locator('#chauffeur figure.drawing')).toHaveAttribute('data-live', '');
+	});
+
+	test('the construction layer is visible from the start', async ({ page }) => {
+		await page.goto('/');
+		await scrubTo(page, 'myne', 0);
+		await expect.poll(() => sp(page, 'myne')).toBeLessThan(1);
+		expect(await page.locator('#myne figure.drawing .c').first().evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
 	});
 });

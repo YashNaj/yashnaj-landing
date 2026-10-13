@@ -318,4 +318,25 @@ html.js .copy-btn { display: block; }
 		html.js.scrub .pin::after { content: ''; display: block; height: var(--span); }
 		html.js.scrub .pin > article { position: sticky; top: 10vh; }
 	}
+	/* --k: layers collapse and the sheet flattens over 55–90%; --q: each part's progress through its own slot */
+	html.js.scrub [data-draw]:not([data-drawn]) { --k: clamp(0, (var(--sp) - 55) / 35, 1); perspective: 1200px; }
+	html.js.scrub [data-draw]:not([data-drawn]) .stack { transform-style: preserve-3d; transform: rotateX(calc(55deg * (1 - var(--k)))); }
+	html.js.scrub [data-draw]:not([data-drawn]) .layer { transform: translateZ(calc(var(--depth, 0) * 40px * (1 - var(--k)))); will-change: transform; }
+	html.js.scrub [data-draw]:not([data-drawn]) :is(.stroke, .after, .type, .stamp, .cursor, .unlock, .slide-out, .grow) {
+		--a0: 0;
+		--a1: 65;
+		--q: clamp(0, (var(--sp) - var(--a0)) / (var(--a1) - var(--a0)), 1);
+	}
+	html.js.scrub [data-draw]:not([data-drawn]) .stroke { stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--q)); }
+	html.js.scrub [data-draw]:not([data-drawn]) :is(.after, .cursor):not(.stroke) { opacity: var(--q); }
+	html.js.scrub [data-draw]:not([data-drawn]) .stamp { opacity: var(--q); transform: rotate(calc(-10deg + 7deg * var(--q))) scale(calc(1.5 - 0.5 * var(--q))); }
+	html.js.scrub [data-draw]:not([data-drawn]) .cursor { transform: translate(calc(36px * (1 - var(--q))), calc(30px * (1 - var(--q)))); }
+	html.js.scrub [data-draw]:not([data-drawn]) .unlock { transform: rotate(calc(-120deg * (1 - var(--q)))); }
+	html.js.scrub [data-draw]:not([data-drawn]) .slide-out { transform: translateX(calc(-40px * (1 - var(--q)))); }
+	html.js.scrub [data-draw]:not([data-drawn]) .grow { transform: scale(var(--q)); }
+	/* letters arrive one by one across the label's slot */
+	html.js.scrub [data-draw]:not([data-drawn]) .type tspan { opacity: clamp(0, (var(--sp) - var(--a0)) / (var(--a1) - var(--a0)) * var(--cn, 1) - var(--ci, 0), 1); }
+	/* live loops animate their own opacity, so the 85–100% band fades them through filter instead */
+	html.js.scrub [data-draw]:not([data-drawn]) .live { --lv: clamp(0, (var(--sp) - 85) / 15, 1); filter: opacity(var(--lv)); }
+	html.js.scrub [data-draw]:not([data-drawn]) .pulse.live { filter: opacity(var(--lv)) drop-shadow(0 0 3px rgb(255 122 61 / 0.9)); }
 }

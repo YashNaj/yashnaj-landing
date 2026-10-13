@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { describe, expect, it } from 'vitest';
@@ -51,5 +51,13 @@ describe('client scripts are fingerprinted', () => {
 	});
 	it('immutable assets get a year-long cache', () => {
 		expect(readFileSync('static/_headers', 'utf8')).toMatch(/\/_app\/immutable\/\*\n\s+Cache-Control: public, max-age=31536000, immutable/);
+	});
+});
+
+describe('drawing engine budget', () => {
+	it('enhance.js stays under 3.5 KB gzipped', () => {
+		const dir = 'build/_app/immutable/assets';
+		const file = readdirSync(dir).find((f) => /^enhance[.-][\w-]+\.js$/.test(f))!;
+		expect(gzipSync(readFileSync(join(dir, file))).length).toBeLessThan(3584);
 	});
 });
