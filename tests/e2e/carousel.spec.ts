@@ -104,3 +104,10 @@ test('the first slide is fetched with high priority', async ({ page }) => {
 	await page.goto('/work/chauffeur');
 	await expect(page.locator('link[rel="preload"][as="image"][href="/media/chauffeur/honest.webp"]')).toHaveCount(1);
 });
+
+test('image slides offer a half-width candidate so phones download less', async ({ page }) => {
+	await page.goto('/work/hard-pills');
+	const img = page.locator('[data-slide]').first().locator('img');
+	await expect(img).toHaveAttribute('srcset', '/media/hard-pills/home-sm.webp 720w, /media/hard-pills/home.webp 1440w');
+	await expect(img).toHaveAttribute('sizes', /86vw/);
+});

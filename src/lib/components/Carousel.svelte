@@ -3,6 +3,8 @@
 
 	let { slides, label }: { slides: Slide[]; label: string } = $props();
 	const pad = (n: number) => String(n).padStart(2, '0');
+	const small = (src: string) => src.replace(/\.webp$/, '-sm.webp');
+	const sizes = { phone: '(min-width: 420px) 300px, 72vw', browser: '(min-width: 880px) 760px, 86vw' };
 	// half the first slide's width, so the first and last slides can sit centred
 	const first = $derived(slides[0]);
 	const edge = $derived(first.kind !== 'cta' && first.frame === 'browser' ? 'min(43vw, 380px)' : 'min(36vw, 150px)');
@@ -28,7 +30,7 @@
 							<div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i></div>
 						{/if}
 						{#if slide.kind === 'image'}
-							<img src={slide.src} alt={slide.alt} width={slide.width} height={slide.height} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} decoding="async" />
+							<img src={slide.src} srcset="{small(slide.src)} {Math.round(slide.width / 2)}w, {slide.src} {slide.width}w" sizes={sizes[slide.frame]} alt={slide.alt} width={slide.width} height={slide.height} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} decoding="async" />
 						{:else}
 							<video src={slide.src} poster={slide.poster} width={slide.width} height={slide.height} aria-label={slide.alt} muted playsinline loop preload="none"></video>
 						{/if}

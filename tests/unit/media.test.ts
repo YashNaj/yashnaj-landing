@@ -18,6 +18,9 @@ describe('slide media', () => {
 				expect(existsSync(file(s.src))).toBe(true);
 				if (s.kind === 'image') {
 					expect(imageDims(file(s.src))).toBe(`${s.width} ${s.height}`);
+					const sm = file(s.src.replace(/\.webp$/, '-sm.webp'));
+					expect(existsSync(sm), `${sm} (half-width variant)`).toBe(true);
+					expect(imageDims(sm).split(' ')[0]).toBe(String(Math.round(s.width / 2)));
 					expect(statSync(file(s.src)).size).toBeLessThanOrEqual(150 * 1024);
 				} else {
 					expect(videoDims(file(s.src))).toBe(`${s.width} ${s.height}`);
