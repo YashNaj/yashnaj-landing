@@ -52,3 +52,15 @@ describe('first slide (the LCP on a phone)', () => {
 		});
 	}
 });
+
+describe('video posters', () => {
+	// posters always download with the page (they cannot be lazy or low priority), so they compete with the LCP
+	for (const p of projects) {
+		for (const s of p.slides) {
+			if (s.kind !== 'video') continue;
+			it(`${p.slug}: ${s.poster} ≤ 40 KB`, () => {
+				expect(statSync(file(s.poster)).size).toBeLessThanOrEqual(40 * 1024);
+			});
+		}
+	}
+});
