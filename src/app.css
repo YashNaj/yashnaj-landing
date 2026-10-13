@@ -10,16 +10,20 @@
 	--font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
-html {
-	color-scheme: dark;
-	background: var(--color-ink);
-	color: var(--color-paper);
-	scroll-behavior: smooth;
+:root {
+	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	--ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+	--ease-draw: cubic-bezier(0.55, 0, 0.25, 1);
+	--ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+	--dur-xs: 140ms;
+	--dur-s: 220ms;
+	--dur-m: 420ms;
+	--dur-l: 900ms;
+	--color-construct: rgb(150 190 255 / 0.32);
 }
 
-body {
-	margin: 0;
-	font-family: var(--font-sans);
+html {
+	color-scheme: dark;
 	background-color: var(--color-ink);
 	background-image:
 		linear-gradient(rgb(242 234 216 / 0.06) 1px, transparent 1px),
@@ -31,9 +35,39 @@ body {
 		96px 96px,
 		24px 24px,
 		24px 24px;
+	color: var(--color-paper);
+	scroll-behavior: smooth;
+}
+
+body {
+	margin: 0;
+	font-family: var(--font-sans);
+	background: transparent;
 	-webkit-font-smoothing: antialiased;
 	overflow-x: hidden;
 }
+
+/* film grain above everything (inert), vignette behind content */
+body::before {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: 60;
+	pointer-events: none;
+	opacity: 0.045;
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+body::after {
+	content: '';
+	position: fixed;
+	inset: 0;
+	z-index: -1;
+	pointer-events: none;
+	background: radial-gradient(130% 95% at 50% 0%, transparent 55%, rgb(3 10 22 / 0.55) 100%);
+}
+h1, h2, h3 { text-wrap: balance; }
+p { text-wrap: pretty; }
+.metric, [data-counter] { font-variant-numeric: tabular-nums; }
 
 :focus-visible {
 	outline: 2px solid var(--color-signal);
@@ -85,7 +119,7 @@ body {
 html.js [data-draw] .stroke {
 	stroke-dasharray: 1;
 	stroke-dashoffset: 1;
-	transition: stroke-dashoffset 900ms cubic-bezier(0.6, 0, 0.2, 1);
+	transition: stroke-dashoffset 900ms var(--ease-draw);
 	transition-delay: calc(var(--i, 0) * 90ms);
 }
 html.js [data-draw][data-drawn] .stroke {
@@ -139,7 +173,7 @@ html.js [data-draw][data-drawn] .after {
 	overscroll-behavior-x: contain;
 }
 .carousel-track::-webkit-scrollbar { display: none; }
-.slide { flex: 0 0 auto; margin: 0; scroll-snap-align: center; transition: transform 450ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 450ms; }
+.slide { flex: 0 0 auto; margin: 0; scroll-snap-align: center; transition: transform 450ms var(--ease-out), opacity 450ms; }
 html.js .is-enhanced .slide:not([data-active]) { transform: scale(0.94); }
 /* dim only the media of off-centre slides — text keeps full contrast */
 .frame img, .frame video { transition: filter 450ms; }
@@ -171,7 +205,7 @@ html.js .is-enhanced .slide:not([data-active]) .frame video { filter: brightness
 }
 ::view-transition-group(*) {
 	animation-duration: 380ms;
-	animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+	animation-timing-function: var(--ease-out);
 }
 @media (prefers-reduced-motion: reduce) {
 	::view-transition-group(*),

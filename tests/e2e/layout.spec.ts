@@ -76,3 +76,17 @@ test('sitemap lists the home page and robots.txt points to it', async ({ request
 	expect(await sitemap.text()).toContain('<loc>https://yashnaj.dev/</loc>');
 	expect(await (await request.get('/robots.txt')).text()).toContain('Sitemap: https://yashnaj.dev/sitemap.xml');
 });
+
+test('visual base: grain overlay is inert, headings balance, metrics use tabular numerals', async ({ page }) => {
+	await page.goto('/');
+	const grain = await page.evaluate(() => {
+		const s = getComputedStyle(document.body, '::before');
+		return { bg: s.backgroundImage, pe: s.pointerEvents, op: Number(s.opacity), pos: s.position };
+	});
+	expect(grain.bg).toContain('feTurbulence');
+	expect(grain.pe).toBe('none');
+	expect(grain.op).toBeLessThanOrEqual(0.05);
+	expect(grain.pos).toBe('fixed');
+	expect(await page.locator('h1').evaluate((h) => getComputedStyle(h).textWrapStyle)).toBe('balance');
+	expect(await page.locator('#myne .metric').evaluate((m) => getComputedStyle(m).fontVariantNumeric)).toContain('tabular-nums');
+});

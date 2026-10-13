@@ -41,7 +41,7 @@
 		<div class="min-w-0">
 			<h1 class="text-4xl font-semibold tracking-tight md:text-5xl" style:view-transition-name="title-{p.slug}">{p.title}</h1>
 			<p class="mt-2 font-mono text-sm text-paper/80">{p.tagline}</p>
-			<p class="mt-5 border-l-2 border-signal pl-3 font-mono text-sm">{p.metric}</p>
+			<p class="metric mt-5 border-l-2 border-signal pl-3 font-mono text-sm">{p.metric}</p>
 			<ul class="mt-5 flex flex-wrap gap-2" aria-label="Stack">
 				{#each p.stack as tech}<li class="border border-line-dim px-2 py-0.5 font-mono text-xs tracking-wider uppercase">{tech}</li>{/each}
 			</ul>

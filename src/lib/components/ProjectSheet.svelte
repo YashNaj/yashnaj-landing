@@ -30,7 +30,7 @@
 		</h3>
 		<p class="mt-2 font-mono text-sm text-paper/80">{project.tagline}</p>
 		<p class="mt-5 leading-relaxed text-paper/90">{project.summary}</p>
-		<p class="mt-5 border-l-2 border-signal pl-3 font-mono text-sm text-paper">{project.metric}</p>
+		<p class="metric mt-5 border-l-2 border-signal pl-3 font-mono text-sm text-paper">{project.metric}</p>
 		<ul class="mt-5 flex flex-wrap gap-2" aria-label="Stack">
 			{#each project.stack as tech}
 				<li class="border border-line-dim px-2 py-0.5 font-mono text-xs uppercase tracking-wider">
