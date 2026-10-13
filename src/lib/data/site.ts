@@ -18,7 +18,7 @@ export const profile = {
 	role: 'Full-Stack Product Engineer · iOS, React Native, TypeScript, Postgres',
 	pitch:
 		'I take products from zero to the App Store — most recently a provenance platform now holding $10M+ in luxury assets, and a five-repo HIPAA platform I rescued as its sole engineer.',
-	availability: 'Open to full-time and contract roles · Remote or Los Angeles area',
+	availability: 'Open to full-time and contract roles · Remote, hybrid or on-site around Los Angeles',
 	location: 'Corona, CA',
 	email: 'yashnaj@proton.me',
 	github: 'https://github.com/YashNaj',
