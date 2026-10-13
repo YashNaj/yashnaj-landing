@@ -88,7 +88,7 @@ test.describe('stories', () => {
 	test.use({ viewport: { width: 1280, height: 900 } });
 	const loopParts: Record<string, string> = {
 		chauffeur: '.cursor, .btn, .ripple, .st-a, .st-b, .st-tick, .leader-pulse, .stamp, .st-one, .st-zero',
-		'mri-viewer': '.st-plane-g, .vp, .st-slice, .knob, .st-bridge',
+		'mri-viewer': '.st-plane-g, .st-frame, .st-scan, .st-slice, .knob, .st-bridge',
 		myne: '.unlock, .st-bolt, .st-check, .st-rec-a, .st-rec-b, .st-clock',
 		'hard-pills': '.st-panel, .stamp, .wobble, .grow, .st-arc'
 	};
@@ -144,6 +144,28 @@ test('mri beats: the slice plane steps down the stack and the readout follows', 
 	await seek(page, 'mri-viewer', 0.4);
 	expect(await y()).toBeGreaterThan(y0 + 40);
 	expect(await shown()).toEqual(['SLICE 117/232']);
+});
+
+test('mri beats: the slice under the plane lights up, and the viewer shows that same slice', async ({ page }) => {
+	const fig = await live(page, 'mri-viewer');
+	const lit = () => fig.locator('.st-scan').evaluateAll((ps) => ps.map((p) => getComputedStyle(p).stroke));
+	const frame = () => fig.locator('.st-frame').evaluateAll((gs) => gs.findIndex((g) => getComputedStyle(g).opacity === '1'));
+	const signal = await fig.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--color-signal').trim());
+	for (const [f, i] of [[0.08, 0], [0.4, 2], [0.7, 4]] as const) {
+		await seek(page, 'mri-viewer', f);
+		const strokes = await lit();
+		expect(strokes.filter((c) => c !== strokes[(i + 1) % 5]).length, `at ${f}`).toBe(1); // exactly one slice lit
+		expect(await frame(), `at ${f}`).toBe(i);
+	}
+	expect(signal).not.toBe('');
+});
+
+test('mri viewer faces the reader: its own lean keeps the phone top edge thin', async ({ page }) => {
+	await page.goto('/');
+	// the phone face's vertical axis stays near-upright (|c| small) and unshrunk (d close to 1): no deep tray look
+	const [, , c, d] = (await page.locator('#mri-viewer [data-plane].face').getAttribute('transform'))!.match(/-?[\d.]+/g)!.map(Number);
+	expect(Math.abs(c)).toBeLessThan(0.05);
+	expect(d).toBeGreaterThan(0.98);
 });
 
 /** The door's edges as built (SSR), read from a fresh copy of the page. */

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { band, box, edgePath, matrixAttr, pose, ring, roundedRect, weigh, type Vec3 } from '../../src/lib/drawings/project';
+import { band, box, edgePath, lean, matrixAttr, pose, ring, roundedRect, weigh, type Vec3 } from '../../src/lib/drawings/project';
 
 describe('pose', () => {
 	it('identity pose maps points to themselves', () => {
@@ -52,5 +52,23 @@ describe('output', () => {
 		const [near, far, fixed] = weigh(p, [{ pts: [[0, 0, 8], [1, 0, 8]] }, { pts: [[0, 0, -8], [1, 0, -8]] }, { pts: [[0, 0, -8]], w: 1.35 }], 8);
 		expect(near.w).toBeGreaterThan(far.w!);
 		expect(fixed.w).toBe(1.35);
+	});
+});
+
+describe('lean', () => {
+	it('re-orients an object so it shows its own pose inside a steeper scene', () => {
+		const scene = pose(-26, 22, [200, 150]);
+		const own = pose(-20, 8, [0, 0]);
+		const L = lean([318, 145, 0], [-26, 22], [-20, 8]);
+		const c = scene.point(L([318, 145, 0]));
+		for (const p of [[270, 40, 5], [366, 250, -5], [300, 100, 5]] as Vec3[]) {
+			const q = scene.point(L(p));
+			const r = own.point([p[0] - 318, p[1] - 145, p[2]]);
+			expect(q[0] - c[0]).toBeCloseTo(r[0], 6);
+			expect(q[1] - c[1]).toBeCloseTo(r[1], 6);
+		}
+	});
+	it('leaves the centre in place', () => {
+		expect(lean([318, 145, 0], [-26, 22], [-20, 8])([318, 145, 0])).toEqual([318, 145, 0]);
 	});
 });

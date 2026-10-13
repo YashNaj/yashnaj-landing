@@ -53,3 +53,22 @@ export const box = (x0: number, x1: number, y0: number, y1: number, z0: number, 
 	return e;
 };
 export const band = (a: Vec3[], b: Vec3[], every = 2): Vec3[][] => a.flatMap((v, i) => (i % every === 0 && i < b.length ? [[v, b[i]]] : []));
+
+/** Re-orient an object about its own centre so that, seen in a scene posed at `scene`, it shows the pose `own`
+ *  (e.g. a phone that faces the reader inside a steeply tilted scene). Returns a point transform. */
+export const lean = (centre: Vec3, scene: [number, number], own: [number, number]) => {
+	const [sy, sp] = scene.map((d) => d * R);
+	const [oy, op] = own.map((d) => d * R);
+	const rot = (y: number, p: number, [X, Y, Z]: Vec3): Vec3 => {
+		const X1 = X * Math.cos(y) + Z * Math.sin(y), Z1 = -X * Math.sin(y) + Z * Math.cos(y);
+		return [X1, Y * Math.cos(p) - Z1 * Math.sin(p), Y * Math.sin(p) + Z1 * Math.cos(p)];
+	};
+	const unrot = (y: number, p: number, [a, b, c]: Vec3): Vec3 => {
+		const Y = b * Math.cos(p) + c * Math.sin(p), Z1 = -b * Math.sin(p) + c * Math.cos(p);
+		return [a * Math.cos(y) - Z1 * Math.sin(y), Y, a * Math.sin(y) + Z1 * Math.cos(y)];
+	};
+	return (v: Vec3): Vec3 => {
+		const d = unrot(sy, sp, rot(oy, op, [v[0] - centre[0], v[1] - centre[1], v[2] - centre[2]]));
+		return [centre[0] + d[0], centre[1] + d[1], centre[2] + d[2]];
+	};
+};
