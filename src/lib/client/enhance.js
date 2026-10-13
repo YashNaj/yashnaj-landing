@@ -4,8 +4,6 @@
 	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 	const fine = matchMedia('(pointer: fine)').matches;
 	const restored = document.documentElement.classList.contains('restored'); // Back/Forward: show finished
-	const scrub = document.documentElement.classList.contains('scrub'); // scroll drives home drawings (app.html)
-	const WINDOW = 65; // strokes and parts draw over the first 65% of a sheet's scroll range
 	const OVERLAP = 0.35; // the next stroke starts when the previous one is 35% drawn
 	const START = 260; // construction prelude before the first stroke
 	const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
@@ -16,7 +14,6 @@
 		fig.querySelectorAll('text.type').forEach((t) => {
 			const s = t.textContent;
 			t.textContent = '';
-			t.style.setProperty('--cn', String(s.length));
 			[...s].forEach((ch, i) => {
 				const span = document.createElementNS(SVG, 'tspan');
 				span.textContent = ch;
@@ -25,26 +22,22 @@
 			});
 		});
 
-	// Start time (--t) for every part; duration (--d) for strokes from their real length;
-	// and the same order as scroll slots (--a0/--a1, % of the sheet's range) for scrub mode.
+	// Start time (--t) for every part; duration (--d) for strokes from their real length.
 	const choreograph = (fig) => {
 		fig.querySelectorAll('.c').forEach((el, i) => el.style.setProperty('--t', `${i * 40}ms`));
 		let t = START;
 		let end = START;
-		const parts = [];
 		for (const el of fig.querySelectorAll('.stroke, .after, .type, .stamp, .cursor, .unlock, .slide-out, .grow, [data-count]')) {
 			el.style.setProperty('--t', `${Math.round(t)}ms`);
-			const isStroke = el.classList.contains('stroke') && 'getTotalLength' in el;
-			const d = isStroke ? clamp(el.getTotalLength() * 2.4, 280, 1400) : 700;
-			if (isStroke) el.style.setProperty('--d', `${Math.round(d)}ms`);
-			parts.push([el, t, d]);
-			end = Math.max(end, t + d);
-			t += isStroke ? d * OVERLAP : 90;
-		}
-		for (const [el, t0, d] of parts) {
-			const count = el.hasAttribute('data-count'); // counts land with the callouts, at their final value
-			el.style.setProperty('--a0', count ? '85' : ((t0 / end) * WINDOW).toFixed(1));
-			el.style.setProperty('--a1', count ? '100' : (((t0 + d) / end) * WINDOW).toFixed(1));
+			if (el.classList.contains('stroke') && 'getTotalLength' in el) {
+				const d = clamp(el.getTotalLength() * 2.4, 280, 1400);
+				el.style.setProperty('--d', `${Math.round(d)}ms`);
+				end = Math.max(end, t + d);
+				t += d * OVERLAP;
+			} else {
+				end = Math.max(end, t + 700);
+				t += 90;
+			}
 		}
 		return end;
 	};
@@ -91,14 +84,6 @@
 	};
 
 	figs.forEach((f) => state.set(f, { done: false, visible: false, started: false }));
-	// Scrub mode: slots are laid out up front; scroll does the drawing, so figures count as done (live = on screen).
-	if (scrub)
-		figs.forEach((f) => {
-			if (f.hasAttribute('data-drawn')) return;
-			splitType(f);
-			choreograph(f);
-			Object.assign(state.get(f), { done: true, started: true });
-		});
 	if (!('IntersectionObserver' in window)) {
 		figs.forEach((f) => {
 			state.get(f).visible = true;

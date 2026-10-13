@@ -1,8 +1,6 @@
 import { expect, test } from '@playwright/test';
-import { timedMode } from './helpers';
 
 test('stroke timing follows real path length and plays in document order', async ({ page }) => {
-	await timedMode(page);
 	await page.goto('/');
 	const fig = page.locator('#myne figure.drawing');
 	await fig.scrollIntoViewIfNeeded();
@@ -20,7 +18,6 @@ test('stroke timing follows real path length and plays in document order', async
 });
 
 test('loops run only while a finished drawing is on screen, and a revisit is not restarted', async ({ page }) => {
-	await timedMode(page);
 	await page.goto('/');
 	const fig = page.locator('#chauffeur figure.drawing');
 	await fig.scrollIntoViewIfNeeded();
@@ -34,7 +31,6 @@ test('loops run only while a finished drawing is on screen, and a revisit is not
 });
 
 test('a drawing scrolled past before it finishes never goes live off-screen', async ({ page }) => {
-	await timedMode(page);
 	await page.goto('/');
 	const fig = page.locator('#myne figure.drawing');
 	await fig.scrollIntoViewIfNeeded();
@@ -50,8 +46,8 @@ test('fine pointer shifts depth layers; touch gets none', async ({ page, browser
 	await fig.scrollIntoViewIfNeeded();
 	const box = (await fig.boundingBox())!;
 	await page.mouse.move(box.x + box.width * 0.95, box.y + box.height * 0.95);
-	const top = fig.locator('.stack > svg.layer').last();
-	await expect.poll(() => top.evaluate((l) => getComputedStyle(l).translate)).not.toMatch(/^(none|0px( 0px)?)$/);
+	const top = fig.locator('svg > g.layer').last();
+	await expect.poll(() => top.evaluate((g) => getComputedStyle(g).transform)).not.toMatch(/^(none|matrix\(1, 0, 0, 1, 0, 0\))$/);
 	const touch = await browser.newContext({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
 	const p2 = await touch.newPage();
 	await p2.goto('/');
@@ -82,21 +78,13 @@ for (const slug of slugs) {
 	test(`${slug} drawing is layered and intricate`, async ({ page }) => {
 		await page.goto('/');
 		const fig = page.locator(`#${slug} figure.drawing`);
-		const layers = fig.locator('.stack > svg.layer');
-		expect(await layers.count()).toBeGreaterThanOrEqual(4);
-		for (const l of await layers.all()) {
-			await expect(l).toHaveAttribute('aria-hidden', 'true');
-			await expect(l).toHaveAttribute('viewBox', '0 0 400 300');
-		}
-		expect(await fig.locator('[role="img"]').count()).toBe(0); // the figure is the one image
-		await expect(fig).toHaveAttribute('role', 'img');
+		expect(await fig.locator('svg > g.layer').count()).toBeGreaterThanOrEqual(4);
 		expect(await fig.locator('.stroke, .after, .c, .type').count()).toBeGreaterThanOrEqual(30);
 		expect(await fig.locator('.live, .wobble, .bob, .march, .vp, .knob').count()).toBeGreaterThanOrEqual(1);
 	});
 }
 
 test('chauffeur dimension counts up to its final value', async ({ page }) => {
-	await timedMode(page);
 	await page.goto('/');
 	await page.evaluate(() => {
 		(window as any).__seen = [];

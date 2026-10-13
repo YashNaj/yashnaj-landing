@@ -8,7 +8,6 @@
 		$props();
 </script>
 
-<div class="pin">
 <article
 	id={project.slug}
 	data-testid="project-sheet"
@@ -58,4 +57,3 @@
 		</p>
 	</div>
 </article>
-</div>
