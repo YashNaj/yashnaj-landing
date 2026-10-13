@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Component } from 'svelte';
+	import Hero from '$lib/components/Hero.svelte';
 	import ProjectSheet from '$lib/components/ProjectSheet.svelte';
 	import { projects, type ProjectSlug } from '$lib/data/site';
 	import ComicPanels from '$lib/drawings/ComicPanels.svelte';
@@ -18,7 +19,7 @@
 <svelte:head><title>Yashal Najeeb</title></svelte:head>
 
 <main class="mx-auto max-w-6xl px-4 md:px-8">
-	<h1 class="py-24 text-5xl font-semibold">Yashal Najeeb</h1>
+	<Hero />
 
 	<section id="work" aria-labelledby="work-heading" class="py-16">
 		<h2 id="work-heading" class="mb-10 font-mono text-sm tracking-[0.3em] text-paper/80 uppercase">

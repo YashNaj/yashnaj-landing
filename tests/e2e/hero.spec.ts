@@ -6,3 +6,24 @@ test('home renders the name as the only h1', async ({ page }) => {
 	await expect(page.locator('h1')).toContainText('Yashal Najeeb');
 	await expect(page.locator('html')).toHaveClass(/\bjs\b/);
 });
+
+test('hero shows role, pitch, photo and contact actions', async ({ page }) => {
+	await page.goto('/');
+	const hero = page.getByTestId('hero');
+	await expect(hero).toContainText('Full-Stack Product Engineer');
+	await expect(hero).toContainText('takes software from zero to the App Store');
+	const img = hero.getByRole('img', { name: 'Portrait of Yashal Najeeb' });
+	await expect(img).toBeVisible();
+	expect(await img.evaluate((i: HTMLImageElement) => i.naturalWidth)).toBeGreaterThan(0);
+	await expect(hero.getByRole('link', { name: 'Resume' })).toHaveAttribute('href', '/Yashal-Najeeb-Resume.pdf');
+	await expect(hero.getByRole('link', { name: 'GitHub' })).toHaveAttribute('href', 'https://github.com/YashNaj');
+	await expect(hero.getByRole('link', { name: 'LinkedIn' })).toHaveAttribute('href', 'https://www.linkedin.com/in/yashnaj');
+	await expect(hero.getByRole('link', { name: 'Email' })).toHaveAttribute('href', 'mailto:yashnaj@proton.me');
+});
+
+test('PRESS START is shown but disabled in phase 1', async ({ page }) => {
+	await page.goto('/');
+	const start = page.getByTestId('press-start');
+	await expect(start).toHaveAttribute('aria-disabled', 'true');
+	await expect(start).toContainText('coming soon');
+});
