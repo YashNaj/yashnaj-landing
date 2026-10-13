@@ -8,7 +8,7 @@
 		<div>
 			<p class="text-2xl font-semibold">Let’s build something.</p>
 			<p class="mt-3 flex flex-wrap gap-x-6 gap-y-2 font-mono text-sm">
-				<a class="underline decoration-signal underline-offset-4 hover:text-signal" href="mailto:{profile.email}">{profile.email}</a>
+				<a class="link-sweep" href="mailto:{profile.email}">{profile.email}</a>
 				<a class="hover:text-signal" href={profile.github}>GitHub ↗</a>
 				<a class="hover:text-signal" href={profile.linkedin}>LinkedIn ↗</a>
 				<a class="hover:text-signal" href={profile.resume}>Resume ↗</a>

@@ -34,7 +34,11 @@
 	<a href="/#work" class="font-mono text-xs tracking-[0.3em] text-paper/80 uppercase hover:text-signal">← All work</a>
 
 	<header class="relative mt-6 grid gap-8 border border-line-dim bg-ink/70 p-5 md:grid-cols-2 md:items-center md:p-10" style:view-transition-name="sheet-{p.slug}">
-		<span class="absolute top-3 right-4 font-mono text-xs tracking-widest text-paper/70" style:view-transition-name="sheetno-{p.slug}">SHEET {p.sheet} / 04</span>
+		<span class="sheet-corner" data-corner="tl" aria-hidden="true"></span>
+		<span class="sheet-corner" data-corner="tr" aria-hidden="true"></span>
+		<span class="sheet-corner" data-corner="bl" aria-hidden="true"></span>
+		<span class="sheet-corner" data-corner="br" aria-hidden="true"></span>
+		<span class="sheet-tb" style:view-transition-name="sheetno-{p.slug}"><span>SHEET {p.sheet} / 04</span><span>SCALE 1:1</span><span>REV 26</span></span>
 		<div style:view-transition-name="drawing-{p.slug}">
 			<DrawOnView label={p.drawingLabel} drawn><Drawing /></DrawOnView>
 		</div>
@@ -46,8 +50,8 @@
 				{#each p.stack as tech}<li class="border border-line-dim px-2 py-0.5 font-mono text-xs tracking-wider uppercase">{tech}</li>{/each}
 			</ul>
 			<p class="mt-6 flex flex-wrap gap-4 font-mono text-sm">
-				{#if p.demo}<a class="border border-signal px-4 py-2 tracking-widest text-signal uppercase hover:bg-signal hover:text-ink" href={p.demo.href}>{p.demo.label} →</a>{/if}
-				{#each p.links as link}<a class="self-center underline decoration-signal underline-offset-4 hover:text-signal" href={link.href}>{link.label} ↗</a>{/each}
+				{#if p.demo}<a class="btn-draft btn-signal" href={p.demo.href}>{p.demo.label} →</a>{/if}
+				{#each p.links as link}<a class="link-sweep self-center" href={link.href}>{link.label} ↗</a>{/each}
 			</p>
 		</div>
 	</header>

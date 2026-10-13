@@ -127,6 +127,23 @@
 		});
 	}
 
+	// Section heads draw their rule; [data-reveal] blocks rise in. Both once.
+	const reveals = document.querySelectorAll('[data-reveal], [data-reveal-head]');
+	if (!('IntersectionObserver' in window) || reduce) reveals.forEach((el) => el.setAttribute('data-revealed', ''));
+	else {
+		const ro = new IntersectionObserver(
+			(entries) => {
+				for (const e of entries) {
+					if (!e.isIntersecting) continue;
+					e.target.setAttribute('data-revealed', '');
+					ro.unobserve(e.target);
+				}
+			},
+			{ threshold: 0.2 }
+		);
+		reveals.forEach((el) => ro.observe(el));
+	}
+
 	document.querySelectorAll('[data-copy-root]').forEach((root) => {
 		const btn = root.querySelector('[data-testid="copy-command"]');
 		const code = root.querySelector('code');

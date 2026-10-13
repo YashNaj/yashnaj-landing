@@ -23,9 +23,7 @@
 	<Hero />
 
 	<section id="work" aria-labelledby="work-heading" class="py-16">
-		<h2 id="work-heading" class="mb-10 font-mono text-sm tracking-[0.3em] text-paper/80 uppercase">
-			Selected work
-		</h2>
+		<div class="section-head" data-reveal-head><span data-n aria-hidden="true">01</span><h2 id="work-heading">Selected work</h2><span data-rule aria-hidden="true"></span></div>
 		<div class="grid gap-10">
 			{#each projects as project, i (project.slug)}
 				<ProjectSheet {project} Drawing={drawings[project.slug]} flip={i % 2 === 1} />

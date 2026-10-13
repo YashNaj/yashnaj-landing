@@ -225,3 +225,41 @@ html.js .is-enhanced .slide:not([data-active]) .frame video { filter: brightness
 /* the copy button needs enhance.js; html.js is dropped when it fails to run */
 .copy-btn { display: none; }
 html.js .copy-btn { display: block; }
+
+/* ---------- Drafting frames ---------- */
+.sheet-corner { position: absolute; width: 12px; height: 12px; pointer-events: none; border-color: var(--color-signal); transition: width var(--dur-m) var(--ease-out), height var(--dur-m) var(--ease-out); }
+.sheet-corner[data-corner='tl'] { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
+.sheet-corner[data-corner='tr'] { top: -1px; right: -1px; border-top: 2px solid; border-right: 2px solid; }
+.sheet-corner[data-corner='bl'] { bottom: -1px; left: -1px; border-bottom: 2px solid; border-left: 2px solid; }
+.sheet-corner[data-corner='br'] { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
+:is(article, header):is(:hover, :focus-within) > .sheet-corner { width: 24px; height: 24px; }
+.sheet-tb { position: absolute; top: -1px; right: 28px; display: flex; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.2em; color: rgb(242 234 216 / 0.75); border: 1px solid var(--color-line-dim); border-top: 0; background: var(--color-ink); }
+.sheet-tb > span { padding: 4px 8px; }
+.sheet-tb > span + span { border-left: 1px solid var(--color-line-dim); }
+
+/* ---------- Buttons & links ---------- */
+.btn-draft { position: relative; display: inline-block; border: 1px solid var(--color-paper); padding: 0.55rem 1rem; font-family: var(--font-mono); font-size: 0.875rem; letter-spacing: 0.12em; text-transform: uppercase; transition: color var(--dur-s) var(--ease-out), border-color var(--dur-s) var(--ease-out), transform var(--dur-s) var(--ease-out); }
+.btn-draft::before, .btn-draft::after { content: ''; position: absolute; width: 0; height: 0; opacity: 0; border-color: var(--color-signal); transition: width var(--dur-s) var(--ease-out), height var(--dur-s) var(--ease-out), opacity var(--dur-xs) linear; }
+.btn-draft::before { top: -5px; left: -5px; border-top: 1px solid; border-left: 1px solid; }
+.btn-draft::after { bottom: -5px; right: -5px; border-bottom: 1px solid; border-right: 1px solid; }
+.btn-draft:is(:hover, :focus-visible) { color: var(--color-signal); border-color: var(--color-signal); transform: translateY(-1px); }
+.btn-draft:is(:hover, :focus-visible)::before, .btn-draft:is(:hover, :focus-visible)::after { width: 10px; height: 10px; opacity: 1; }
+.btn-draft:active { transform: translateY(0); transition-duration: var(--dur-xs); }
+.btn-signal { border-color: var(--color-signal); color: var(--color-signal); }
+.link-sweep { padding-bottom: 3px; background: linear-gradient(var(--color-signal), var(--color-signal)) left 100% / 0% 1px no-repeat, linear-gradient(rgb(242 234 216 / 0.35), rgb(242 234 216 / 0.35)) left 100% / 100% 1px no-repeat; transition: background-size var(--dur-m) var(--ease-out), color var(--dur-s) var(--ease-out); }
+.link-sweep:is(:hover, :focus-visible) { background-size: 100% 1px, 100% 1px; color: var(--color-signal); }
+
+/* ---------- Section heads & reveals ---------- */
+.section-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 2.5rem; }
+.section-head [data-n] { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-signal); letter-spacing: 0.2em; }
+.section-head h2 { margin: 0; font-family: var(--font-mono); font-size: 0.875rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgb(242 234 216 / 0.8); }
+.section-head [data-rule] { flex: 1; height: 1px; background: var(--color-line-dim); transform-origin: left; }
+@media (prefers-reduced-motion: no-preference) {
+	html.js .section-head:not([data-revealed]) [data-rule] { transform: scaleX(0); }
+	html.js .section-head [data-rule] { transition: transform 1100ms var(--ease-out) 150ms; }
+	html.js [data-reveal]:not([data-revealed]) { opacity: 0; transform: translateY(16px); }
+	html.js [data-reveal] { transition: opacity var(--dur-l) var(--ease-out), transform var(--dur-l) var(--ease-out); transition-delay: calc(var(--r, 0) * 80ms); }
+}
+@media (prefers-reduced-motion: no-preference) {
+	.carousel-controls > button { transition: transform var(--dur-s) var(--ease-out), color var(--dur-s) var(--ease-out), border-color var(--dur-s) var(--ease-out); }
+}

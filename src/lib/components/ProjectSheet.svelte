@@ -14,9 +14,11 @@
 	style:view-transition-name="sheet-{project.slug}"
 	class="relative grid scroll-mt-8 gap-8 border border-line-dim bg-ink/70 p-5 md:grid-cols-2 md:items-center md:gap-12 md:p-10"
 >
-	<span class="absolute top-3 right-4 font-mono text-xs tracking-widest text-paper/70" style:view-transition-name="sheetno-{project.slug}">
-		SHEET {project.sheet} / 04
-	</span>
+	<span class="sheet-corner" data-corner="tl" aria-hidden="true"></span>
+	<span class="sheet-corner" data-corner="tr" aria-hidden="true"></span>
+	<span class="sheet-corner" data-corner="bl" aria-hidden="true"></span>
+	<span class="sheet-corner" data-corner="br" aria-hidden="true"></span>
+	<span class="sheet-tb" style:view-transition-name="sheetno-{project.slug}"><span>SHEET {project.sheet} / 04</span><span>SCALE 1:1</span><span>REV 26</span></span>
 
 	<div class={flip ? 'md:order-2' : ''} style:view-transition-name="drawing-{project.slug}">
 		<DrawOnView label={project.drawingLabel}>
@@ -44,14 +46,14 @@
 		{#if project.links.length}
 			<p class="mt-4 flex flex-wrap gap-4 font-mono text-sm">
 				{#each project.links as link}
-					<a class="underline decoration-signal underline-offset-4 hover:text-signal" href={link.href}
+					<a class="link-sweep self-center" href={link.href}
 						>{link.label} ↗</a
 					>
 				{/each}
 			</p>
 		{/if}
 		<p class="mt-6">
-			<a href="/work/{project.slug}" class="inline-block border border-paper px-4 py-2 font-mono text-sm tracking-widest uppercase hover:border-signal hover:text-signal">View project →</a>
+			<a href="/work/{project.slug}" class="btn-draft">View project →</a>
 		</p>
 	</div>
 </article>

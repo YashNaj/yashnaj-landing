@@ -25,11 +25,7 @@
 
 		<nav aria-label="Contact" class="mt-8 flex flex-wrap gap-3">
 			{#each actions as a}
-				<a
-					href={a.href}
-					class="border border-paper px-4 py-2 font-mono text-sm tracking-widest uppercase transition-colors hover:border-signal hover:text-signal"
-					>{a.label}</a
-				>
+				<a href={a.href} class="btn-draft">{a.label}</a>
 			{/each}
 		</nav>
 
