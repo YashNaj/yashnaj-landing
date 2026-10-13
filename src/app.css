@@ -158,6 +158,14 @@ html.restored :is([data-draw] :is(.c, .stroke, .after, .type tspan, .stamp, .cur
 /* starts at the static (centre) position so going live never jumps: frame A centre, B right, C left */
 @keyframes d-knob { 0%, 28% { transform: translateX(0); } 33%, 61% { transform: translateX(22px); } 66%, 94% { transform: translateX(-22px); } 100% { transform: translateX(0); } }
 
+/* ---------- Story drawings (svg.story) ---------- */
+.drawing .face-fill { fill: var(--color-ink); stroke: none; }
+.drawing .battery-fill { fill: var(--color-paper); }
+.drawing .st-type { fill: none; stroke: var(--color-paper); stroke-width: 2.2; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.drawing .st-tick { fill: none; stroke: var(--color-signal); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+.drawing .st-one { opacity: 0; }
+.drawing svg.story :is(.btn, .st-one, .st-zero) { transform-box: fill-box; transform-origin: center; }
+
 @media (prefers-reduced-motion: reduce), print {
 	html.js [data-draw] :is(.c, .stroke, .after, .type tspan, .stamp, .cursor, .unlock, .slide-out, .grow) {
 		transition: none !important;

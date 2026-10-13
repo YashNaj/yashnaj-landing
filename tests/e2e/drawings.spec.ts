@@ -42,7 +42,7 @@ test('a drawing scrolled past before it finishes never goes live off-screen', as
 
 test('fine pointer shifts depth layers; touch gets none', async ({ page, browser }) => {
 	await page.goto('/');
-	const fig = page.locator('#myne figure.drawing');
+	const fig = page.locator('#hard-pills figure.drawing');
 	await fig.scrollIntoViewIfNeeded();
 	const box = (await fig.boundingBox())!;
 	await page.mouse.move(box.x + box.width * 0.95, box.y + box.height * 0.95);
@@ -51,7 +51,7 @@ test('fine pointer shifts depth layers; touch gets none', async ({ page, browser
 	const touch = await browser.newContext({ hasTouch: true, isMobile: true, viewport: { width: 390, height: 844 } });
 	const p2 = await touch.newPage();
 	await p2.goto('/');
-	const f2 = p2.locator('#myne figure.drawing');
+	const f2 = p2.locator('#hard-pills figure.drawing');
 	await f2.scrollIntoViewIfNeeded();
 	expect(await f2.evaluate((f) => (f as HTMLElement).style.getPropertyValue('--px'))).toBe('');
 	await touch.close();
@@ -78,9 +78,11 @@ for (const slug of slugs) {
 	test(`${slug} drawing is layered and intricate`, async ({ page }) => {
 		await page.goto('/');
 		const fig = page.locator(`#${slug} figure.drawing`);
-		expect(await fig.locator('svg > g.layer').count()).toBeGreaterThanOrEqual(4);
+		const is3d = (await fig.locator('svg[data-model]').count()) > 0;
+		if (is3d) expect(await fig.locator('.wire path').count()).toBeGreaterThanOrEqual(20);
+		else expect(await fig.locator('svg > g.layer').count()).toBeGreaterThanOrEqual(4);
 		expect(await fig.locator('.stroke, .after, .c, .type').count()).toBeGreaterThanOrEqual(30);
-		expect(await fig.locator('.live, .wobble, .bob, .march, .vp, .knob').count()).toBeGreaterThanOrEqual(1);
+		expect(await fig.locator('.live, .wobble, .bob, .march, .vp, .knob, [class*="st-"]').count()).toBeGreaterThanOrEqual(1);
 	});
 }
 
