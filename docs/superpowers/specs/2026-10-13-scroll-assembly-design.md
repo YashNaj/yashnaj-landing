@@ -1,5 +1,7 @@
 # Scroll-assembled drawings — design
 
+> **Reverted (2026-10-13, `4563884`).** This shipped and was removed the same day: it changed how the drawings were presented, not what they do. Superseded by `2026-10-13-story-drawings-design.md`.
+
 Phase 1 of 3 in the "next-level motion" roadmap:
 
 1. **Scroll-driven story** (this spec): the exploded-blueprint set piece.
