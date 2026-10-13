@@ -27,3 +27,15 @@ describe('render-blocking CSS', () => {
 		expect(html).toMatch(/<style[^>]*>[\s\S]*--color-ink/);
 	});
 });
+
+describe('project page JS budget', () => {
+	it('each /work page ships under 4 KB gzipped JS', () => {
+		for (const slug of ['chauffeur', 'myne', 'mri-viewer', 'hard-pills']) {
+			const html = readFileSync(`build/work/${slug}.html`, 'utf8');
+			const urls = [...html.matchAll(/src="([^"]+\.js)"/g)].map((m) => m[1]);
+			let total = gzipSync(html.match(/<script>[\s\S]*?<\/script>/g)?.join('') ?? '').length;
+			for (const u of urls) total += gzipSync(readFileSync(join('build', u.replace(/^\.?\//, '')))).length;
+			expect(total, slug).toBeLessThan(4 * 1024);
+		}
+	});
+});

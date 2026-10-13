@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import Seo from '$lib/components/Seo.svelte';
 </script>
 
-<svelte:head><title>{page.status} · Yashal Najeeb</title></svelte:head>
+<Seo title="{page.status} · Yashal Najeeb" description="This page isn’t in the set." path={page.url.pathname} noindex />
 
 <main class="mx-auto flex min-h-dvh max-w-3xl flex-col justify-center px-4">
 	<p class="font-mono text-xs tracking-[0.3em] text-signal uppercase">Sheet missing</p>
