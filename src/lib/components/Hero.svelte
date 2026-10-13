@@ -25,7 +25,7 @@
 			class="hero-plate"
 			src="/img/yashal-bg-480.webp"
 			srcset="/img/yashal-bg-480.webp 480w, /img/yashal-bg-800.webp 800w"
-			sizes="(min-width: 768px) 520px, 100vw"
+			sizes="(min-width: 768px) 520px, 60vw"
 			width="800"
 			height="800"
 			alt={profile.photoAlt}
