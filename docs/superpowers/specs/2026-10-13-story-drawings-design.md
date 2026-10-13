@@ -11,7 +11,7 @@ The user asked for "more advanced animations", which means the animations themse
 - **The finish is solid, not sketchy.** Bodies read as whole objects: the front face hides what is behind it, and back outlines are full ink. Status icons and small details are complete.
 - **It's fast.** A drawing is finished in about 1.5 s, and story loops run about 4 s.
 
-The approved reference is the chauffeur spike on branch `spike/chauffeur-story` (final commit `0e093c4`, GIF `chauffeur-3d-v5.gif`). That branch is throwaway. This spec re-implements it properly and extends it to the other three drawings.
+The approved reference is the chauffeur spike on branch `spike/chauffeur-story` (final commit after the axes change, GIF `chauffeur-3d-v6.gif`). That branch is throwaway. This spec re-implements it properly and extends it to the other three drawings.
 
 **Decided with the user:**
 - 3D only where the subject is really 3D.
@@ -37,6 +37,7 @@ Exactly as approved in the spike:
   - **Outlines:** the back outline is full ink at a fixed width of 1.35. The front and back outlines are joined by every second outline point, forming the edge band.
   - **Side buttons and camera:** side buttons are boxes 6 deep, and the camera bump is on the back.
   - **Face:** the front face is filled with `--color-ink`, so it occludes the body behind it.
+  - **Construction axes:** the dashed centre lines, bounding box and tap-target circle live in the model's middle plane (z = 0), so they turn with the phone instead of staying flat on the sheet.
 - **Turn:** yaw −12° → −30°, pitch 5° → 10°.
 - **Story, 4.2 s:**
   1. The cursor glides in and taps; the button dips and turns signal orange, and ripples spread.
@@ -113,6 +114,7 @@ All of these show the same final 3D view, so the home ↔ project morph has the 
 Each 3D drawing component defines its model as data (edges with width and dim options, plus anchored planes). It renders:
 - `<g class="wire">` with one `<path class="stroke …" pathLength="1" d={edgePath(final, pts)} data-pts={json}>` per edge
 - `<g class="face" transform="matrix(…final…)">` for each mapped plane, holding the existing 2D artwork
+- the construction layer (`.c` axes and guides) as one more mapped plane at the model's middle depth, so guides turn with the object
 - callout leaders whose start points are projected anchors
 
 So the final pose is in the HTML: no JS is needed to see the 3D drawing.
