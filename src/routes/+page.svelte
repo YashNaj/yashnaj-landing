@@ -19,6 +19,8 @@
 	};
 </script>
 
+<svelte:head><script src="/enhance.js" defer></script></svelte:head>
+
 <main class="mx-auto max-w-6xl px-4 md:px-8">
 	<Hero />
 
