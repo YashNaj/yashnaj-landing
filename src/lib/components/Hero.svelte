@@ -17,7 +17,7 @@
 			{profile.name}
 		</h1>
 		<p data-enter style="--e: 1" class="mt-4 font-mono text-sm text-paper/85">{profile.role}</p>
-		<p data-enter style="--e: 2" class="mt-6 max-w-2xl text-xl leading-snug md:text-2xl">{profile.pitch}</p>
+		<p class="mt-6 max-w-2xl text-xl leading-snug md:text-2xl">{profile.pitch}</p>
 		<p data-testid="availability" data-enter style="--e: 3" class="mt-5 inline-flex items-center gap-2 font-mono text-sm text-paper">
 			<span aria-hidden="true" class="ping h-2 w-2 shrink-0 rounded-full bg-signal"></span>
 			{profile.availability}

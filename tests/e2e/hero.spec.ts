@@ -47,3 +47,13 @@ test('reduced motion: hero is static', async ({ page }) => {
 	await page.goto('/');
 	expect(await page.getByTestId('hero').evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
 });
+
+test('on a phone the pitch is the LCP, so it never animates either', async ({ browser }) => {
+	const ctx = await browser.newContext({ viewport: { width: 412, height: 823 } });
+	const page = await ctx.newPage();
+	await page.goto('/');
+	const pitch = page.locator('[data-testid="hero"] p', { hasText: 'I take products from zero' });
+	expect(await pitch.evaluate((el) => el.getAnimations().length)).toBe(0);
+	expect(await pitch.evaluate((el) => getComputedStyle(el).opacity)).toBe('1');
+	await ctx.close();
+});
