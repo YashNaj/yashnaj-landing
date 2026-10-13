@@ -111,3 +111,30 @@ test('image slides offer a half-width candidate so phones download less', async 
 	await expect(img).toHaveAttribute('srcset', '/media/hard-pills/home-sm.webp 720w, /media/hard-pills/home.webp 1440w');
 	await expect(img).toHaveAttribute('sizes', /86vw/);
 });
+
+test('two quick Next presses move exactly two slides', async ({ page }) => {
+	await page.goto('/work/myne');
+	const c = page.locator('[data-carousel]');
+	await c.locator('[data-next]').click();
+	await c.locator('[data-next]').click();
+	await expect(c.locator('[data-counter]')).toHaveText('FIG. 03 / 05');
+});
+
+test('the slide counter is announced politely', async ({ page }) => {
+	await page.goto('/work/myne');
+	await expect(page.locator('[data-counter]')).toHaveAttribute('aria-live', 'polite');
+	await expect(page.locator('[data-counter]')).toHaveAttribute('aria-atomic', 'true');
+});
+
+test('a video waits until its slide is at least 60% visible', async ({ page }) => {
+	await page.goto('/work/chauffeur');
+	const video = page.locator('[data-slide]').first().locator('video');
+	await page.evaluate(() => {
+		const r = document.querySelector('[data-slide]')!.getBoundingClientRect();
+		window.scrollBy({ top: r.top - innerHeight + r.height * 0.4, behavior: 'instant' }); // smooth scroll-behavior would leave it at 0
+	});
+	await page.waitForTimeout(600);
+	expect(await video.evaluate((v: HTMLVideoElement) => v.paused)).toBe(true);
+	await page.locator('[data-slide]').first().scrollIntoViewIfNeeded();
+	await expect.poll(() => video.evaluate((v: HTMLVideoElement) => !v.paused), { timeout: 5000 }).toBe(true);
+});

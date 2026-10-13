@@ -6,18 +6,19 @@
 		const slides = [...root.querySelectorAll('[data-slide]')];
 		const counter = root.querySelector('[data-counter]');
 		const dots = [...root.querySelectorAll('[data-dot]')];
+		const clamp = (i) => Math.max(0, Math.min(slides.length - 1, i));
 		let active = 0;
-		let onScreen = false;
+		let target = null; // slide a button/key asked for, until the scroll arrives
+		const visible = new Set(); // slides ≥ 60% inside the viewport (track clipping included)
 		root.querySelector('[data-controls]').hidden = false;
 		root.classList.add('is-enhanced');
 		if (reduce) root.querySelectorAll('video').forEach((v) => (v.controls = true));
 
-		// Videos play only when their slide is active and the carousel is on screen.
 		const sync = () =>
 			slides.forEach((s, j) => {
 				const v = s.querySelector('video');
 				if (!v) return;
-				if (onScreen && j === active && !reduce) v.play().catch(() => {});
+				if (j === active && visible.has(s) && !reduce) v.play().catch(() => {});
 				else v.pause();
 			});
 		const setActive = (i) => {
@@ -27,7 +28,6 @@
 			slides.forEach((s, j) => s.toggleAttribute('data-active', j === i));
 			sync();
 		};
-		// Several slides can be fully visible on wide screens, so "active" is the one nearest the centre.
 		const nearest = () => {
 			const centre = track.scrollLeft + track.clientWidth / 2;
 			let best = 0;
@@ -39,19 +39,23 @@
 			return best;
 		};
 		const go = (i) => {
-			const s = slides[Math.max(0, Math.min(slides.length - 1, i))];
+			target = clamp(i);
+			const s = slides[target];
 			track.scrollTo({ left: s.offsetLeft - (track.clientWidth - s.offsetWidth) / 2, behavior: reduce ? 'auto' : 'smooth' });
 		};
+		const step = (delta) => go((target ?? active) + delta);
 
-		root.querySelector('[data-prev]').addEventListener('click', () => go(active - 1));
-		root.querySelector('[data-next]').addEventListener('click', () => go(active + 1));
+		root.querySelector('[data-prev]').addEventListener('click', () => step(-1));
+		root.querySelector('[data-next]').addEventListener('click', () => step(1));
 		dots.forEach((d, i) => d.addEventListener('click', () => go(i)));
 		track.addEventListener('keydown', (e) => {
 			if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
 				e.preventDefault();
-				go(active + (e.key === 'ArrowRight' ? 1 : -1));
+				step(e.key === 'ArrowRight' ? 1 : -1);
 			}
 		});
+		// a hand on the track cancels any pending button target
+		for (const ev of ['pointerdown', 'wheel', 'touchstart']) track.addEventListener(ev, () => (target = null), { passive: true });
 		let raf = 0;
 		track.addEventListener(
 			'scroll',
@@ -59,18 +63,20 @@
 				cancelAnimationFrame(raf);
 				raf = requestAnimationFrame(() => {
 					const i = nearest();
+					if (i === target) target = null;
 					if (i !== active) setActive(i);
 				});
 			},
 			{ passive: true }
 		);
-		new IntersectionObserver(
-			([e]) => {
-				onScreen = e.isIntersecting;
+		const io = new IntersectionObserver(
+			(entries) => {
+				for (const e of entries) e.intersectionRatio >= 0.6 ? visible.add(e.target) : visible.delete(e.target);
 				sync();
 			},
-			{ threshold: 0.25 }
-		).observe(root);
+			{ threshold: [0, 0.6] }
+		);
+		slides.forEach((s) => io.observe(s));
 		setActive(nearest());
 	});
 })();

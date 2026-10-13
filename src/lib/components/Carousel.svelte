@@ -44,7 +44,7 @@
 	</div>
 	<div class="carousel-controls" data-controls hidden>
 		<button type="button" data-prev aria-label="Previous slide">←</button>
-		<span data-counter class="font-mono text-xs tracking-[0.25em]">FIG. 01 / {pad(slides.length)}</span>
+		<span data-counter aria-live="polite" aria-atomic="true" class="font-mono text-xs tracking-[0.25em]">FIG. 01 / {pad(slides.length)}</span>
 		<span class="flex">
 			{#each slides as _, i}
 				<button type="button" data-dot aria-label="Go to slide {i + 1}" aria-current={i === 0 ? 'true' : 'false'}></button>
