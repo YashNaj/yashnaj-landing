@@ -40,3 +40,27 @@ test('sitemap lists every project page and the demo', async ({ request }) => {
 	for (const slug of slugs) expect(xml).toContain(`<loc>https://yashnaj.dev/work/${slug}</loc>`);
 	expect(xml).toContain('<loc>https://yashnaj.dev/work/mri-viewer/demo</loc>');
 });
+
+test('each home sheet links to its page and shares view-transition names with it', async ({ page }) => {
+	for (const slug of slugs) {
+		await page.goto('/');
+		const sheet = page.locator(`#${slug}`);
+		const names = await sheet.evaluate((el) =>
+			[el, ...el.querySelectorAll('*')].map((n) => getComputedStyle(n).viewTransitionName).filter((n) => n && n !== 'none' && n !== 'root').sort()
+		);
+		expect(names).toEqual([`drawing-${slug}`, `sheet-${slug}`, `sheetno-${slug}`, `title-${slug}`]);
+		await sheet.getByRole('link', { name: /View project/ }).click();
+		await expect(page).toHaveURL(`/work/${slug}`);
+		const target = await page.evaluate(() =>
+			[...document.querySelectorAll('*')].map((n) => getComputedStyle(n).viewTransitionName).filter((n) => n && n !== 'none' && n !== 'root').sort()
+		);
+		expect(target).toEqual(names);
+	}
+});
+
+test('cross-document view transitions are enabled and disabled for reduced motion', async ({ page }) => {
+	await page.goto('/');
+	const css = await page.evaluate(() => [...document.styleSheets].flatMap((s) => [...s.cssRules].map((r) => r.cssText)).join('\n'));
+	expect(css).toMatch(/@view-transition\s*\{\s*navigation:\s*auto/);
+	expect(css).toMatch(/prefers-reduced-motion: reduce[\s\S]*::view-transition-group\(\*\)[\s\S]*animation: (none|auto ease 0s 1 normal none running none)/);
+});

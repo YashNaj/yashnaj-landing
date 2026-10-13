@@ -158,3 +158,19 @@ html.js .is-enhanced .slide:not([data-active]) { transform: scale(0.94); opacity
 [data-dot] { width: 8px; height: 8px; border: 1px solid var(--color-paper); border-radius: 50%; }
 [data-dot][aria-current='true'] { background: var(--color-signal); border-color: var(--color-signal); }
 @media (prefers-reduced-motion: reduce) { .slide { transition: none; } }
+
+/* ---------- Cross-document morph ---------- */
+@view-transition {
+	navigation: auto;
+}
+::view-transition-group(*) {
+	animation-duration: 380ms;
+	animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+	::view-transition-group(*),
+	::view-transition-old(*),
+	::view-transition-new(*) {
+		animation: none;
+	}
+}

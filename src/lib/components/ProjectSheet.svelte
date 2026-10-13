@@ -11,18 +11,23 @@
 <article
 	id={project.slug}
 	data-testid="project-sheet"
+	style:view-transition-name="sheet-{project.slug}"
 	class="relative grid scroll-mt-8 gap-8 border border-line-dim bg-ink/70 p-5 md:grid-cols-2 md:items-center md:gap-12 md:p-10"
 >
-	<span class="absolute top-3 right-4 font-mono text-xs tracking-widest text-paper/70">
+	<span class="absolute top-3 right-4 font-mono text-xs tracking-widest text-paper/70" style:view-transition-name="sheetno-{project.slug}">
 		SHEET {project.sheet} / 04
 	</span>
 
-	<DrawOnView label={project.drawingLabel} class={flip ? 'md:order-2' : ''}>
-		<Drawing />
-	</DrawOnView>
+	<div class={flip ? 'md:order-2' : ''} style:view-transition-name="drawing-{project.slug}">
+		<DrawOnView label={project.drawingLabel}>
+			<Drawing />
+		</DrawOnView>
+	</div>
 
 	<div class="min-w-0">
-		<h3 class="text-3xl font-semibold tracking-tight md:text-4xl">{project.title}</h3>
+		<h3 class="text-3xl font-semibold tracking-tight md:text-4xl">
+			<a href="/work/{project.slug}" class="hover:text-signal" style:view-transition-name="title-{project.slug}">{project.title}</a>
+		</h3>
 		<p class="mt-2 font-mono text-sm text-paper/80">{project.tagline}</p>
 		<p class="mt-5 leading-relaxed text-paper/90">{project.summary}</p>
 		<p class="mt-5 border-l-2 border-signal pl-3 font-mono text-sm text-paper">{project.metric}</p>
@@ -45,5 +50,8 @@
 				{/each}
 			</p>
 		{/if}
+		<p class="mt-6">
+			<a href="/work/{project.slug}" class="inline-block border border-paper px-4 py-2 font-mono text-sm tracking-widest uppercase hover:border-signal hover:text-signal">View project →</a>
+		</p>
 	</div>
 </article>
