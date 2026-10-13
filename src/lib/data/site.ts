@@ -1,4 +1,10 @@
 export type Link = { label: string; href: string };
+export type SlideFrame = 'phone' | 'browser';
+export type Slide =
+	| { kind: 'image'; src: string; width: number; height: number; alt: string; caption: string; frame: SlideFrame }
+	| { kind: 'video'; src: string; poster: string; width: number; height: number; alt: string; caption: string; frame: SlideFrame }
+	| { kind: 'cta'; href: string; label: string; caption: string };
+export type ProjectDetail = { problem: string; built: string; how: string; outcome: string };
 export type ProjectSlug = 'chauffeur' | 'myne' | 'mri-viewer' | 'hard-pills';
 export type Project = {
 	slug: ProjectSlug;
@@ -11,6 +17,9 @@ export type Project = {
 	links: Link[];
 	command?: string;
 	drawingLabel: string;
+	detail: ProjectDetail;
+	slides: Slide[];
+	demo?: { href: string; label: string };
 };
 
 export const profile = {
@@ -44,7 +53,22 @@ export const projects: Project[] = [
 		],
 		command: 'brew install yashnaj/chauffeur/chauffeur',
 		drawingLabel:
-			'Line drawing of a phone: a tap ripple lands on a greyed-out button and a NO EFFECT label stamps beside it.'
+			'Line drawing of a phone: a tap ripple lands on a greyed-out button and a NO EFFECT label stamps beside it.',
+		detail: {
+			problem:
+				'Coding agents can write an iOS app but can’t tell whether it works. Pointed at the Simulator, an agent taps a disabled button and reports “Done” — nothing happened, and it has no way of knowing.',
+			built:
+				'chauffeur is an MCP server and agent skill, written in Swift, that lets Claude Code, Codex or Cursor drive the iOS Simulator and get the truth back. It installs with Homebrew and ships a doctor command that checks your Xcode setup.',
+			how:
+				'It hands the agent the screen as an accessibility outline it can reason about, taps through the Simulator’s own input system, then checks what actually changed. A tap that did nothing returns NO EFFECT, one an alert swallowed returns INTERCEPTED, and a crash returns APP CRASHED with the line that caused it.',
+			outcome:
+				'Benchmarked head to head with Xcode 27’s own MCP server over 180 runs: on Opus it verified 45 of 45 tasks to Xcode’s 39, in under half the turns at roughly a sixth of the cost — and it answered every crash and log task Xcode couldn’t.'
+		},
+		slides: [
+			{ kind: 'video', src: '/media/chauffeur/honest.mp4', poster: '/media/chauffeur/honest.webp', width: 960, height: 540, frame: 'browser', alt: 'Screen recording: an agent taps a disabled button and chauffeur reports NO EFFECT', caption: 'NO EFFECT — the tap changed nothing, and the agent is told so' },
+			{ kind: 'video', src: '/media/chauffeur/race.mp4', poster: '/media/chauffeur/race.webp', width: 960, height: 540, frame: 'browser', alt: 'Side-by-side recording of the same task with chauffeur and with Xcode 27’s MCP server', caption: 'Same task, both tools: 5 turns vs 14' },
+			{ kind: 'video', src: '/media/chauffeur/crash.mp4', poster: '/media/chauffeur/crash.webp', width: 960, height: 540, frame: 'browser', alt: 'Screen recording: the app crashes and chauffeur reports APP CRASHED with the failing line', caption: 'APP CRASHED — with the line that caused it' }
+		]
 	},
 	{
 		slug: 'myne',
@@ -60,7 +84,26 @@ export const projects: Project[] = [
 			{ label: 'App Store', href: 'https://apps.apple.com/us/app/myne-global/id6757202169' }
 		],
 		drawingLabel:
-			'Exploded-view drawing of a vault door with a Myne Passport pulled out beside it, with callout labels.'
+			'Exploded-view drawing of a vault door with a Myne Passport pulled out beside it, with callout labels.',
+		detail: {
+			problem:
+				'Collectors of watches, bags and other high-value goods had no way to prove they owned an item — or that it wasn’t stolen — when it came time to sell.',
+			built:
+				'As lead engineer I built Myne end to end: a SvelteKit API on Postgres with row-level security, a SwiftUI iOS app, and Stripe plus StoreKit billing. Owners register items in a private vault, dealers issue Myne Passports at the point of sale, and repair shops log service history with in-app estimate approval.',
+			how:
+				'Ownership transfers use owner-held keys with escrowed recovery, so the server never reads an item’s private data. Every buyer search is checked against a registry of 16,830 law-enforcement and Interpol stolen-item records. Design specs and API handoffs keep the web, iOS and repair-shop work in step.',
+			outcome:
+				'$10M+ in registered assets across 1,200 items and 400 collectors. Shifting revenue to dealers signed 12 NYC shops whose 800 passports became verified items in buyers’ vaults in the first quarter, and a proactive audit found and closed two critical privilege-escalation paths the same day.'
+		},
+		slides: [1, 2, 3, 4, 5].map((n) => ({
+			kind: 'image' as const,
+			src: `/media/myne/myne-${n}.webp`,
+			width: 600,
+			height: 1300,
+			frame: 'phone' as const,
+			alt: `Myne Global iOS app, App Store screenshot ${n} of 5`,
+			caption: ['Your vault', 'Item provenance', 'Myne Passport', 'Ownership transfer', 'Stolen-item check'][n - 1]
+		}))
 	},
 	{
 		slug: 'mri-viewer',
@@ -73,7 +116,24 @@ export const projects: Project[] = [
 		stack: ['React Native', 'Cornerstone3D', 'DICOMweb', 'Express', 'AWS'],
 		links: [],
 		drawingLabel:
-			'Abstract drawing of stacked scan slices fanning out beside a phone with a slice scrubber.'
+			'Abstract drawing of stacked scan slices fanning out beside a phone with a slice scrubber.',
+		demo: { href: '/work/mri-viewer/demo', label: 'Try the live viewer' },
+		detail: {
+			problem:
+				'Clinicians on a healthcare records platform couldn’t view MRI or CT scans on their phones. The platform’s imaging viewer was a three-year-old fork that predated touch support, so the viewport was dead on mobile.',
+			built:
+				'Rather than a risky major upgrade that the web and admin apps also depended on, I built a small, modern Cornerstone3D viewport as its own build and moved every control a user touches into native React Native: series chips, a slice scrubber, scroll / window-level / pan tools and reset.',
+			how:
+				'The app fetches the study’s DICOMweb manifest, parses it into series, and pushes a stack of image IDs into the WebView over a thin message bridge — loadStack, setSlice, setPrimaryTool, reset — and the page reports back ready, stackLoaded, slice or error. Gestures map to tool groups: one finger for the active tool, pinch to zoom, three fingers to scroll.',
+			outcome:
+				'MRI and CT studies render on device with the first image in under 2 seconds. Alongside it I closed 57 of 68 open UAT defects (all 31 on mobile), rebuilt authorization across 156 API routes to derive privilege from the database, and stood up the platform’s first iOS release path.'
+		},
+		slides: [
+			{ kind: 'image', src: '/media/mri/series.webp', width: 780, height: 1688, frame: 'phone', alt: 'MRI viewer showing an axial brain slice with series chips and a slice scrubber', caption: 'Series chips and a native slice scrubber' },
+			{ kind: 'image', src: '/media/mri/volume.webp', width: 780, height: 1688, frame: 'phone', alt: 'MRI viewer on a 100-slice T1 volume, scrolled to the middle of the stack', caption: 'A 100-slice T1 volume, mid-scroll' },
+			{ kind: 'image', src: '/media/mri/flair.webp', width: 780, height: 1688, frame: 'phone', alt: 'MRI viewer showing a FLAIR series with the Window tool selected', caption: 'FLAIR series with window/level' },
+			{ kind: 'cta', href: '/work/mri-viewer/demo', label: 'Try the live viewer', caption: 'The real viewer, running in your browser' }
+		]
 	},
 	{
 		slug: 'hard-pills',
@@ -85,7 +145,22 @@ export const projects: Project[] = [
 		metric: 'Live in production, run end to end by a non-technical writer',
 		stack: ['SvelteKit', 'Supabase', 'Drizzle', 'Tailwind', 'Vercel'],
 		links: [{ label: 'hardpillstoswallow.com', href: 'https://hardpillstoswallow.com' }],
-		drawingLabel: 'Comic-book page drawing: panel grid, halftone shading and a speech bubble.'
+		drawingLabel: 'Comic-book page drawing: panel grid, halftone shading and a speech bubble.',
+		detail: {
+			problem:
+				'A writer wanted a blog with real personality — and to run all of it herself, from drafting and scheduling to the mailing list, without calling a developer.',
+			built:
+				'A pop-art public site with a featured post, ticker, RSS and generated share images, plus a full admin: a TipTap editor with autosave, scheduling and preview, comic-styled banners, a plain-language SEO panel, a media library, submissions, the mailing list, analytics and backups.',
+			how:
+				'Publishing runs on database triggers, so “publish now” and scheduled posts behave the same way: the new-post email goes out exactly once through a Supabase edge function, and the post is shared to the writer’s linked X and Threads accounts. Social tokens and API keys are encrypted at rest.',
+			outcome:
+				'Live at hardpillstoswallow.com and run end to end by a non-technical writer — every post, schedule, email and social share happens without a developer in the loop.'
+		},
+		slides: [
+			{ kind: 'image', src: '/media/hard-pills/home.webp', width: 1440, height: 900, frame: 'browser', alt: 'Hard Pills to Swallow home page: pop-art featured post and recent articles', caption: 'Home: featured post, ticker and recent articles' },
+			{ kind: 'image', src: '/media/hard-pills/article.webp', width: 1440, height: 900, frame: 'browser', alt: 'A Hard Pills to Swallow article page with a comic-styled banner', caption: 'An article with its comic-styled banner' },
+			{ kind: 'image', src: '/media/hard-pills/mobile.webp', width: 780, height: 1688, frame: 'phone', alt: 'Hard Pills to Swallow home page on a phone', caption: 'The same site on a phone' }
+		]
 	}
 ];
 

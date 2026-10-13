@@ -51,4 +51,27 @@ describe('site data', () => {
 		expect(alsoBuilt.map((a) => a.name)).toEqual(['Serveus', 'Rider365', 'AutoAce', 'FieldDiligence']);
 		expect(experience).toHaveLength(3);
 	});
+	it('every project has a four-part write-up', () => {
+		for (const p of projects) {
+			for (const k of ['problem', 'built', 'how', 'outcome'] as const) {
+				expect(p.detail[k].length, `${p.slug}.${k}`).toBeGreaterThan(60);
+			}
+		}
+	});
+
+	it('every project has at least three slides with alt text and captions', () => {
+		for (const p of projects) {
+			expect(p.slides.length, p.slug).toBeGreaterThanOrEqual(3);
+			for (const s of p.slides) {
+				expect(s.caption.length).toBeGreaterThan(3);
+				if (s.kind !== 'cta') expect(s.alt.length).toBeGreaterThan(10);
+			}
+		}
+	});
+
+	it('the MRI project links to the live demo', () => {
+		const mri = projects.find((p) => p.slug === 'mri-viewer')!;
+		expect(mri.demo?.href).toBe('/work/mri-viewer/demo');
+		expect(mri.slides.some((s) => s.kind === 'cta' && s.href === '/work/mri-viewer/demo')).toBe(true);
+	});
 });
