@@ -30,7 +30,7 @@
 							<div class="frame-bar" aria-hidden="true"><i></i><i></i><i></i></div>
 						{/if}
 						{#if slide.kind === 'image'}
-							<img src={slide.src} srcset="{small(slide.src)} {Math.round(slide.width / 2)}w, {slide.src} {slide.width}w" sizes={sizes[slide.frame]} alt={slide.alt} width={slide.width} height={slide.height} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} decoding="async" />
+							<img src={slide.src} srcset="{small(slide.src)} {Math.round(slide.width / 2)}w, {slide.src} {slide.width}w" sizes={sizes[slide.frame]} alt={slide.alt} width={slide.width} height={slide.height} loading={i === 0 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : 'low'} decoding="async" />
 						{:else}
 							<video src={slide.src} poster={slide.poster} width={slide.width} height={slide.height} aria-label={slide.alt} muted playsinline loop preload="none"></video>
 						{/if}

@@ -157,3 +157,10 @@ test('slides are named figures, not figures forced into a disallowed role', asyn
 	await expect(slide).toHaveAttribute('aria-roledescription', 'slide');
 	await expect(slide).toHaveAttribute('aria-label', '1 of 5');
 });
+
+test('later slide images yield bandwidth to the first (the LCP)', async ({ page }) => {
+	await page.goto('/work/myne');
+	const imgs = page.locator('[data-slide] img');
+	await expect(imgs.first()).toHaveAttribute('fetchpriority', 'high');
+	for (const img of (await imgs.all()).slice(1)) await expect(img).toHaveAttribute('fetchpriority', 'low');
+});
