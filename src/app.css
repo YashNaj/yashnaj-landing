@@ -241,6 +241,19 @@ html.js [data-draw] svg.story .stroke { transition: stroke-dashoffset var(--d, 9
 @keyframes st-clock { to { opacity: 1; } }
 @keyframes st-pulse-m { 0%, 36% { stroke-dashoffset: 1.08; opacity: 0; } 37% { opacity: 1; } 46% { stroke-dashoffset: 0; opacity: 1; } 50%, 100% { stroke-dashoffset: 0; opacity: 0; } }
 
+/* hard-pills — flat: the page re-inks panel by panel, then POW, the halftone and LATER land; starts and ends whole */
+[data-draw][data-live] svg.story.pills { --loop: 4.5s; }
+[data-draw][data-live] svg.story.pills .st-panel { animation: st-panel var(--loop) var(--ease-in-out) infinite; animation-delay: calc((var(--i) * 0.06 - 1) * var(--loop)); }
+[data-draw][data-live] svg.story.pills .wobble { animation: st-wobble var(--loop) var(--ease-out) infinite; }
+[data-draw][data-live] svg.story.pills .stamp { animation: st-pow var(--loop) var(--ease-pop) infinite; }
+[data-draw][data-live] svg.story.pills .grow { animation: st-grow var(--loop) var(--ease-out) infinite; }
+[data-draw][data-live] svg.story.pills .st-arc { animation: st-arc var(--loop) var(--ease-draw) infinite; }
+@keyframes st-panel { 0%, 8% { opacity: 1; } 12% { opacity: 0.15; } 20%, 100% { opacity: 1; } }
+@keyframes st-wobble { 0%, 40% { transform: rotate(0deg); } 44% { transform: rotate(-8deg); } 48% { transform: rotate(6deg); } 53%, 100% { transform: rotate(0deg); } }
+@keyframes st-pow { 0%, 40% { transform: rotate(-3deg); } 44% { transform: rotate(-8deg) scale(1.25); } 50%, 100% { transform: rotate(-3deg); } }
+@keyframes st-grow { 0%, 22% { transform: scale(1); } 24% { transform: scale(0); } 44%, 100% { transform: scale(1); } }
+@keyframes st-arc { 0%, 28% { stroke-dashoffset: 0; } 30% { stroke-dashoffset: 1; } 52%, 100% { stroke-dashoffset: 0; } }
+
 @media (prefers-reduced-motion: reduce), print {
 	html.js [data-draw] :is(.c, .stroke, .after, .type tspan, .stamp, .cursor, .unlock, .slide-out, .grow) {
 		transition: none !important;

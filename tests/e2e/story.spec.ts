@@ -88,7 +88,8 @@ test.describe('stories', () => {
 	const loopParts: Record<string, string> = {
 		chauffeur: '.cursor, .btn, .ripple, .st-a, .st-b, .st-tick, .leader-pulse, .stamp, .st-one, .st-zero',
 		'mri-viewer': '.st-plane-g, .vp, .st-slice, .knob, .st-bridge',
-		myne: '.unlock, .st-bolt, .st-check, .st-rec-a, .st-rec-b, .st-clock'
+		myne: '.unlock, .st-bolt, .st-check, .st-rec-a, .st-rec-b, .st-clock',
+		'hard-pills': '.st-panel, .stamp, .wobble, .grow, .st-arc'
 	};
 	for (const [slug, sel] of Object.entries(loopParts)) {
 		test(`${slug}: every loop part runs on the drawing's one clock, only while live`, async ({ page }) => {
@@ -185,4 +186,15 @@ test.describe('myne door', () => {
 		expect(await liveDoor(page)).toEqual(await ssrDoor(page));
 		expect(await page.locator('#myne figure.drawing').evaluate((f) => f.getAnimations({ subtree: true }).length)).toBe(0);
 	});
+});
+
+test('hard-pills beats: a panel re-inks inside its border; the page is whole at loop start', async ({ page }) => {
+	const fig = await live(page, 'hard-pills');
+	const panels = () => fig.locator('.st-panel').evaluateAll((g) => g.map((e) => parseFloat(getComputedStyle(e).opacity)));
+	const borders = () => fig.locator('rect.stroke').evaluateAll((r) => r.slice(0, 5).map((e) => parseFloat(getComputedStyle(e).strokeDashoffset)));
+	await seek(page, 'hard-pills', 0);
+	expect(await panels()).toEqual([1, 1, 1, 1]);
+	await seek(page, 'hard-pills', 0.12);
+	expect((await panels())[0]).toBeLessThan(0.5);
+	expect(Math.max(...(await borders()))).toBe(0);
 });
