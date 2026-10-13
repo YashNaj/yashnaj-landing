@@ -18,12 +18,20 @@
 			var from = document.referrer && new URL(document.referrer);
 			var fromWork = from && from.origin === location.origin && from.pathname.indexOf('/work/') === 0 && location.pathname === '/';
 			if (nav && (nav.type === 'back_forward' || (nav.type === 'navigate' && fromWork))) document.documentElement.classList.add('restored');
+			// Prev/next and "All work" tell the next page which way to move.
+			document.addEventListener('click', function (e) {
+				var a = e.target.closest && e.target.closest('[data-vt-dir]');
+				if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+				try { sessionStorage.setItem('vt-dir', a.getAttribute('data-vt-dir')); } catch (_) {}
+			});
 			// Tag cross-document view transitions with their direction before first render.
 			window.addEventListener('pagereveal', function (e) {
+				var dir = null;
+				try { dir = sessionStorage.getItem('vt-dir'); sessionStorage.removeItem('vt-dir'); } catch (_) {}
 				if (!e.viewTransition) return;
 				var a = window.navigation && navigation.activation;
 				var back = !!(a && a.navigationType === 'traverse' && a.from && a.entry && a.entry.index < a.from.index);
-				e.viewTransition.types.add(back ? 'back' : 'forward');
+				e.viewTransition.types.add(dir || (back ? 'back' : 'forward'));
 			});
 		</script>
 		%sveltekit.head%

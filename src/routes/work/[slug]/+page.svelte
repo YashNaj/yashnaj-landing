@@ -31,7 +31,7 @@
 </svelte:head>
 
 <main class="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-16">
-	<a href="/#work" class="font-mono text-xs tracking-[0.3em] text-paper/80 uppercase hover:text-signal">← All work</a>
+	<a href="/#work" data-vt-dir="back" class="font-mono text-xs tracking-[0.3em] text-paper/80 uppercase hover:text-signal">← All work</a>
 
 	<header class="relative mt-6 grid gap-8 border border-line-dim bg-ink/70 p-5 md:grid-cols-2 md:items-center md:p-10" style:view-transition-name="sheet-{p.slug}" style:view-transition-class="vt-sheet">
 		<span class="sheet-corner" data-corner="tl" aria-hidden="true"></span>
@@ -75,8 +75,8 @@
 	{/if}
 
 	<nav data-reveal class="mt-16 flex flex-wrap justify-between gap-4 border-t border-line-dim pt-8 font-mono text-sm" aria-label="More projects">
-		<a class="hover:text-signal" href="/work/{data.prev.slug}">← Previous: {data.prev.title}</a>
-		<a class="hover:text-signal" href="/work/{data.next.slug}">Next: {data.next.title} →</a>
+		<a class="hover:text-signal" href="/work/{data.prev.slug}" data-vt-dir="prev">← Previous: {data.prev.title}</a>
+		<a class="hover:text-signal" href="/work/{data.next.slug}" data-vt-dir="next">Next: {data.next.title} →</a>
 	</nav>
 	<Footer />
 </main>

@@ -18,7 +18,7 @@ describe('morph choreography', () => {
 	const html = readFileSync('src/app.html', 'utf8');
 	it('tags each navigation forward or back before first render', () => {
 		expect(html).toContain("addEventListener('pagereveal'");
-		expect(html).toContain("types.add(back ? 'back' : 'forward')");
+		expect(html).toContain("types.add(dir || (back ? 'back' : 'forward'))");
 	});
 	it('animates root by direction and groups by class', () => {
 		expect(css).toMatch(/:active-view-transition-type\(back\)/);
