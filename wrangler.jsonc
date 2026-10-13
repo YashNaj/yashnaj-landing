@@ -5,6 +5,11 @@
 	"build": {
 		"command": "bun run build"
 	},
+	"workers_dev": false,
+	"routes": [
+		{ "pattern": "yashnaj.dev", "custom_domain": true },
+		{ "pattern": "www.yashnaj.dev", "custom_domain": true }
+	],
 	"assets": {
 		"directory": "./build",
 		"not_found_handling": "404-page",
