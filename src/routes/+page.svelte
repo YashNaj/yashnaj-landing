@@ -1,5 +1,8 @@
 <script lang="ts">
 	import type { Component } from 'svelte';
+	import AlsoBuilt from '$lib/components/AlsoBuilt.svelte';
+	import Experience from '$lib/components/Experience.svelte';
+	import Footer from '$lib/components/Footer.svelte';
 	import Hero from '$lib/components/Hero.svelte';
 	import ProjectSheet from '$lib/components/ProjectSheet.svelte';
 	import { projects, type ProjectSlug } from '$lib/data/site';
@@ -31,4 +34,9 @@
 			{/each}
 		</div>
 	</section>
+
+	<AlsoBuilt />
+	<Experience />
 </main>
+
+<div class="mx-auto max-w-6xl px-4 md:px-8"><Footer /></div>
