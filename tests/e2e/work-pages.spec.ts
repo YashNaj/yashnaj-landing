@@ -131,7 +131,8 @@ test('"All work" from a project lands on finished drawings, like Back', async ({
 	await expect(page).toHaveURL('/#work');
 	await expect(page.locator('html')).toHaveClass(/\brestored\b/);
 	const fig = page.locator('#chauffeur figure.drawing');
-	await expect(fig).toHaveAttribute('data-drawn', '', { timeout: 1000 });
+	// 1 s raced page load under parallel workers; the no-replay proof is the zero transition below
+	await expect(fig).toHaveAttribute('data-drawn', '', { timeout: 3000 });
 	const stroke = fig.locator('.stroke').first();
 	expect(await stroke.evaluate((el) => getComputedStyle(el).transitionDuration.split(',').every((d) => parseFloat(d) === 0))).toBe(true);
 });

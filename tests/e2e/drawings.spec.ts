@@ -6,7 +6,8 @@ test('stroke timing follows real path length and plays in document order', async
 	await fig.scrollIntoViewIfNeeded();
 	await expect(fig).toHaveAttribute('data-drawn', '');
 	const timing = await fig.evaluate((f) =>
-		[...f.querySelectorAll('.stroke')].map((el) => ({
+		// 3D body edges (.wire) draw alongside, by design; the sequence is the drawn artwork's strokes
+		[...f.querySelectorAll('.stroke')].filter((el) => !el.closest('.wire')).map((el) => ({
 			len: (el as SVGGeometryElement).getTotalLength(),
 			d: parseFloat((el as HTMLElement).style.getPropertyValue('--d')),
 			t: parseFloat((el as HTMLElement).style.getPropertyValue('--t'))
@@ -27,7 +28,8 @@ test('loops run only while a finished drawing is on screen, and a revisit is not
 	expect(await fig.locator('.live').first().evaluate((el) => getComputedStyle(el).animationName)).toBe('none');
 	await fig.scrollIntoViewIfNeeded();
 	await expect(fig).toHaveAttribute('data-live', '');
-	expect(await fig.locator('.stroke').first().evaluate((el) => parseFloat(getComputedStyle(el).strokeDashoffset))).toBe(0);
+	// not restarted: a replay would put the dash back near 1 (exact 0 races the last frames of the draw under load)
+	expect(await fig.locator('.stroke').first().evaluate((el) => parseFloat(getComputedStyle(el).strokeDashoffset))).toBeLessThan(0.05);
 });
 
 test('a drawing scrolled past before it finishes never goes live off-screen', async ({ page }) => {

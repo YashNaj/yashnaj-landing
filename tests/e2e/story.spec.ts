@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const models = ['chauffeur', 'mri-viewer'] as const; // Task 6 appends 'myne'
+const models = ['chauffeur', 'mri-viewer', 'myne'] as const;
 const faceMatrix = (page: import('@playwright/test').Page, sel: string) =>
 	page.locator(sel).first().getAttribute('transform');
 
@@ -87,7 +87,8 @@ test.describe('stories', () => {
 	test.use({ viewport: { width: 1280, height: 900 } });
 	const loopParts: Record<string, string> = {
 		chauffeur: '.cursor, .btn, .ripple, .st-a, .st-b, .st-tick, .leader-pulse, .stamp, .st-one, .st-zero',
-		'mri-viewer': '.st-plane-g, .vp, .st-slice, .knob, .st-bridge'
+		'mri-viewer': '.st-plane-g, .vp, .st-slice, .knob, .st-bridge',
+		myne: '.unlock, .st-bolt, .st-check, .st-rec-a, .st-rec-b, .st-clock'
 	};
 	for (const [slug, sel] of Object.entries(loopParts)) {
 		test(`${slug}: every loop part runs on the drawing's one clock, only while live`, async ({ page }) => {
@@ -141,4 +142,47 @@ test('mri beats: the slice plane steps down the stack and the readout follows', 
 	await seek(page, 'mri-viewer', 0.4);
 	expect(await y()).toBeGreaterThan(y0 + 40);
 	expect(await shown()).toEqual(['SLICE 117/232']);
+});
+
+/** The door's edges as built (SSR), read from a fresh copy of the page. */
+const ssrDoor = (page: import('@playwright/test').Page) =>
+	page.evaluate(async () => {
+		const doc = new DOMParser().parseFromString(await (await fetch('/')).text(), 'text/html');
+		return [...doc.querySelectorAll('#myne [data-part="door"][data-pts]')].map((p) => p.getAttribute('d'));
+	});
+const liveDoor = (page: import('@playwright/test').Page) =>
+	page.locator('#myne [data-part="door"][data-pts]').evaluateAll((ps) => ps.map((p) => p.getAttribute('d')));
+
+test.describe('myne door', () => {
+	test('swings open mid-loop and is shut at the start of the loop', async ({ page }) => {
+		await live(page, 'myne');
+		const ssr = await ssrDoor(page);
+		expect(ssr.length).toBeGreaterThan(10);
+		await seek(page, 'myne', 0.05);
+		await page.waitForTimeout(120);
+		expect(await liveDoor(page)).toEqual(ssr);
+		await seek(page, 'myne', 0.5);
+		await page.waitForTimeout(120);
+		const open = await liveDoor(page);
+		expect(open.filter((d, i) => d !== ssr[i]).length).toBeGreaterThan(10);
+	});
+	test('stops (and shuts) when the drawing leaves the screen', async ({ page }) => {
+		await live(page, 'myne');
+		const ssr = await ssrDoor(page);
+		await page.evaluate(() => scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }));
+		await expect(page.locator('#myne figure.drawing')).not.toHaveAttribute('data-live', '');
+		await page.waitForTimeout(150);
+		const a = await liveDoor(page);
+		await page.waitForTimeout(400);
+		expect(await liveDoor(page)).toEqual(a);
+		expect(a).toEqual(ssr);
+	});
+	test('never moves under reduced motion', async ({ page }) => {
+		await page.emulateMedia({ reducedMotion: 'reduce' });
+		await page.goto('/');
+		await page.locator('#myne').scrollIntoViewIfNeeded();
+		await page.waitForTimeout(1500);
+		expect(await liveDoor(page)).toEqual(await ssrDoor(page));
+		expect(await page.locator('#myne figure.drawing').evaluate((f) => f.getAnimations({ subtree: true }).length)).toBe(0);
+	});
 });

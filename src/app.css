@@ -221,6 +221,26 @@ html.js [data-draw] svg.story .stroke { transition: stroke-dashoffset var(--d, 9
 @keyframes st-knob { 0%, 14% { transform: translateX(0); } 18%, 30% { transform: translateX(4px); } 34%, 46% { transform: translateX(8px); } 50%, 62% { transform: translateX(12px); } 66%, 88% { transform: translateX(16px); } 96%, 100% { transform: translateX(0); } }
 @keyframes st-bridge { 0% { stroke-dashoffset: 1.08; opacity: 0; } 1% { opacity: 1; } 8% { stroke-dashoffset: 0; opacity: 1; } 11% { stroke-dashoffset: 0; opacity: 0; } 16% { stroke-dashoffset: 1.08; opacity: 0; } 17% { opacity: 1; } 24% { stroke-dashoffset: 0; opacity: 1; } 27% { stroke-dashoffset: 0; opacity: 0; } 32% { stroke-dashoffset: 1.08; opacity: 0; } 33% { opacity: 1; } 40% { stroke-dashoffset: 0; opacity: 1; } 43% { stroke-dashoffset: 0; opacity: 0; } 48% { stroke-dashoffset: 1.08; opacity: 0; } 49% { opacity: 1; } 56% { stroke-dashoffset: 0; opacity: 1; } 59% { stroke-dashoffset: 0; opacity: 0; } 64% { stroke-dashoffset: 1.08; opacity: 0; } 65% { opacity: 1; } 72% { stroke-dashoffset: 0; opacity: 1; } 75% { stroke-dashoffset: 0; opacity: 0; } 100% { stroke-dashoffset: 1.08; opacity: 0; } }
 
+/* myne — unlock, swing (models.js, on .st-clock), stamp, count, close; every part on one clock */
+.drawing .st-rec-b { opacity: 0; }
+.drawing svg.story.myne .st-check { transform-box: fill-box; transform-origin: center; }
+[data-draw][data-live] svg.story.myne { --loop: 4.5s; }
+[data-draw][data-live] svg.story.myne .unlock { animation: st-spin var(--loop) var(--ease-in-out) infinite; }
+[data-draw][data-live] svg.story.myne .st-bolt { animation: st-bolt var(--loop) var(--ease-in-out) infinite; }
+[data-draw][data-live] svg.story.myne .st-check { animation: st-check var(--loop) var(--ease-pop) infinite; }
+[data-draw][data-live] svg.story.myne .st-rec-a { animation: st-rec-a var(--loop) step-end infinite; }
+[data-draw][data-live] svg.story.myne .st-rec-b { animation: st-rec-b var(--loop) step-end infinite; }
+[data-draw][data-live] svg.story.myne .st-clock { animation: st-clock var(--loop) linear infinite; }
+[data-draw][data-live] svg.story.myne .st-pulse { animation: st-pulse-m var(--loop) var(--ease-in-out) infinite; }
+[data-draw][data-live] svg.story.myne .foil-shine { animation-duration: var(--loop); }
+@keyframes st-spin { 0%, 4% { transform: rotate(0deg); } 22%, 84% { transform: rotate(90deg); } 96%, 100% { transform: rotate(0deg); } }
+@keyframes st-bolt { 0%, 10% { translate: 0 0; } 24%, 84% { translate: var(--dx) var(--dy); } 94%, 100% { translate: 0 0; } }
+@keyframes st-check { 0%, 26% { opacity: 1; transform: none; } 30%, 43% { opacity: 0; transform: scale(1.4) rotate(-8deg); } 47% { opacity: 1; transform: scale(1.18) rotate(-4deg); } 52%, 100% { opacity: 1; transform: none; } }
+@keyframes st-rec-a { 0% { opacity: 1; } 50% { opacity: 0; } 74%, 100% { opacity: 1; } }
+@keyframes st-rec-b { 0% { opacity: 0; } 50% { opacity: 1; } 74%, 100% { opacity: 0; } }
+@keyframes st-clock { to { opacity: 1; } }
+@keyframes st-pulse-m { 0%, 36% { stroke-dashoffset: 1.08; opacity: 0; } 37% { opacity: 1; } 46% { stroke-dashoffset: 0; opacity: 1; } 50%, 100% { stroke-dashoffset: 0; opacity: 0; } }
+
 @media (prefers-reduced-motion: reduce), print {
 	html.js [data-draw] :is(.c, .stroke, .after, .type tspan, .stamp, .cursor, .unlock, .slide-out, .grow) {
 		transition: none !important;
