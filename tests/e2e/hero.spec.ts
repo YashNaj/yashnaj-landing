@@ -32,3 +32,18 @@ test('the hero is a labelled section, not a header inside main', async ({ page }
 	await expect(page.locator('main header')).toHaveCount(0);
 	await expect(page.getByRole('region', { name: 'Yashal Najeeb' })).toHaveAttribute('data-testid', 'hero');
 });
+
+test('hero secondary elements enter; the h1 and photo never animate (LCP)', async ({ page }) => {
+	await page.goto('/');
+	expect(await page.locator('h1').evaluate((el) => el.getAnimations().length)).toBe(0);
+	expect(await page.locator('[data-testid="hero"] img').evaluate((el) => el.getAnimations().length)).toBe(0);
+	expect(await page.locator('[data-enter]').count()).toBeGreaterThanOrEqual(6);
+	expect(await page.locator('[data-enter]').first().evaluate((el) => el.getAnimations().length)).toBeGreaterThan(0);
+	expect(await page.getByTestId('availability').evaluate((el) => el.getAnimations({ subtree: true }).length)).toBeGreaterThan(0);
+});
+
+test('reduced motion: hero is static', async ({ page }) => {
+	await page.emulateMedia({ reducedMotion: 'reduce' });
+	await page.goto('/');
+	expect(await page.getByTestId('hero').evaluate((el) => el.getAnimations({ subtree: true }).length)).toBe(0);
+});

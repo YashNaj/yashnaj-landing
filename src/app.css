@@ -263,3 +263,17 @@ html.js .copy-btn { display: block; }
 @media (prefers-reduced-motion: no-preference) {
 	.carousel-controls > button { transition: transform var(--dur-s) var(--ease-out), color var(--dur-s) var(--ease-out), border-color var(--dur-s) var(--ease-out); }
 }
+
+/* ---------- Hero entrance ---------- */
+@media (prefers-reduced-motion: no-preference) {
+	html.js [data-enter] { animation: enter var(--dur-l) var(--ease-out) both; animation-delay: calc(var(--e, 0) * 70ms + 60ms); }
+	html.js [data-corner-in] { animation-name: corner-in; }
+	html.js [data-corner-in='tl'] { transform-origin: 0 0; }
+	html.js [data-corner-in='br'] { transform-origin: 100% 100%; }
+	.ping::after { animation: ping 2.4s var(--ease-out) infinite; }
+}
+@keyframes enter { from { opacity: 0; transform: translateY(12px); filter: blur(3px); } }
+@keyframes corner-in { from { transform: scale(0); } }
+.ping { position: relative; }
+.ping::after { content: ''; position: absolute; inset: 0; border-radius: 9999px; border: 1px solid var(--color-signal); }
+@keyframes ping { from { transform: scale(1); opacity: 0.8; } to { transform: scale(3.2); opacity: 0; } }
