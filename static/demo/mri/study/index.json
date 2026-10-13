@@ -1,0 +1,1459 @@
+{
+  "studies": [
+    {
+      "StudyInstanceUID": "2.16.840.1.113669.632.20.1211.10000357775",
+      "StudyDescription": "IRM cérébrale, neuro-crâne",
+      "StudyDate": "20061201",
+      "series": [
+        {
+          "SeriesInstanceUID": "1.3.46.670589.11.0.0.11.4.2.0.8743.5.5396.2006120114262848496",
+          "SeriesNumber": 301,
+          "SeriesDescription": "sT2/TSE/T",
+          "Modality": "MR",
+          "instances": [
+            {
+              "metadata": {
+                "InstanceNumber": 1
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0001_d63558.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 2
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0002_54bfd7.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 3
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0003_82cc1a.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 4
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0004_4344e0.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 5
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0005_1f2236.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 6
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0006_98c6f0.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 7
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0007_5d85c7.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 8
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0008_68f4f1.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 9
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0009_13d42b.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 10
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0010_e5dca4.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 11
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0011_f05800.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 12
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0012_cb481c.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 13
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0013_2fbd6d.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 14
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0014_6e68ed.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 15
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0015_01a6ff.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 16
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0016_9f9118.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 17
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0017_4dbca7.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 18
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0018_1fe1c0.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 19
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0019_af3596.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 20
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0020_c25f4e.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 21
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0021_7f4ba1.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 22
+              },
+              "url": "dicomweb:/demo/mri/study/s301_i0022_fa9743.dcm"
+            }
+          ]
+        },
+        {
+          "SeriesInstanceUID": "1.3.46.670589.11.0.0.11.4.2.0.8743.5.5396.2006120114285654497",
+          "SeriesNumber": 401,
+          "SeriesDescription": "sT2W/FLAIR",
+          "Modality": "MR",
+          "instances": [
+            {
+              "metadata": {
+                "InstanceNumber": 1
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0001_4dc71d.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 2
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0002_bbd4d3.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 3
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0003_2db53a.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 4
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0004_f32ec1.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 5
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0005_8dddbd.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 6
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0006_144ca2.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 7
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0007_4cf245.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 8
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0008_bda7dd.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 9
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0009_fccbc5.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 10
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0010_59ad98.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 11
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0011_5ec70f.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 12
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0012_24ea82.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 13
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0013_9058e0.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 14
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0014_3ad70b.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 15
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0015_6fe353.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 16
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0016_08ff3a.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 17
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0017_40df6a.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 18
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0018_992642.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 19
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0019_6059d0.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 20
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0020_3b2a21.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 21
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0021_f5701e.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 22
+              },
+              "url": "dicomweb:/demo/mri/study/s401_i0022_fa1fc6.dcm"
+            }
+          ]
+        },
+        {
+          "SeriesInstanceUID": "1.3.46.670589.11.0.0.11.4.2.0.8743.5.5396.2006120114314125550",
+          "SeriesNumber": 501,
+          "SeriesDescription": "T2W/FE-EPI",
+          "Modality": "MR",
+          "instances": [
+            {
+              "metadata": {
+                "InstanceNumber": 1
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0001_1d429c.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 2
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0002_6e8192.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 3
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0003_61eeef.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 4
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0004_bdb8bc.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 5
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0005_8291d7.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 6
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0006_ea902b.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 7
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0007_f9fb8c.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 8
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0008_12ac4e.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 9
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0009_be415e.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 10
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0010_8c3133.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 11
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0011_6c23b0.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 12
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0012_586c97.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 13
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0013_18bc41.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 14
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0014_c12759.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 15
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0015_3b9ea5.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 16
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0016_8c1ad5.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 17
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0017_00402c.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 18
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0018_313bcb.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 19
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0019_3d452e.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 20
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0020_837193.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 21
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0021_81cb1a.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 22
+              },
+              "url": "dicomweb:/demo/mri/study/s501_i0022_08a2d2.dcm"
+            }
+          ]
+        },
+        {
+          "SeriesInstanceUID": "1.3.46.670589.11.0.0.11.4.2.0.8743.5.5396.2006120114333440565",
+          "SeriesNumber": 601,
+          "SeriesDescription": "T1/SE/extrp",
+          "Modality": "MR",
+          "instances": [
+            {
+              "metadata": {
+                "InstanceNumber": 1
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0001_36bf7d.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 2
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0002_61edac.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 3
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0003_5a8283.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 4
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0004_5d3ec2.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 5
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0005_8da4b7.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 6
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0006_58a37f.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 7
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0007_1c492d.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 8
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0008_1dc544.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 9
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0009_f2d9b1.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 10
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0010_00330d.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 11
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0011_f767ea.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 12
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0012_88425b.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 13
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0013_0a9aeb.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 14
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0014_b9ad2f.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 15
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0015_674987.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 16
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0016_c0ae92.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 17
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0017_8e0984.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 18
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0018_3352d3.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 19
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0019_c28442.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 20
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0020_733480.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 21
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0021_f6581d.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 22
+              },
+              "url": "dicomweb:/demo/mri/study/s601_i0022_d651f1.dcm"
+            }
+          ]
+        },
+        {
+          "SeriesInstanceUID": "1.3.46.670589.11.0.0.11.4.2.0.8743.5.5396.2006120114395892620",
+          "SeriesNumber": 701,
+          "SeriesDescription": "T1/SE/extrp",
+          "Modality": "MR",
+          "instances": [
+            {
+              "metadata": {
+                "InstanceNumber": 1
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0001_e73100.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 2
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0002_dc33d5.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 3
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0003_9b41ef.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 4
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0004_6a863e.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 5
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0005_f0200e.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 6
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0006_f0b9f0.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 7
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0007_dbbdf7.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 8
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0008_350952.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 9
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0009_447631.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 10
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0010_8360e7.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 11
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0011_f6986d.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 12
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0012_5d5a01.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 13
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0013_813754.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 14
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0014_4368e7.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 15
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0015_3ef086.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 16
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0016_e06e73.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 17
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0017_985681.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 18
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0018_23f130.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 19
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0019_7be22b.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 20
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0020_ef1301.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 21
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0021_7c0140.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 22
+              },
+              "url": "dicomweb:/demo/mri/study/s701_i0022_979d54.dcm"
+            }
+          ]
+        },
+        {
+          "SeriesInstanceUID": "1.3.46.670589.11.0.0.11.4.2.0.8743.5.3800.2006120117110979000",
+          "SeriesNumber": 702,
+          "SeriesDescription": "SOUS",
+          "Modality": "MR",
+          "instances": [
+            {
+              "metadata": {
+                "InstanceNumber": 1
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0001_892717.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 2
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0002_6e6138.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 3
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0003_ed8aac.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 4
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0004_1adf54.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 5
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0005_f90d01.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 6
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0006_ca69bc.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 7
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0007_c9fcb8.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 8
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0008_ba88f3.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 9
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0009_139c2f.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 10
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0010_262394.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 11
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0011_632b63.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 12
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0012_bb1c37.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 13
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0013_7a93b8.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 14
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0014_238b70.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 15
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0015_182763.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 16
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0016_b09ecb.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 17
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0017_065baa.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 18
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0018_5345a8.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 19
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0019_15aa54.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 20
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0020_edd8ff.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 21
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0021_0a3d6e.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 22
+              },
+              "url": "dicomweb:/demo/mri/study/s702_i0022_a7ecae.dcm"
+            }
+          ]
+        },
+        {
+          "SeriesInstanceUID": "1.3.46.670589.11.0.0.11.4.2.0.8743.5.5396.2006120114440679623",
+          "SeriesNumber": 801,
+          "SeriesDescription": "T1/3D/FFE/C",
+          "Modality": "MR",
+          "instances": [
+            {
+              "metadata": {
+                "InstanceNumber": 1
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0001_524d6c.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 2
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0002_ea367f.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 3
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0003_3e50a4.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 4
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0004_3e1b5e.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 5
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0005_fa97d0.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 6
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0006_63f244.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 7
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0007_305f2e.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 8
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0008_48c6f0.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 9
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0009_8afef2.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 10
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0010_6c09fe.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 11
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0011_08681b.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 12
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0012_28d6cc.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 13
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0013_3db0ed.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 14
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0014_2ac63c.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 15
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0015_70f2c3.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 16
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0016_9ea062.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 17
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0017_9f7cf9.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 18
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0018_71f56b.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 19
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0019_d0fa70.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 20
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0020_c444da.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 21
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0021_d1dddb.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 22
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0022_639a0c.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 23
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0023_f19da7.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 24
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0024_cbe8b5.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 25
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0025_59ae37.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 26
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0026_9b6eef.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 27
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0027_91f6ce.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 28
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0028_a00470.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 29
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0029_cd83c6.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 30
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0030_53054c.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 31
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0031_eb0d9a.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 32
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0032_22384b.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 33
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0033_b8a08e.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 34
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0034_e5e753.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 35
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0035_6756e3.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 36
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0036_e7e589.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 37
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0037_e50c58.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 38
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0038_f029a4.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 39
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0039_17f2e7.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 40
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0040_bdf8fa.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 41
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0041_c2ddd3.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 42
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0042_eae46c.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 43
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0043_108b35.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 44
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0044_db7109.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 45
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0045_ecbdb0.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 46
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0046_bd8348.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 47
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0047_df884c.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 48
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0048_5278cb.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 49
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0049_a9d66d.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 50
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0050_8eb85b.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 51
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0051_00ffd5.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 52
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0052_d16f2f.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 53
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0053_50511e.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 54
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0054_d31720.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 55
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0055_44591a.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 56
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0056_f3c107.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 57
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0057_a22c1f.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 58
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0058_2e526b.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 59
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0059_e09721.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 60
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0060_56d7c8.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 61
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0061_ff95b7.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 62
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0062_60072a.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 63
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0063_ca6ba0.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 64
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0064_4b0cbd.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 65
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0065_46d83e.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 66
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0066_2cd735.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 67
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0067_d393e9.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 68
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0068_771431.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 69
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0069_47509c.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 70
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0070_681633.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 71
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0071_14aba4.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 72
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0072_20115a.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 73
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0073_205b71.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 74
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0074_e9a25f.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 75
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0075_560002.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 76
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0076_19ea20.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 77
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0077_d695a4.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 78
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0078_3025c3.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 79
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0079_4764eb.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 80
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0080_c6b2c0.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 81
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0081_c22daa.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 82
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0082_25b703.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 83
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0083_9d31b1.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 84
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0084_94141e.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 85
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0085_4ccb13.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 86
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0086_c05ccb.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 87
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0087_7090f0.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 88
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0088_d01e18.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 89
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0089_0577c6.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 90
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0090_99a083.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 91
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0091_fb7c10.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 92
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0092_84a924.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 93
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0093_4bebbb.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 94
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0094_a03809.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 95
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0095_901269.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 96
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0096_fc0790.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 97
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0097_8c5546.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 98
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0098_7e3405.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 99
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0099_954655.dcm"
+            },
+            {
+              "metadata": {
+                "InstanceNumber": 100
+              },
+              "url": "dicomweb:/demo/mri/study/s801_i0100_3da3a4.dcm"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

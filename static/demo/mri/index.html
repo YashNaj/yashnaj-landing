@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MRI/CT Viewer — Demo</title>
+<style>
+  :root { --bg:#000; --chip:#1c1c1e; --txt:#fff; --muted:#9b9fa2; }
+  * { box-sizing:border-box; }
+  html,body { margin:0; height:100%; background:var(--bg); color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; }
+  #app { display:flex; flex-direction:column; height:100vh; }
+  header { padding:12px 16px; text-align:center; }
+  header h1 { font-size:16px; margin:0; font-weight:600; }
+  header p { font-size:12px; margin:3px 0 0; color:var(--muted); }
+  .stage { flex:1; position:relative; background:#000; min-height:0; }
+  iframe { position:absolute; inset:0; width:100%; height:100%; border:0; background:#000; }
+  .overlay { position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:var(--muted); font-size:14px; pointer-events:none; }
+  footer { padding:10px 16px calc(10px + env(safe-area-inset-bottom)); background:#000; }
+  .slider { width:100%; margin:6px 0 12px; accent-color:#fff; }
+  .sliderRow { display:flex; align-items:center; gap:10px; font-size:12px; color:var(--muted); }
+  .sliderRow span { min-width:64px; text-align:center; }
+  .strip { display:flex; gap:8px; overflow-x:auto; padding-bottom:10px; }
+  .chip { flex:0 0 auto; background:var(--chip); border:0; color:var(--txt); border-radius:14px;
+    padding:9px 14px; cursor:pointer; text-align:left; max-width:180px; }
+  .chip.active { background:#fff; color:#000; }
+  .chip small { display:block; color:var(--muted); font-size:11px; margin-top:1px; }
+  .chip.active small { color:#5a5d60; }
+  .tools { display:flex; justify-content:center; gap:10px; }
+  .tool { display:flex; align-items:center; gap:6px; background:var(--chip); border:0; color:var(--txt);
+    border-radius:20px; padding:9px 18px; cursor:pointer; font-size:13px; font-weight:600; }
+  .tool.active { background:#fff; color:#000; }
+  .hint { text-align:center; color:var(--muted); font-size:11px; margin-top:10px; }
+</style>
+</head>
+<body>
+<div id="app">
+  <header>
+    <h1 id="title">Brain MRI — Demo Study</h1>
+    <p id="subtitle">loading…</p>
+  </header>
+  <div class="stage">
+    <iframe id="viewer" src="/demo/mri/mobile/index.html"></iframe>
+    <div class="overlay" id="overlay">Loading imaging…</div>
+  </div>
+  <footer>
+    <div class="sliderRow">
+      <input type="range" class="slider" id="slice" min="0" max="0" value="0" />
+    </div>
+    <div class="sliderRow" style="justify-content:center;margin-top:-6px;margin-bottom:10px;">
+      <span id="sliceLabel">0 / 0</span>
+    </div>
+    <div class="strip" id="strip"></div>
+    <div class="tools">
+      <button class="tool active" data-tool="scroll" id="t-scroll">Scroll</button>
+      <button class="tool" data-tool="wwwc" id="t-wwwc">Window</button>
+      <button class="tool" data-tool="pan" id="t-pan">Pan</button>
+      <button class="tool" data-tool="reset" id="t-reset" style="background:#2a2a2c">Reset</button>
+    </div>
+    <div class="hint">Drag the image with the active tool · mouse-wheel also scrolls slices · right-drag zooms</div>
+  </footer>
+</div>
+<script>
+const BASE = location.origin;
+const iframe = document.getElementById('viewer');
+const overlay = document.getElementById('overlay');
+const slider = document.getElementById('slice');
+const sliceLabel = document.getElementById('sliceLabel');
+const strip = document.getElementById('strip');
+let series = [], activeId = null, cmdReady = false;
+window.__loadTimer = setTimeout(() => { if (overlay.style.display !== 'none') overlay.textContent = 'This device could not start the imaging viewer (WebGL unavailable).'; }, 15000);
+
+function cmd(obj){ try { iframe.contentWindow.MV_CMD && iframe.contentWindow.MV_CMD(obj); } catch(e){} }
+
+function selectSeries(s){
+  activeId = s.id;
+  overlay.style.display = 'flex'; overlay.textContent = 'Loading imaging…';
+  [...strip.children].forEach(c => c.classList.toggle('active', c.dataset.id === s.id));
+  cmd({ type:'loadStack', imageIds:s.imageIds, index:0 });
+  clearTimeout(window.__loadTimer);
+  window.__loadTimer = setTimeout(() => { if (overlay.style.display !== 'none') overlay.textContent = 'This device could not start the imaging viewer (WebGL unavailable).'; }, 15000);
+}
+
+function buildChrome(manifest){
+  const study = manifest.studies[0];
+  document.getElementById('title').textContent = study.StudyDescription || 'DICOM Study';
+  document.getElementById('subtitle').textContent =
+    (study.series.length + ' series · ' + study.series.reduce((n,s)=>n+s.instances.length,0) + ' images');
+  series = study.series.map(s => ({
+    id: s.SeriesInstanceUID,
+    desc: s.SeriesDescription || ('Series ' + s.SeriesNumber),
+    imageIds: [...s.instances]
+      .sort((a,b)=>(a.metadata?.InstanceNumber||0)-(b.metadata?.InstanceNumber||0))
+      .map(i => String(i.url).replace(/^dicomweb:/, 'wadouri:')),
+  }));
+  strip.innerHTML = '';
+  series.forEach(s => {
+    const b = document.createElement('button');
+    b.className = 'chip'; b.dataset.id = s.id;
+    b.innerHTML = s.desc + '<small>' + s.imageIds.length + ' images</small>';
+    b.onclick = () => selectSeries(s);
+    strip.appendChild(b);
+  });
+}
+
+// Route the viewer page's bridge messages (normally aimed at ReactNativeWebView) to us.
+iframe.addEventListener('load', () => {
+  const w = iframe.contentWindow;
+  w.ReactNativeWebView = { postMessage: (s) => { try { handle(JSON.parse(s)); } catch(e){} } };
+  const wait = setInterval(() => {
+    if (w.MV_CMD) { clearInterval(wait); cmdReady = true; if (series.length) selectSeries(series[0]); }
+  }, 200);
+});
+
+function handle(msg){
+  if (msg.type === 'stackLoaded' || msg.type === 'slice'){
+    overlay.style.display = 'none';
+    slider.max = Math.max(0, msg.total - 1);
+    slider.value = msg.index;
+    sliceLabel.textContent = (msg.index + 1) + ' / ' + msg.total;
+  } else if (msg.type === 'error'){
+    overlay.style.display = 'flex'; overlay.textContent = msg.message || 'Viewer error';
+  }
+}
+
+slider.oninput = () => { cmd({ type:'setSlice', index:Number(slider.value) }); sliceLabel.textContent = (Number(slider.value)+1)+' / '+(Number(slider.max)+1); };
+document.querySelectorAll('.tool').forEach(t => t.onclick = () => {
+  const tool = t.dataset.tool;
+  if (tool === 'reset'){ cmd({ type:'reset' }); return; }
+  document.querySelectorAll('.tool[data-tool="scroll"],.tool[data-tool="wwwc"],.tool[data-tool="pan"]').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  cmd({ type:'setPrimaryTool', tool });
+});
+
+fetch(BASE + '/demo/mri/study/index.json').then(r=>r.json()).then(m => {
+  buildChrome(m);
+  if (cmdReady) selectSeries(series[0]);
+}).catch(e => { overlay.textContent = 'Could not load study: ' + e.message; clearTimeout(window.__loadTimer); });
+</script>
+</body>
+</html>
