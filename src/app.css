@@ -418,7 +418,7 @@ html.js .copy-btn { display: block; }
 .hero-photo { grid-area: photo; position: relative; z-index: -1; display: grid; }
 /* phones: a full-bleed plate tucked under the heading, as tall as the first screen allows so the
    actions stay above the browser's toolbar on first load (svh = the viewport with toolbars shown) */
-.hero-plate { display: block; width: calc(100% + 2rem); max-width: 520px; height: clamp(10rem, calc(100svh - 25rem), 100vw); object-fit: cover; object-position: 50% 42%; margin: -4rem -1rem -3rem; justify-self: center; opacity: 0.9;
+.hero-plate { display: block; width: calc(100% + 2rem); max-width: 520px; height: clamp(10rem, calc(100svh + 80vw - 22rem - 352px), 100vw); object-fit: cover; object-position: 50% 42%; margin: -4rem -1rem -3rem; justify-self: center; opacity: 0.9;
 	/* the crop can cut into the baked vignette: feather the top and bottom again */
 	mask-image: linear-gradient(transparent, #000 24%, #000 72%, transparent); }
 @media (min-width: 768px) {
