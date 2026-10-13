@@ -155,7 +155,8 @@ html.restored :is([data-draw] :is(.c, .stroke, .after, .type tspan, .stamp, .cur
 @keyframes d-march { to { stroke-dashoffset: -16; } }
 @keyframes d-shine { 0%, 100% { opacity: 0; } 45% { opacity: 0.6; } 55% { opacity: 0; } }
 @keyframes d-vp { 0%, 28% { opacity: 1; } 33%, 95% { opacity: 0; } 100% { opacity: 1; } }
-@keyframes d-knob { 0%, 28% { transform: translateX(-22px); } 33%, 61% { transform: translateX(0); } 66%, 94% { transform: translateX(22px); } 100% { transform: translateX(-22px); } }
+/* starts at the static (centre) position so going live never jumps: frame A centre, B right, C left */
+@keyframes d-knob { 0%, 28% { transform: translateX(0); } 33%, 61% { transform: translateX(22px); } 66%, 94% { transform: translateX(-22px); } 100% { transform: translateX(0); } }
 
 @media (prefers-reduced-motion: reduce), print {
 	html.js [data-draw] :is(.c, .stroke, .after, .type tspan, .stamp, .cursor, .unlock, .slide-out, .grow) {
@@ -273,8 +274,8 @@ html.js .copy-btn { display: block; }
 
 /* ---------- Hero entrance ---------- */
 @media (prefers-reduced-motion: no-preference) {
-	html.js [data-enter] { animation: enter var(--dur-l) var(--ease-out) both; animation-delay: calc(var(--e, 0) * 70ms + 60ms); }
-	html.js [data-corner-in] { animation-name: corner-in; }
+	html.js:not(.restored) [data-enter] { animation: enter var(--dur-l) var(--ease-out) both; animation-delay: calc(var(--e, 0) * 70ms + 60ms); }
+	html.js:not(.restored) [data-corner-in] { animation-name: corner-in; }
 	html.js [data-corner-in='tl'] { transform-origin: 0 0; }
 	html.js [data-corner-in='br'] { transform-origin: 100% 100%; }
 	.ping::after { animation: ping 2.4s var(--ease-out) infinite; }

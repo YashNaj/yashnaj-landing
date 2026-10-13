@@ -124,3 +124,24 @@ test('write-up sections reveal on scroll; header and carousel are visible at fir
 	await sec.scrollIntoViewIfNeeded();
 	await expect.poll(() => sec.evaluate((e) => getComputedStyle(e).opacity)).toBe('1');
 });
+
+test('"All work" from a project lands on finished drawings, like Back', async ({ page }) => {
+	await page.goto('/work/chauffeur');
+	await page.getByRole('link', { name: /All work/ }).click();
+	await expect(page).toHaveURL('/#work');
+	await expect(page.locator('html')).toHaveClass(/\brestored\b/);
+	const fig = page.locator('#chauffeur figure.drawing');
+	await expect(fig).toHaveAttribute('data-drawn', '', { timeout: 1000 });
+	const stroke = fig.locator('.stroke').first();
+	expect(await stroke.evaluate((el) => getComputedStyle(el).transitionDuration.split(',').every((d) => parseFloat(d) === 0))).toBe(true);
+});
+
+test('returning home does not replay the hero entrance', async ({ page }) => {
+	await page.goto('/');
+	await page.locator('#myne').getByRole('link', { name: /View project/ }).click();
+	await expect(page).toHaveURL('/work/myne');
+	await page.goBack();
+	await expect(page.locator('html')).toHaveClass(/\brestored\b/); // a reload-style traversal, not a bfcache restore
+	await page.evaluate(() => window.scrollTo(0, 0));
+	expect(await page.locator('[data-enter]').evaluateAll((els) => els.flatMap((e) => e.getAnimations()).filter((a) => a.playState === 'running').length)).toBe(0);
+});

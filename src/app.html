@@ -12,9 +12,12 @@
 				var h = document.documentElement;
 				if (document.querySelector('[data-draw]') && !h.classList.contains('draw-ready')) h.classList.remove('js');
 			}, 2500);
-			// Back/Forward restores the finished page: drawings and reveals skip their entrance.
+			// Back/Forward (and returning home from a project) restores the finished page: no entrance replays.
 			var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
-			if (nav && nav.type === 'back_forward') document.documentElement.classList.add('restored');
+			// Arriving home from a project page (the "All work" link) is the same return trip.
+			var from = document.referrer && new URL(document.referrer);
+			var fromWork = from && from.origin === location.origin && from.pathname.indexOf('/work/') === 0 && location.pathname === '/';
+			if (nav && (nav.type === 'back_forward' || (nav.type === 'navigate' && fromWork))) document.documentElement.classList.add('restored');
 			// Tag cross-document view transitions with their direction before first render.
 			window.addEventListener('pagereveal', function (e) {
 				if (!e.viewTransition) return;

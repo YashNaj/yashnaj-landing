@@ -25,3 +25,10 @@ describe('morph choreography', () => {
 		for (const c of ['vt-sheet', 'vt-title', 'vt-drawing']) expect(css).toContain(`*.${c}`);
 	});
 });
+
+describe('MRI scrubber loop', () => {
+	it('starts where the static knob sits (centre), so going live does not jump', () => {
+		expect(css).toMatch(/@keyframes d-knob \{ 0%, 28% \{ transform: translateX\(0\); \}/);
+		expect(css).toMatch(/100% \{ transform: translateX\(0\); \} \}/);
+	});
+});
