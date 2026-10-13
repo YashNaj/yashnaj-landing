@@ -199,6 +199,28 @@ html.js [data-draw] svg.story .stroke { transition: stroke-dashoffset var(--d, 9
 @keyframes st-zero { 0%, 47% { opacity: 1; } 48%, 59.6% { opacity: 0; } 60.4% { opacity: 1; transform: translateX(-2px); } 61.4%, 100% { opacity: 1; transform: none; } }
 
 
+/* mri — the active slice steps down the volume; the viewer, readout and scrubber follow it. Dwells: 0–14 · 18–30 · 34–46 · 50–62 · 66–80 */
+.drawing .st-slice { opacity: 0; }
+[data-draw][data-live] svg.story.mri { --loop: 4.5s; }
+[data-draw][data-live] svg.story.mri .st-slice-static { opacity: 0; transition: none; } /* hand off to the live readout without a cross-fade */
+[data-draw][data-live] svg.story.mri .st-plane-g { animation: st-drop var(--loop) var(--ease-in-out) infinite; }
+[data-draw][data-live] svg.story.mri .st-slice { animation: st-show var(--loop) step-end infinite; animation-delay: calc((var(--i) * 0.16 - 1) * var(--loop)); }
+[data-draw][data-live] svg.story.mri .st-slice:last-child { animation-name: st-show-last; animation-delay: 0s; }
+[data-draw][data-live] svg.story.mri .vp-a { animation: st-vp-a var(--loop) step-end infinite; animation-delay: 0s; }
+[data-draw][data-live] svg.story.mri .vp-b { animation: st-vp-b var(--loop) step-end infinite; animation-delay: 0s; }
+[data-draw][data-live] svg.story.mri .vp-c { animation: st-vp-c var(--loop) step-end infinite; animation-delay: 0s; }
+[data-draw][data-live] svg.story.mri .knob { animation: st-knob var(--loop) var(--ease-in-out) infinite; }
+[data-draw][data-live] svg.story.mri .st-bridge { animation: st-bridge var(--loop) var(--ease-in-out) infinite; }
+@keyframes st-drop { 0%, 14% { translate: 0 0; opacity: 1; } 18%, 30% { translate: 0 calc(var(--drop) * 0.25); } 34%, 46% { translate: 0 calc(var(--drop) * 0.5); } 50%, 62% { translate: 0 calc(var(--drop) * 0.75); } 66%, 80% { translate: 0 var(--drop); opacity: 1; } 88% { translate: 0 var(--drop); opacity: 0; } 92% { translate: 0 0; opacity: 0; } 100% { translate: 0 0; opacity: 1; } }
+@keyframes st-show { 0% { opacity: 1; } 16%, 100% { opacity: 0; } }
+@keyframes st-show-last { 0% { opacity: 0; } 64%, 100% { opacity: 1; } }
+@keyframes st-vp-a { 0% { opacity: 1; } 16% { opacity: 0; } 48% { opacity: 1; } 64%, 100% { opacity: 0; } }
+@keyframes st-vp-b { 0% { opacity: 0; } 16% { opacity: 1; } 32% { opacity: 0; } 64%, 100% { opacity: 1; } }
+@keyframes st-vp-c { 0% { opacity: 0; } 32% { opacity: 1; } 48%, 100% { opacity: 0; } }
+/* the scrubber starts where it rests (slice 0), so going live never jumps */
+@keyframes st-knob { 0%, 14% { transform: translateX(0); } 18%, 30% { transform: translateX(4px); } 34%, 46% { transform: translateX(8px); } 50%, 62% { transform: translateX(12px); } 66%, 88% { transform: translateX(16px); } 96%, 100% { transform: translateX(0); } }
+@keyframes st-bridge { 0% { stroke-dashoffset: 1.08; opacity: 0; } 1% { opacity: 1; } 8% { stroke-dashoffset: 0; opacity: 1; } 11% { stroke-dashoffset: 0; opacity: 0; } 16% { stroke-dashoffset: 1.08; opacity: 0; } 17% { opacity: 1; } 24% { stroke-dashoffset: 0; opacity: 1; } 27% { stroke-dashoffset: 0; opacity: 0; } 32% { stroke-dashoffset: 1.08; opacity: 0; } 33% { opacity: 1; } 40% { stroke-dashoffset: 0; opacity: 1; } 43% { stroke-dashoffset: 0; opacity: 0; } 48% { stroke-dashoffset: 1.08; opacity: 0; } 49% { opacity: 1; } 56% { stroke-dashoffset: 0; opacity: 1; } 59% { stroke-dashoffset: 0; opacity: 0; } 64% { stroke-dashoffset: 1.08; opacity: 0; } 65% { opacity: 1; } 72% { stroke-dashoffset: 0; opacity: 1; } 75% { stroke-dashoffset: 0; opacity: 0; } 100% { stroke-dashoffset: 1.08; opacity: 0; } }
+
 @media (prefers-reduced-motion: reduce), print {
 	html.js [data-draw] :is(.c, .stroke, .after, .type tspan, .stamp, .cursor, .unlock, .slide-out, .grow) {
 		transition: none !important;

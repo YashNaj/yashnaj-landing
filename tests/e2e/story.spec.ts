@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-const models = ['chauffeur'] as const; // Tasks 5–6 append 'mri-viewer', 'myne'
+const models = ['chauffeur', 'mri-viewer'] as const; // Task 6 appends 'myne'
 const faceMatrix = (page: import('@playwright/test').Page, sel: string) =>
 	page.locator(sel).first().getAttribute('transform');
 
@@ -85,7 +85,10 @@ test.describe('the turn', () => {
 
 test.describe('stories', () => {
 	test.use({ viewport: { width: 1280, height: 900 } });
-	const loopParts: Record<string, string> = { chauffeur: '.cursor, .btn, .ripple, .st-a, .st-b, .st-tick, .leader-pulse, .stamp, .st-one, .st-zero' };
+	const loopParts: Record<string, string> = {
+		chauffeur: '.cursor, .btn, .ripple, .st-a, .st-b, .st-tick, .leader-pulse, .stamp, .st-one, .st-zero',
+		'mri-viewer': '.st-plane-g, .vp, .st-slice, .knob, .st-bridge'
+	};
 	for (const [slug, sel] of Object.entries(loopParts)) {
 		test(`${slug}: every loop part runs on the drawing's one clock, only while live`, async ({ page }) => {
 			await page.goto('/');
@@ -109,4 +112,33 @@ test.describe('stories', () => {
 		expect(await at(0.52)).toBe('1');
 		expect(await at(0.7)).toBe('0');
 	});
+});
+
+/** Pause every animation in a drawing at fraction f of its loop. */
+const seek = (page: import('@playwright/test').Page, slug: string, f: number) =>
+	page.locator(`#${slug} figure.drawing`).evaluate((fig, f) => {
+		for (const a of fig.getAnimations({ subtree: true })) {
+			a.pause();
+			a.currentTime = ((a.effect!.getTiming().duration as number) || 0) * f;
+		}
+	}, f);
+const live = async (page: import('@playwright/test').Page, slug: string) => {
+	await page.setViewportSize({ width: 1280, height: 900 });
+	await page.goto('/');
+	const fig = page.locator(`#${slug} figure.drawing`);
+	await fig.scrollIntoViewIfNeeded();
+	await expect(fig).toHaveAttribute('data-live', '', { timeout: 6000 });
+	return fig;
+};
+
+test('mri beats: the slice plane steps down the stack and the readout follows', async ({ page }) => {
+	const fig = await live(page, 'mri-viewer');
+	const y = () => fig.locator('.st-plane-g').evaluate((g) => (g as SVGGraphicsElement).getBoundingClientRect().top);
+	const shown = () => fig.locator('.st-slice').evaluateAll((ts) => ts.filter((t) => getComputedStyle(t).opacity === '1').map((t) => t.textContent));
+	await seek(page, 'mri-viewer', 0.08);
+	const y0 = await y();
+	expect(await shown()).toEqual(['SLICE 115/232']);
+	await seek(page, 'mri-viewer', 0.4);
+	expect(await y()).toBeGreaterThan(y0 + 40);
+	expect(await shown()).toEqual(['SLICE 117/232']);
 });
