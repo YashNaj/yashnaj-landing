@@ -21,7 +21,8 @@ test('footer exposes email and links', async ({ page }) => {
 	await page.goto('/');
 	const footer = page.locator('footer');
 	await expect(footer.getByRole('link', { name: 'yashnaj@proton.me' })).toHaveAttribute('href', 'mailto:yashnaj@proton.me');
-	await expect(footer).toContainText('© 2026 Yashal Najeeb');
+	await expect(footer.locator('dd').filter({ hasText: '2026 Yashal Najeeb' })).toHaveCount(1);
+	expect((await footer.textContent())!.match(/2026 Yashal Najeeb/g)).toHaveLength(1);
 });
 
 test('unknown paths render the blueprint 404 with a way home', async ({ page }) => {

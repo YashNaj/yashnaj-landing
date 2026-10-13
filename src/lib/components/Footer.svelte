@@ -16,5 +16,4 @@
 		</div>
 		<TitleBlock rows={[['Drawn by', profile.name], ['Sheet', 'END'], ['©', '2026 Yashal Najeeb']]} />
 	</div>
-	<p class="sr-only">© 2026 Yashal Najeeb</p>
 </footer>
