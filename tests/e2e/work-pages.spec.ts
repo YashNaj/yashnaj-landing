@@ -82,3 +82,36 @@ test('Hard Pills meta description does not repeat itself', async ({ page }) => {
 	expect(d).toContain('custom admin');
 	expect(d).not.toContain('runs entirely herself. Live in production');
 });
+
+test('morph groups carry view-transition classes on both pages', async ({ page }) => {
+	for (const url of ['/', '/work/myne']) {
+		await page.goto(url);
+		const scope = url === '/' ? page.locator('#myne') : page.locator('main');
+		const classes = await scope.evaluate((el) =>
+			[el, ...el.querySelectorAll('*')].map((n) => getComputedStyle(n).viewTransitionClass).filter((c) => c && c !== 'none').sort()
+		);
+		expect(classes).toEqual(expect.arrayContaining(['vt-drawing', 'vt-sheet', 'vt-title']));
+	}
+});
+
+test('after Back from a project, the home page is fully drawn and visible', async ({ page }) => {
+	await page.goto('/');
+	await page.locator('#myne').getByRole('link', { name: /View project/ }).click();
+	await expect(page).toHaveURL('/work/myne');
+	await page.goBack();
+	await page.locator('#myne').scrollIntoViewIfNeeded();
+	await expect(page.locator('#myne figure.drawing')).toHaveAttribute('data-drawn', '', { timeout: 8000 });
+	expect(await page.locator('#myne [data-reveal], #myne').evaluateAll((els) => els.map((e) => getComputedStyle(e).opacity))).not.toContain('0');
+});
+
+test('Back lands on finished drawings, not a replay', async ({ page }) => {
+	await page.goto('/');
+	await page.locator('#myne').getByRole('link', { name: /View project/ }).click();
+	await expect(page).toHaveURL('/work/myne');
+	await page.goBack();
+	const fig = page.locator('#myne figure.drawing');
+	await expect(fig).toHaveAttribute('data-drawn', '', { timeout: 1000 });
+	const stroke = fig.locator('.stroke').first();
+	expect(await stroke.evaluate((el) => getComputedStyle(el).transitionDuration.split(',').every((d) => parseFloat(d) === 0))).toBe(true);
+	expect(await stroke.evaluate((el) => parseFloat(getComputedStyle(el).strokeDashoffset))).toBe(0);
+});

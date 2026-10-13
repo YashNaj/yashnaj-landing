@@ -11,7 +11,7 @@
 <article
 	id={project.slug}
 	data-testid="project-sheet"
-	style:view-transition-name="sheet-{project.slug}"
+	style:view-transition-name="sheet-{project.slug}" style:view-transition-class="vt-sheet"
 	class="relative grid scroll-mt-8 gap-8 border border-line-dim bg-ink/70 p-5 md:grid-cols-2 md:items-center md:gap-12 md:p-10"
 >
 	<span class="sheet-corner" data-corner="tl" aria-hidden="true"></span>
@@ -20,7 +20,7 @@
 	<span class="sheet-corner" data-corner="br" aria-hidden="true"></span>
 	<span class="sheet-tb" style:view-transition-name="sheetno-{project.slug}"><span>SHEET {project.sheet} / 04</span><span>SCALE 1:1</span><span>REV 26</span></span>
 
-	<div class={flip ? 'md:order-2' : ''} style:view-transition-name="drawing-{project.slug}">
+	<div class={flip ? 'md:order-2' : ''} style:view-transition-name="drawing-{project.slug}" style:view-transition-class="vt-drawing">
 		<DrawOnView label={project.drawingLabel}>
 			<Drawing />
 		</DrawOnView>
@@ -28,7 +28,7 @@
 
 	<div class="min-w-0">
 		<h3 class="text-3xl font-semibold tracking-tight md:text-4xl">
-			<a href="/work/{project.slug}" class="hover:text-signal" style:view-transition-name="title-{project.slug}">{project.title}</a>
+			<a href="/work/{project.slug}" class="hover:text-signal" style:view-transition-name="title-{project.slug}" style:view-transition-class="vt-title">{project.title}</a>
 		</h3>
 		<p class="mt-2 font-mono text-sm text-paper/80">{project.tagline}</p>
 		<p class="mt-5 leading-relaxed text-paper/90">{project.summary}</p>

@@ -110,24 +110,28 @@ p { text-wrap: pretty; }
 [data-draw][data-live] .live { opacity: 1; }
 
 /* hidden-until-drawn states — JS only; the inline fallback drops html.js if enhance.js never runs */
-html.js [data-draw]:not([data-drawn]) .c { opacity: 0; }
+html.js:not(.restored) [data-draw]:not([data-drawn]) .c { opacity: 0; }
 html.js [data-draw] .c { transition: opacity var(--dur-m) var(--ease-out) var(--t, 0ms); }
 html.js [data-draw] .stroke { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset var(--d, 900ms) var(--ease-draw) var(--t, 0ms); }
 html.js [data-draw][data-drawn] .stroke { stroke-dashoffset: 0; }
-html.js [data-draw]:not([data-drawn]) .after:not(.stroke) { opacity: 0; }
+html.js:not(.restored) [data-draw]:not([data-drawn]) .after:not(.stroke) { opacity: 0; }
 html.js [data-draw] .after:not(.stroke) { transition: opacity var(--dur-m) var(--ease-out) var(--t, 0ms); }
-html.js [data-draw]:not([data-drawn]) .type tspan { opacity: 0; }
+html.js:not(.restored) [data-draw]:not([data-drawn]) .type tspan { opacity: 0; }
 html.js [data-draw] .type tspan { transition: opacity 80ms linear calc(var(--t, 0ms) + var(--ci, 0) * 32ms); }
-html.js [data-draw]:not([data-drawn]) .stamp { opacity: 0; transform: scale(1.5) rotate(-10deg); }
+html.js:not(.restored) [data-draw]:not([data-drawn]) .stamp { opacity: 0; transform: scale(1.5) rotate(-10deg); }
 html.js [data-draw] .stamp { transform: rotate(-3deg); transition: opacity 120ms linear var(--t, 0ms), transform var(--dur-m) var(--ease-pop) var(--t, 0ms); }
-html.js [data-draw]:not([data-drawn]) .cursor { opacity: 0; transform: translate(36px, 30px); }
+html.js:not(.restored) [data-draw]:not([data-drawn]) .cursor { opacity: 0; transform: translate(36px, 30px); }
 html.js [data-draw] .cursor { transition: opacity var(--dur-s) linear var(--t, 0ms), transform var(--dur-l) var(--ease-out) var(--t, 0ms); }
-html.js [data-draw]:not([data-drawn]) .unlock { transform: rotate(-120deg); }
+html.js:not(.restored) [data-draw]:not([data-drawn]) .unlock { transform: rotate(-120deg); }
 html.js [data-draw] .unlock { transition: transform 1400ms var(--ease-pop) var(--t, 0ms); }
-html.js [data-draw]:not([data-drawn]) .slide-out { transform: translateX(-40px); }
+html.js:not(.restored) [data-draw]:not([data-drawn]) .slide-out { transform: translateX(-40px); }
 html.js [data-draw] .slide-out { transition: transform 1200ms var(--ease-out) var(--t, 0ms); }
-html.js [data-draw]:not([data-drawn]) .grow { transform: scale(0); }
+html.js:not(.restored) [data-draw]:not([data-drawn]) .grow { transform: scale(0); }
 html.js [data-draw] .grow { transition: transform 1100ms var(--ease-out) var(--t, 0ms); }
+
+/* history traversal (Back/Forward) restores the finished page instead of replaying it */
+html.restored [data-draw] .stroke { stroke-dashoffset: 0; }
+html.restored :is([data-draw] :is(.c, .stroke, .after, .type tspan, .stamp, .cursor, .unlock, .slide-out, .grow), [data-reveal], .section-head [data-rule]) { transition: none !important; }
 
 /* alive — only while on screen (data-live), never under reduced motion */
 [data-draw][data-live] .ripple { animation: d-ripple 2.6s var(--ease-out) infinite; }
@@ -207,19 +211,22 @@ html.js .is-enhanced .slide:not([data-active]) .frame video { filter: brightness
 @media (prefers-reduced-motion: reduce) { .slide { transition: none; } }
 
 /* ---------- Cross-document morph ---------- */
-@view-transition {
-	navigation: auto;
-}
-::view-transition-group(*) {
-	animation-duration: 380ms;
-	animation-timing-function: var(--ease-out);
-}
+@view-transition { navigation: auto; }
+::view-transition-group(*) { animation-duration: 420ms; animation-timing-function: var(--ease-out); }
+::view-transition-group(*.vt-sheet) { animation-duration: 560ms; }
+::view-transition-group(*.vt-title) { animation-duration: 480ms; }
+::view-transition-group(*.vt-drawing) { animation-duration: 620ms; animation-delay: 40ms; }
+::view-transition-old(*.vt-title) { animation-duration: 160ms; }
+::view-transition-old(root) { animation: vt-out var(--dur-m) var(--ease-out) both; }
+::view-transition-new(root) { animation: vt-in-fwd 640ms var(--ease-out) both; }
+html:active-view-transition-type(back)::view-transition-new(root) { animation-name: vt-in-back; }
+@keyframes vt-out { to { opacity: 0; transform: scale(0.985); } }
+@keyframes vt-in-fwd { from { opacity: 0; transform: translateY(18px); } }
+@keyframes vt-in-back { from { opacity: 0; transform: translateY(-18px); } }
 @media (prefers-reduced-motion: reduce) {
 	::view-transition-group(*),
 	::view-transition-old(*),
-	::view-transition-new(*) {
-		animation: none;
-	}
+	::view-transition-new(*) { animation: none; }
 }
 
 /* the copy button needs enhance.js; html.js is dropped when it fails to run */
@@ -255,9 +262,9 @@ html.js .copy-btn { display: block; }
 .section-head h2 { margin: 0; font-family: var(--font-mono); font-size: 0.875rem; letter-spacing: 0.3em; text-transform: uppercase; color: rgb(242 234 216 / 0.8); }
 .section-head [data-rule] { flex: 1; height: 1px; background: var(--color-line-dim); transform-origin: left; }
 @media (prefers-reduced-motion: no-preference) {
-	html.js .section-head:not([data-revealed]) [data-rule] { transform: scaleX(0); }
+	html.js:not(.restored) .section-head:not([data-revealed]) [data-rule] { transform: scaleX(0); }
 	html.js .section-head [data-rule] { transition: transform 1100ms var(--ease-out) 150ms; }
-	html.js [data-reveal]:not([data-revealed]) { opacity: 0; transform: translateY(16px); }
+	html.js:not(.restored) [data-reveal]:not([data-revealed]) { opacity: 0; transform: translateY(16px); }
 	html.js [data-reveal] { transition: opacity var(--dur-l) var(--ease-out), transform var(--dur-l) var(--ease-out); transition-delay: calc(var(--r, 0) * 80ms); }
 }
 @media (prefers-reduced-motion: no-preference) {

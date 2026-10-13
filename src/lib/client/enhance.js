@@ -3,6 +3,7 @@
 	document.documentElement.classList.add('draw-ready');
 	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 	const fine = matchMedia('(pointer: fine)').matches;
+	const restored = document.documentElement.classList.contains('restored'); // Back/Forward: show finished
 	const OVERLAP = 0.35; // the next stroke starts when the previous one is 35% drawn
 	const START = 260; // construction prelude before the first stroke
 	const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
@@ -67,7 +68,7 @@
 	};
 	const draw = (fig) => {
 		const s = state.get(fig);
-		if (fig.hasAttribute('data-drawn') || reduce) {
+		if (fig.hasAttribute('data-drawn') || reduce || restored) {
 			fig.setAttribute('data-drawn', '');
 			s.done = true;
 			return setLive(fig);
@@ -129,7 +130,7 @@
 
 	// Section heads draw their rule; [data-reveal] blocks rise in. Both once.
 	const reveals = document.querySelectorAll('[data-reveal], [data-reveal-head]');
-	if (!('IntersectionObserver' in window) || reduce) reveals.forEach((el) => el.setAttribute('data-revealed', ''));
+	if (!('IntersectionObserver' in window) || reduce || restored) reveals.forEach((el) => el.setAttribute('data-revealed', ''));
 	else {
 		const ro = new IntersectionObserver(
 			(entries) => {

@@ -12,6 +12,16 @@
 				var h = document.documentElement;
 				if (document.querySelector('[data-draw]') && !h.classList.contains('draw-ready')) h.classList.remove('js');
 			}, 2500);
+			// Back/Forward restores the finished page: drawings and reveals skip their entrance.
+			var nav = performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+			if (nav && nav.type === 'back_forward') document.documentElement.classList.add('restored');
+			// Tag cross-document view transitions with their direction before first render.
+			window.addEventListener('pagereveal', function (e) {
+				if (!e.viewTransition) return;
+				var a = window.navigation && navigation.activation;
+				var back = !!(a && a.navigationType === 'traverse' && a.from && a.entry && a.entry.index < a.from.index);
+				e.viewTransition.types.add(back ? 'back' : 'forward');
+			});
 		</script>
 		%sveltekit.head%
 	</head>

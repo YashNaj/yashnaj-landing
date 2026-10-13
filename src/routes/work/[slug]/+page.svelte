@@ -33,17 +33,17 @@
 <main class="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-16">
 	<a href="/#work" class="font-mono text-xs tracking-[0.3em] text-paper/80 uppercase hover:text-signal">← All work</a>
 
-	<header class="relative mt-6 grid gap-8 border border-line-dim bg-ink/70 p-5 md:grid-cols-2 md:items-center md:p-10" style:view-transition-name="sheet-{p.slug}">
+	<header class="relative mt-6 grid gap-8 border border-line-dim bg-ink/70 p-5 md:grid-cols-2 md:items-center md:p-10" style:view-transition-name="sheet-{p.slug}" style:view-transition-class="vt-sheet">
 		<span class="sheet-corner" data-corner="tl" aria-hidden="true"></span>
 		<span class="sheet-corner" data-corner="tr" aria-hidden="true"></span>
 		<span class="sheet-corner" data-corner="bl" aria-hidden="true"></span>
 		<span class="sheet-corner" data-corner="br" aria-hidden="true"></span>
 		<span class="sheet-tb" style:view-transition-name="sheetno-{p.slug}"><span>SHEET {p.sheet} / 04</span><span>SCALE 1:1</span><span>REV 26</span></span>
-		<div style:view-transition-name="drawing-{p.slug}">
+		<div style:view-transition-name="drawing-{p.slug}" style:view-transition-class="vt-drawing">
 			<DrawOnView label={p.drawingLabel} drawn><Drawing /></DrawOnView>
 		</div>
 		<div class="min-w-0">
-			<h1 class="text-4xl font-semibold tracking-tight md:text-5xl" style:view-transition-name="title-{p.slug}">{p.title}</h1>
+			<h1 class="text-4xl font-semibold tracking-tight md:text-5xl" style:view-transition-name="title-{p.slug}" style:view-transition-class="vt-title">{p.title}</h1>
 			<p class="mt-2 font-mono text-sm text-paper/80">{p.tagline}</p>
 			<p class="metric mt-5 border-l-2 border-signal pl-3 font-mono text-sm">{p.metric}</p>
 			<ul class="mt-5 flex flex-wrap gap-2" aria-label="Stack">
