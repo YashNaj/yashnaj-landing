@@ -1,5 +1,5 @@
 <script lang="ts">
-	// Click handling lives in static/enhance.js — the home page ships no Svelte runtime.
+	// Click handling lives in src/lib/client/enhance.js — the home page ships no Svelte runtime.
 	let { command }: { command: string } = $props();
 </script>
 

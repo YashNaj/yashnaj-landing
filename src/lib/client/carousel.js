@@ -1,3 +1,4 @@
+// @ts-nocheck — plain browser script, served as-is (was static/, never type-checked)
 (() => {
 	const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 	const pad = (n) => String(n).padStart(2, '0');

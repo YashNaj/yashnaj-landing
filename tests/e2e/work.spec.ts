@@ -88,7 +88,7 @@ test('copy button falls back to selecting text when clipboard is unavailable', a
 });
 
 test('drawings stay visible when enhance.js fails to load', async ({ page }) => {
-	await page.route('**/enhance.js', (route) => route.abort());
+	await page.route('**/enhance*.js', (route) => route.abort());
 	await page.goto('/');
 	await page.locator('#hard-pills').scrollIntoViewIfNeeded();
 	await expect.poll(() => dashOffset(page, 'hard-pills'), { timeout: 6000 }).toBe(0);

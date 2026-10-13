@@ -1,4 +1,6 @@
 <script lang="ts">
+	import carouselUrl from '$lib/client/carousel.js?url';
+	import enhanceUrl from '$lib/client/enhance.js?url';
 	import Carousel from '$lib/components/Carousel.svelte';
 	import DrawOnView from '$lib/components/DrawOnView.svelte';
 	import Footer from '$lib/components/Footer.svelte';
@@ -24,8 +26,8 @@
 	imageAlt="{p.title} — a project by Yashal Najeeb, drawn as a blueprint title block"
 />
 <svelte:head>
-	<script src="/enhance.js" defer></script>
-	<script src="/carousel.js" defer></script>
+	<script src={enhanceUrl} defer></script>
+	<script src={carouselUrl} defer></script>
 </svelte:head>
 
 <main class="mx-auto max-w-6xl px-4 py-10 md:px-8 md:py-16">

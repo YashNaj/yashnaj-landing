@@ -1,3 +1,4 @@
+// @ts-nocheck — plain browser script, served as-is (was static/, never type-checked)
 (() => {
 	document.documentElement.classList.add('draw-ready');
 	const figs = document.querySelectorAll('[data-draw]');

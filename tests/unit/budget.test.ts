@@ -39,3 +39,17 @@ describe('project page JS budget', () => {
 		}
 	});
 });
+
+describe('client scripts are fingerprinted', () => {
+	it('pages load enhance/carousel from hashed immutable URLs, not from the site root', () => {
+		const home = readFileSync('build/index.html', 'utf8');
+		const work = readFileSync('build/work/chauffeur.html', 'utf8');
+		expect(home).toMatch(/src="[^"]*\/_app\/immutable\/assets\/enhance[.-][\w-]+\.js"/);
+		expect(work).toMatch(/src="[^"]*\/_app\/immutable\/assets\/carousel[.-][\w-]+\.js"/);
+		expect(existsSync('build/enhance.js')).toBe(false);
+		expect(existsSync('build/carousel.js')).toBe(false);
+	});
+	it('immutable assets get a year-long cache', () => {
+		expect(readFileSync('static/_headers', 'utf8')).toMatch(/\/_app\/immutable\/\*\n\s+Cache-Control: public, max-age=31536000, immutable/);
+	});
+});
