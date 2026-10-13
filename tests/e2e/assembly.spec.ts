@@ -56,6 +56,14 @@ test.describe('pin', () => {
 		await expect.poll(() => sp(page, 'myne')).toBeGreaterThan(95);
 		expect(t0 - (await sheetTop(page))).toBeGreaterThan(300);
 	});
+	test('narrow desktop window (768×800): no pin, so the sheet is never cropped', async ({ page }) => {
+		await page.setViewportSize({ width: 768, height: 800 });
+		await page.goto('/');
+		for (const slug of ['chauffeur', 'myne', 'mri-viewer', 'hard-pills']) {
+			expect(await pinExtra(page, slug), slug).toBeLessThan(1);
+			expect(await page.locator(`#${slug}`).evaluate((a) => getComputedStyle(a).position), slug).not.toBe('sticky');
+		}
+	});
 	test('wide but short window (1366×700): no pin', async ({ page }) => {
 		await page.setViewportSize({ width: 1366, height: 700 });
 		await page.goto('/');
@@ -229,7 +237,10 @@ test.describe('without JavaScript', () => {
 test('a deep link to a sheet lands before its pin, and scrolling on completes it', async ({ page }) => {
 	await page.setViewportSize({ width: 1280, height: 900 });
 	await page.goto('/#myne');
-	await expect.poll(() => sp(page, 'myne')).toBeLessThan(10);
+	// the fragment scroll lands late (smooth scroll after load): wait until the sheet has arrived at the top
+	await expect.poll(() => page.locator('#myne').evaluate((a) => a.getBoundingClientRect().top), { timeout: 5000 }).toBeLessThan(200);
+	await page.waitForTimeout(300);
+	expect(await sp(page, 'myne')).toBeLessThan(1);
 	await scrubTo(page, 'myne', 100);
 	await expect.poll(() => layerSpread(page, 'myne')).toBeLessThan(1);
 });

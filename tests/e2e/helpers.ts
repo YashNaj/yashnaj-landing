@@ -14,7 +14,7 @@ export const scrubTo = (page: Page, slug: string, p: number) =>
 			const pin = document.getElementById(slug)!.closest('.pin')!;
 			const vh = innerHeight;
 			const T = pin.getBoundingClientRect().top + scrollY;
-			const r0 = matchMedia('(min-width: 768px) and (min-height: 760px)').matches ? 0.9 : 0.2;
+			const r0 = matchMedia('(min-width: 1024px) and (min-height: 760px)').matches ? 0.9 : 0.2;
 			scrollTo({ top: T - vh + (r0 + (p / 100) * 0.5) * vh, behavior: 'instant' });
 		},
 		[slug, p] as [string, number]

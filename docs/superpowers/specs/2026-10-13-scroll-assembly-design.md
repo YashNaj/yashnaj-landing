@@ -31,7 +31,7 @@ This applies in scrub mode (defined below).
   - 55–90%: the layers collapse onto Z = 0 and the tilt flattens to face-on.
   - 85–100%: callouts, typed labels, `[data-count]` values (at their final number) and `.live` elements fade in.
 - **Pinning:**
-  - On desktop (`min-width: 768px` and `min-height: 760px`), the whole sheet pins, vertically centred, for 50vh of scroll while this plays.
+  - On desktop (`min-width: 1024px` and `min-height: 760px`; below 1024 px wide the two-column sheet can be taller than the room a pin leaves), the whole sheet pins 10vh from the top for 50vh of scroll while this plays.
   - On smaller viewports nothing pins: the timeline is the sheet crossing the viewport.
 - **Scrolling back up** reverses all of it.
 - **Once assembled:** the live loops run while the drawing is on screen, as today, and the pointer parallax works.
@@ -100,7 +100,7 @@ When it holds, the engine uses scroll choreography instead of timed choreography
 
 - **`enhance.js` blocked or late:** scrub CSS needs `html.js`, and the 2.5 s fallback removes it, so drawings render finished and the pin space collapses. Accepted: this happens only on failure.
 - **Before `enhance.js` sets `--a0`/`--a1`:** parts default to `--a0: 0` and `--a1: 0.65`, so a part draws across the whole window rather than staying hidden.
-- **Viewport resized across the 768 px or 760 px thresholds:** pure CSS, so it adapts. No JS state depends on it.
+- **Viewport resized across the 1024 px or 760 px thresholds:** pure CSS, so it adapts. No JS state depends on it.
 - **Clicking a sheet mid-assembly:** the view transition morphs the partly exploded drawing into the flat one. No special handling.
 - **Sheet taller than the viewport:** no pin, because of the `min-height` gate.
 

@@ -312,11 +312,13 @@ html.js .copy-btn { display: block; }
 @media screen and (prefers-reduced-motion: no-preference) {
 	/* --sp runs 0 → 100 over cover r0 → r0+span: phones while the sheet crosses the screen, desktop while it is pinned */
 	html.js.scrub .pin { --r0: 20vh; --span: 50vh; view-timeline: --sheet; animation: sp linear both; animation-timeline: --sheet; animation-range: cover var(--r0) cover calc(var(--r0) + var(--span)); }
-	@media (min-width: 768px) and (min-height: 760px) {
+	/* 1024px: below it the two-column sheet can be taller than the 90vh a pin leaves, cropping it */
+	@media (min-width: 1024px) and (min-height: 760px) {
 		html.js.scrub .pin { --r0: 90vh; }
 		/* a spacer, not padding: a sticky sheet can only travel inside its parent's content box */
 		html.js.scrub .pin::after { content: ''; display: block; height: var(--span); }
-		html.js.scrub .pin > article { position: sticky; top: 10vh; }
+		/* a deep link (/#slug) lands just before the pin starts, not partway in */
+		html.js.scrub .pin > article { position: sticky; top: 10vh; scroll-margin-top: calc(10vh + 2rem); }
 	}
 	/* --k: layers collapse and the sheet flattens over 55–90%; --q: each part's progress through its own slot */
 	html.js.scrub [data-draw]:not([data-drawn]) { --k: clamp(0, (var(--sp) - 55) / 35, 1); perspective: 1200px; }
