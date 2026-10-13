@@ -75,3 +75,10 @@ for (const slug of slugs) {
 		expect(res.headers()['content-type']).toBe('image/png');
 	});
 }
+
+test('Hard Pills meta description does not repeat itself', async ({ page }) => {
+	await page.goto('/work/hard-pills');
+	const d = (await page.locator('meta[name="description"]').getAttribute('content'))!;
+	expect(d).toContain('custom admin');
+	expect(d).not.toContain('runs entirely herself. Live in production');
+});

@@ -18,7 +18,7 @@
 
 <Seo
 	title="{p.title} — Yashal Najeeb"
-	description="{p.tagline} {p.metric}"
+	description={p.seoDescription}
 	path="/work/{p.slug}"
 	image="https://yashnaj.dev/og/{p.slug}.png"
 	imageAlt="{p.title} — a project by Yashal Najeeb, drawn as a blueprint title block"

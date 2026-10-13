@@ -11,6 +11,7 @@ export type Project = {
 	sheet: string;
 	title: string;
 	tagline: string;
+	seoDescription: string;
 	summary: string;
 	metric: string;
 	stack: string[];
@@ -42,6 +43,8 @@ export const projects: Project[] = [
 		sheet: '01',
 		title: 'chauffeur',
 		tagline: 'Lets coding agents drive the iOS Simulator — and tells them the truth.',
+		seoDescription:
+			'chauffeur lets coding agents drive the iOS Simulator and verifies every tap. Benchmarked vs Xcode 27’s MCP: under half the turns at ~1/6 the cost.',
 		summary:
 			'Agents tap a disabled button and report “done.” chauffeur hands the agent the screen as an outline it can reason about, taps through the Simulator’s own input system, and verifies every action against what actually changed: NO EFFECT, INTERCEPTED or APP CRASHED, with the line that caused it.',
 		metric:
@@ -75,6 +78,8 @@ export const projects: Project[] = [
 		sheet: '02',
 		title: 'Myne Global',
 		tagline: 'Provenance for luxury goods, from purchase to resale.',
+		seoDescription:
+			'Myne Global, a provenance platform for luxury goods built end to end in SvelteKit, Postgres and SwiftUI: $10M+ in registered assets, 400 collectors.',
 		summary:
 			'Built end to end as lead engineer: SvelteKit API, Postgres with row-level security, a SwiftUI app and Stripe/StoreKit billing. Owner-held-key encryption carries every ownership transfer, dealers issue Myne Passports at the point of sale, and every buyer search checks a registry of 16,830 stolen-item records.',
 		metric: '$10M+ in registered assets · 400 collectors · 12 NYC dealers',
@@ -116,6 +121,8 @@ export const projects: Project[] = [
 		sheet: '03',
 		title: 'Mobile MRI/CT viewer',
 		tagline: 'Healthcare records platform (contract).',
+		seoDescription:
+			'A mobile MRI/CT viewer for a healthcare records platform: Cornerstone3D with native React Native controls, first image in under 2 s. Try the live demo.',
 		summary:
 			'Clinicians couldn’t view scans on mobile: the platform’s legacy imaging viewer predated touch support. Instead of a risky framework upgrade, I built a modern Cornerstone3D renderer inside a WebView and moved every control — slice scrubber, series, window/level, pan, pinch-zoom — into native React Native over a small message bridge. Also rebuilt authorization across 156 API routes and stood up the first iOS release path.',
 		metric: 'First image on device in under 2 s · 57 of 68 UAT defects closed (31/31 on mobile)',
@@ -146,6 +153,8 @@ export const projects: Project[] = [
 		sheet: '04',
 		title: 'Hard Pills to Swallow',
 		tagline: 'A pop-art blog its writer runs entirely herself.',
+		seoDescription:
+			'Hard Pills to Swallow: a pop-art blog with a custom admin its writer runs herself — scheduling, email on publish and auto-posting to X and Threads.',
 		summary:
 			'Public site plus a full admin: TipTap editor with autosave and scheduling, banner styling, SEO panel, media library and mailing list. Database triggers make “publish now” and scheduled posts behave the same — the email goes out once and the post auto-shares to X and Threads.',
 		metric: 'Live in production, run end to end by a non-technical writer',

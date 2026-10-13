@@ -2,6 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { alsoBuilt, experience, profile, projects } from '../../src/lib/data/site';
 
 describe('site data', () => {
+	it('every project has a search description of 70–170 characters that does not just repeat tagline and metric', () => {
+		for (const p of projects) {
+			expect(p.seoDescription.length, p.slug).toBeGreaterThanOrEqual(70);
+			expect(p.seoDescription.length, p.slug).toBeLessThanOrEqual(170);
+			expect(p.seoDescription).not.toBe(`${p.tagline} ${p.metric}`);
+		}
+	});
 	it('has exactly the four hero projects in sheet order', () => {
 		expect(projects.map((p) => p.slug)).toEqual(['chauffeur', 'myne', 'mri-viewer', 'hard-pills']);
 		expect(projects.map((p) => p.sheet)).toEqual(['01', '02', '03', '04']);
