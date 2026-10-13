@@ -52,7 +52,7 @@ test('each home sheet links to its page and shares view-transition names with it
 		await sheet.getByRole('link', { name: /View project/ }).click();
 		await expect(page).toHaveURL(`/work/${slug}`);
 		const target = await page.evaluate(() =>
-			[...document.querySelectorAll('*')].map((n) => getComputedStyle(n).viewTransitionName).filter((n) => n && n !== 'none' && n !== 'root').sort()
+			[...document.querySelectorAll('*')].map((n) => getComputedStyle(n).viewTransitionName).filter((n) => n && n !== 'none' && n !== 'root' && !n.startsWith('case-')).sort()
 		);
 		expect(target).toEqual(names);
 	}

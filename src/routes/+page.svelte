@@ -21,7 +21,7 @@
 <!-- models first, so its draw:start listener exists before any drawing starts -->
 <svelte:head><script src={modelsUrl} defer></script><script src={enhanceUrl} defer></script></svelte:head>
 
-<main class="mx-auto max-w-6xl px-4 md:px-8">
+<main class="mx-auto max-w-6xl px-4 md:px-8" data-vt-page="home">
 	<Hero />
 
 	<section id="work" aria-labelledby="work-heading" class="py-16">

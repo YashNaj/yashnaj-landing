@@ -50,3 +50,17 @@ test('a modifier-click on Next leaves no direction behind', async ({ page }) => 
 	});
 	expect(await page.evaluate(() => sessionStorage.getItem('vt-dir'))).toBeNull();
 });
+
+test('case studies expose the two beats once each, and pages mark themselves', async ({ page }) => {
+	await page.goto('/');
+	await expect(page.locator('main[data-vt-page="home"]')).toHaveCount(1);
+	for (const slug of ['chauffeur', 'myne', 'mri-viewer', 'hard-pills']) {
+		await page.goto(`/work/${slug}`);
+		await expect(page.locator('main[data-vt-page="case"]')).toHaveCount(1);
+		const names = await page.evaluate(() => [...document.querySelectorAll('*')].map((n) => getComputedStyle(n).viewTransitionName));
+		expect(names.filter((n) => n === 'case-head'), slug).toHaveLength(1);
+		expect(names.filter((n) => n === 'case-body'), slug).toHaveLength(1);
+		// the footer stays in the root snapshot
+		expect(await page.locator('footer').evaluate((f) => !!f.closest('[style*="case-body"]'))).toBe(false);
+	}
+});
