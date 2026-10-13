@@ -1,5 +1,6 @@
 <script lang="ts">
 	import enhanceUrl from '$lib/client/enhance.js?url';
+	import modelsUrl from '$lib/client/models.js?url';
 	import AlsoBuilt from '$lib/components/AlsoBuilt.svelte';
 	import Experience from '$lib/components/Experience.svelte';
 	import Footer from '$lib/components/Footer.svelte';
@@ -17,7 +18,8 @@
 	path="/"
 	jsonLd={{ '@context': 'https://schema.org', '@type': 'Person', name: profile.name, alternateName: ['Yash Najeeb', 'yashnaj'], url: 'https://yashnaj.dev/', image: 'https://yashnaj.dev/img/yashal-460.webp', jobTitle: 'Full-Stack Product Engineer', sameAs: [profile.github, profile.linkedin] }}
 />
-<svelte:head><script src={enhanceUrl} defer></script></svelte:head>
+<!-- models first, so its draw:start listener exists before any drawing starts -->
+<svelte:head><script src={modelsUrl} defer></script><script src={enhanceUrl} defer></script></svelte:head>
 
 <main class="mx-auto max-w-6xl px-4 md:px-8">
 	<Hero />

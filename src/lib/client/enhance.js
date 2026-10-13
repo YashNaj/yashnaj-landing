@@ -23,20 +23,27 @@
 		});
 
 	// Start time (--t) for every part; duration (--d) for strokes from their real length.
-	const choreograph = (fig) => {
+	// k < 1 (story drawings) shortens strokes and the gaps between them; a 3D body (.wire) draws alongside, staggered.
+	const choreograph = (fig, k = 1) => {
 		fig.querySelectorAll('.c').forEach((el, i) => el.style.setProperty('--t', `${i * 40}ms`));
 		let t = START;
 		let end = START;
+		fig.querySelectorAll('.wire .stroke').forEach((el, i) => {
+			el.style.setProperty('--t', `${Math.round(START + i * 14 * k)}ms`);
+			el.style.setProperty('--d', `${Math.round(900 * k)}ms`);
+			end = Math.max(end, START + i * 14 * k + 900 * k);
+		});
 		for (const el of fig.querySelectorAll('.stroke, .after, .type, .stamp, .cursor, .unlock, .slide-out, .grow, [data-count]')) {
+			if (el.closest('.wire')) continue;
 			el.style.setProperty('--t', `${Math.round(t)}ms`);
 			if (el.classList.contains('stroke') && 'getTotalLength' in el) {
-				const d = clamp(el.getTotalLength() * 2.4, 280, 1400);
+				const d = clamp(el.getTotalLength() * 2.4 * k, 280 * k, 1400 * k);
 				el.style.setProperty('--d', `${Math.round(d)}ms`);
 				end = Math.max(end, t + d);
-				t += d * OVERLAP;
+				t += d * OVERLAP * k;
 			} else {
-				end = Math.max(end, t + 700);
-				t += 90;
+				end = Math.max(end, t + 700 * k);
+				t += 90 * k;
 			}
 		}
 		return end;
@@ -74,7 +81,8 @@
 			return setLive(fig);
 		}
 		splitType(fig);
-		const end = choreograph(fig);
+		const end = choreograph(fig, fig.querySelector('svg.story') ? 0.5 : 1);
+		fig.dispatchEvent(new CustomEvent('draw:start', { detail: { end } }));
 		fig.querySelectorAll('[data-count]').forEach(countUp);
 		requestAnimationFrame(() => requestAnimationFrame(() => fig.setAttribute('data-drawn', '')));
 		setTimeout(() => {

@@ -34,3 +34,51 @@ test.describe('3D drawings render their final pose without JavaScript', () => {
 		expect(pts!.split(' ')[0]).not.toBe('214,177');
 	});
 });
+
+const nums = (m: string | null) => m!.match(/-?[\d.]+/g)!.map(Number);
+test.describe('the turn', () => {
+	test.use({ viewport: { width: 1280, height: 900 } });
+	test('a 3D drawing turns into its final pose as it draws, then holds the SSR pose', async ({ page }) => {
+		await page.goto('/');
+		const face = page.locator('#chauffeur [data-plane].face');
+		const ssr = await page.evaluate(async () => (await (await fetch('/')).text()).match(/class="face"[^>]*transform="([^"]+)"|transform="([^"]+)"[^>]*class="face"/)!.slice(1).find(Boolean));
+		const before = await face.getAttribute('transform');
+		expect(nums(before)[0]).not.toBeCloseTo(nums(ssr!)[0], 2); // sits at FROM until it draws
+		await page.locator('#chauffeur').scrollIntoViewIfNeeded();
+		await expect.poll(async () => nums(await face.getAttribute('transform')).map((n, i) => Math.abs(n - nums(ssr!)[i])).every((d) => d < 0.01), { timeout: 4000 }).toBe(true);
+	});
+	test('reduced motion never turns', async ({ page }) => {
+		await page.emulateMedia({ reducedMotion: 'reduce' });
+		await page.goto('/');
+		const face = page.locator('#chauffeur [data-plane].face');
+		const t0 = await face.getAttribute('transform');
+		await page.locator('#chauffeur').scrollIntoViewIfNeeded();
+		await page.waitForTimeout(1500);
+		expect(await face.getAttribute('transform')).toBe(t0);
+	});
+	test('if models.js never loads, the drawing still draws and keeps the SSR pose', async ({ page }) => {
+		// deferred scripts run in order, so enhance.js can't start a draw before models.js; the real failure is models.js missing
+		await page.route('**/models*.js', (r) => r.abort());
+		await page.goto('/');
+		const face = page.locator('#chauffeur [data-plane].face');
+		const ssr = await face.getAttribute('transform');
+		await page.locator('#chauffeur').scrollIntoViewIfNeeded();
+		await expect(page.locator('#chauffeur figure.drawing')).toHaveAttribute('data-drawn', '');
+		await page.waitForTimeout(2000);
+		expect(await face.getAttribute('transform')).toBe(ssr);
+		await expect(page.locator('html')).toHaveClass(/\bdraw-ready\b/);
+	});
+	test('story figures draw fast (finished by 2 s)', async ({ page }) => {
+		await page.goto('/');
+		await page.locator('#chauffeur').scrollIntoViewIfNeeded();
+		await expect(page.locator('#chauffeur figure.drawing')).toHaveAttribute('data-drawn', '');
+		const end = await page.locator('#chauffeur .stroke').evaluateAll((els) => Math.max(...els.map((e) => parseFloat((e as HTMLElement).style.getPropertyValue('--t')) + parseFloat((e as HTMLElement).style.getPropertyValue('--d') || '0'))));
+		expect(end).toBeLessThanOrEqual(2000);
+	});
+	test('project pages do not load models.js', async ({ page }) => {
+		const urls: string[] = [];
+		page.on('request', (r) => urls.push(r.url()));
+		await page.goto('/work/chauffeur');
+		expect(urls.some((u) => /models[.-][\w-]+\.js/.test(u))).toBe(false);
+	});
+});
