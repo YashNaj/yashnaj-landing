@@ -23,18 +23,25 @@
 		const btn = root.querySelector('[data-testid="copy-command"]');
 		const code = root.querySelector('code');
 		const status = root.querySelector('[data-testid="copy-status"]');
+		let clear = 0;
+		const say = (msg) => {
+			clearTimeout(clear);
+			status.textContent = '';
+			requestAnimationFrame(() => (status.textContent = msg)); // empty → text so it re-announces
+			clear = setTimeout(() => (status.textContent = ''), 2500);
+		};
 		btn.addEventListener('click', async () => {
 			try {
 				if (!navigator.clipboard) throw new Error('clipboard unavailable');
 				await navigator.clipboard.writeText(code.textContent);
-				status.textContent = 'Copied';
+				say('Copied');
 			} catch {
 				const range = document.createRange();
 				range.selectNodeContents(code);
 				const sel = window.getSelection();
 				sel?.removeAllRanges();
 				sel?.addRange(range);
-				status.textContent = 'Press ⌘C / Ctrl+C';
+				say('Press ⌘C / Ctrl+C');
 			}
 		});
 	});

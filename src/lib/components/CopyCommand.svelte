@@ -10,7 +10,7 @@
 		<button
 			type="button"
 			data-testid="copy-command"
-			class="shrink-0 border-l border-line-dim px-3 py-2 uppercase tracking-widest hover:text-signal"
+			class="copy-btn shrink-0 border-l border-line-dim px-3 py-2 uppercase tracking-widest hover:text-signal"
 		>
 			Copy
 		</button>

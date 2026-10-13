@@ -180,3 +180,7 @@ html.js .is-enhanced .slide:not([data-active]) .frame video { filter: brightness
 		animation: none;
 	}
 }
+
+/* the copy button needs enhance.js; html.js is dropped when it fails to run */
+.copy-btn { display: none; }
+html.js .copy-btn { display: block; }

@@ -44,6 +44,22 @@ test.describe('without JavaScript', () => {
 		expect(await dashOffset(page, 'chauffeur')).toBe(0);
 		expect(await dashOffset(page, 'hard-pills')).toBe(0);
 	});
+	test('the copy button is not shown when it cannot work', async ({ page }) => {
+		await page.goto('/');
+		await expect(page.getByTestId('copy-command')).toBeHidden();
+	});
+});
+
+test('copy status clears and re-announces on the next copy', async ({ page, context }) => {
+	await context.grantPermissions(['clipboard-read', 'clipboard-write']);
+	await page.clock.install();
+	await page.goto('/');
+	await page.getByTestId('copy-command').click();
+	await expect(page.getByTestId('copy-status')).toHaveText('Copied');
+	await page.clock.fastForward(3000);
+	await expect(page.getByTestId('copy-status')).toHaveText('');
+	await page.getByTestId('copy-command').click();
+	await expect(page.getByTestId('copy-status')).toHaveText('Copied');
 });
 
 test('copy button copies the brew command', async ({ page, context }) => {
