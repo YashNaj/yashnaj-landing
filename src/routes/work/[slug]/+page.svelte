@@ -62,8 +62,8 @@
 	</section>
 
 	<div class="grid gap-10 md:grid-cols-2">
-		{#each sections as [heading, body]}
-			<section>
+		{#each sections as [heading, body], i}
+			<section data-reveal style="--r: {i}">
 				<h2 class="font-mono text-sm tracking-[0.3em] text-signal uppercase">{heading}</h2>
 				<p class="mt-3 text-lg leading-relaxed text-paper/90">{body}</p>
 			</section>
@@ -74,7 +74,7 @@
 		<p class="mt-10 font-mono text-xs text-paper/70">Sample study: BRAINIX, from the OsiriX / Orthanc public DICOM sample library — for teaching and demonstration.</p>
 	{/if}
 
-	<nav class="mt-16 flex flex-wrap justify-between gap-4 border-t border-line-dim pt-8 font-mono text-sm" aria-label="More projects">
+	<nav data-reveal class="mt-16 flex flex-wrap justify-between gap-4 border-t border-line-dim pt-8 font-mono text-sm" aria-label="More projects">
 		<a class="hover:text-signal" href="/work/{data.prev.slug}">← Previous: {data.prev.title}</a>
 		<a class="hover:text-signal" href="/work/{data.next.slug}">Next: {data.next.title} →</a>
 	</nav>

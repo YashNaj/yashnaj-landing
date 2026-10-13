@@ -284,3 +284,21 @@ html.js .copy-btn { display: block; }
 .ping { position: relative; }
 .ping::after { content: ''; position: absolute; inset: 0; border-radius: 9999px; border: 1px solid var(--color-signal); }
 @keyframes ping { from { transform: scale(1); opacity: 0.8; } to { transform: scale(3.2); opacity: 0; } }
+
+/* ---------- Carousel refinements ---------- */
+[data-dot]::before { transition: inset var(--dur-m) var(--ease-out), background-color var(--dur-s) var(--ease-out), border-radius var(--dur-m) var(--ease-out); }
+[data-dot][aria-current='true']::before { inset: 8px 2px; border-radius: 9999px; }
+.carousel-controls > [data-prev]:hover { transform: translateX(-2px); }
+.carousel-controls > [data-next]:hover { transform: translateX(2px); }
+[data-counter] { display: inline-block; }
+@supports (animation-timeline: view()) {
+	@media (prefers-reduced-motion: no-preference) {
+		.slide { view-timeline: --slide inline; }
+		.slide > .frame { animation: slide-depth linear both; animation-timeline: --slide; }
+		.slide > .frame :is(img, video) { animation: slide-dim linear both; animation-timeline: --slide; }
+		html.js .is-enhanced .slide:not([data-active]) { transform: none; }
+		html.js .is-enhanced .slide:not([data-active]) .frame :is(img, video) { filter: none; }
+	}
+}
+@keyframes slide-depth { 0% { transform: perspective(900px) rotateY(10deg) scale(0.9); } 50% { transform: none; } 100% { transform: perspective(900px) rotateY(-10deg) scale(0.9); } }
+@keyframes slide-dim { 0%, 100% { filter: brightness(0.5) saturate(0.7); } 50% { filter: none; } }

@@ -9,6 +9,7 @@
 		const dots = [...root.querySelectorAll('[data-dot]')];
 		const clamp = (i) => Math.max(0, Math.min(slides.length - 1, i));
 		let active = 0;
+		let ticked = false;
 		let target = null; // slide a button/key asked for, until the scroll arrives
 		const visible = new Set(); // slides ≥ 60% inside the viewport (track clipping included)
 		root.querySelector('[data-controls]').hidden = false;
@@ -28,6 +29,8 @@
 			dots.forEach((d, j) => d.setAttribute('aria-current', String(j === i)));
 			slides.forEach((s, j) => s.toggleAttribute('data-active', j === i));
 			sync();
+			if (ticked && !reduce) counter.animate([{ transform: 'translateY(40%)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 260, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' });
+			ticked = true;
 		};
 		const nearest = () => {
 			const centre = track.scrollLeft + track.clientWidth / 2;

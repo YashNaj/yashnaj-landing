@@ -164,3 +164,19 @@ test('later slide images yield bandwidth to the first (the LCP)', async ({ page 
 	await expect(imgs.first()).toHaveAttribute('fetchpriority', 'high');
 	for (const img of (await imgs.all()).slice(1)) await expect(img).toHaveAttribute('fetchpriority', 'low');
 });
+
+test('active dot becomes a pill and the counter ticks', async ({ page }) => {
+	await page.goto('/work/myne');
+	const w = (i: number) => page.locator('[data-dot]').nth(i).evaluate((d) => parseFloat(getComputedStyle(d, '::before').width));
+	expect(await w(0)).toBeGreaterThan(await w(1));
+	await page.locator('[data-next]').click();
+	// the counter ticks when the smooth scroll reaches the next slide, not on the click itself
+	await expect.poll(() => page.locator('[data-counter]').evaluate((c) => c.getAnimations().length)).toBeGreaterThan(0);
+});
+
+test('slides use a scroll-linked depth timeline where supported', async ({ page }) => {
+	await page.goto('/work/myne');
+	const supported = await page.evaluate(() => CSS.supports('animation-timeline: view()'));
+	test.skip(!supported, 'scroll-driven animations unsupported');
+	expect(await page.locator('[data-slide] .frame').first().evaluate((f) => getComputedStyle(f).animationName)).toBe('slide-depth');
+});

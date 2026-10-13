@@ -115,3 +115,12 @@ test('Back lands on finished drawings, not a replay', async ({ page }) => {
 	expect(await stroke.evaluate((el) => getComputedStyle(el).transitionDuration.split(',').every((d) => parseFloat(d) === 0))).toBe(true);
 	expect(await stroke.evaluate((el) => parseFloat(getComputedStyle(el).strokeDashoffset))).toBe(0);
 });
+
+test('write-up sections reveal on scroll; header and carousel are visible at first paint', async ({ page }) => {
+	await page.goto('/work/chauffeur');
+	expect(await page.locator('main > header').evaluate((e) => getComputedStyle(e).opacity)).toBe('1');
+	expect(await page.locator('[data-carousel]').evaluate((e) => getComputedStyle(e).opacity)).toBe('1');
+	const sec = page.locator('section[data-reveal]').first();
+	await sec.scrollIntoViewIfNeeded();
+	await expect.poll(() => sec.evaluate((e) => getComputedStyle(e).opacity)).toBe('1');
+});
