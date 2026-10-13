@@ -5,6 +5,10 @@ test('head has title, description, canonical, OG and JSON-LD without email', asy
 	await expect(page).toHaveTitle('Yashal Najeeb — Full-Stack Product Engineer');
 	await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /zero to the App Store/);
 	await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://yashnaj.dev/');
+	await expect(page.locator('meta[name="google-site-verification"]')).toHaveAttribute(
+		'content',
+		'DpRDN8S4C7lxB8omOBLxNdOBkkvq0gNEBsFw-Q4748M'
+	);
 	await expect(page.locator('meta[property="og:image"]')).toHaveAttribute('content', 'https://yashnaj.dev/og.png');
 	await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
 	const ld = JSON.parse((await page.locator('script[type="application/ld+json"]').textContent())!);

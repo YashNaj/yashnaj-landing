@@ -26,6 +26,7 @@
 	<title>{title}</title>
 	<meta name="description" content={description} />
 	<link rel="canonical" href={url} />
+	<meta name="google-site-verification" content="DpRDN8S4C7lxB8omOBLxNdOBkkvq0gNEBsFw-Q4748M" />
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content={url} />
 	<meta property="og:title" content={title} />
