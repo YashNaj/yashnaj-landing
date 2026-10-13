@@ -65,9 +65,9 @@ export const projects: Project[] = [
 				'Benchmarked head to head with Xcode 27’s own MCP server over 180 runs: on Opus it verified 45 of 45 tasks to Xcode’s 39, in under half the turns at roughly a sixth of the cost — and it answered every crash and log task Xcode couldn’t.'
 		},
 		slides: [
-			{ kind: 'video', src: '/media/chauffeur/honest.mp4', poster: '/media/chauffeur/honest.webp', width: 960, height: 540, frame: 'browser', alt: 'Screen recording: an agent taps a disabled button and chauffeur reports NO EFFECT', caption: 'NO EFFECT — the tap changed nothing, and the agent is told so' },
-			{ kind: 'video', src: '/media/chauffeur/race.mp4', poster: '/media/chauffeur/race.webp', width: 960, height: 540, frame: 'browser', alt: 'Side-by-side recording of the same task with chauffeur and with Xcode 27’s MCP server', caption: 'Same task, both tools: 5 turns vs 14' },
-			{ kind: 'video', src: '/media/chauffeur/crash.mp4', poster: '/media/chauffeur/crash.webp', width: 960, height: 540, frame: 'browser', alt: 'Screen recording: the app crashes and chauffeur reports APP CRASHED with the failing line', caption: 'APP CRASHED — with the line that caused it' }
+			{ kind: 'video', src: '/media/chauffeur/honest.mp4', poster: '/media/chauffeur/honest.webp', width: 960, height: 722, frame: 'browser', alt: 'Screen recording: an agent taps a disabled button and chauffeur reports NO EFFECT', caption: 'NO EFFECT — the tap changed nothing, and the agent is told so' },
+			{ kind: 'video', src: '/media/chauffeur/race.mp4', poster: '/media/chauffeur/race.webp', width: 960, height: 1444, frame: 'browser', alt: 'Side-by-side recording of the same task with chauffeur and with Xcode 27’s MCP server', caption: 'Same task, both tools: 5 turns vs 14' },
+			{ kind: 'video', src: '/media/chauffeur/crash.mp4', poster: '/media/chauffeur/crash.webp', width: 960, height: 722, frame: 'browser', alt: 'Screen recording: the app crashes and chauffeur reports APP CRASHED with the failing line', caption: 'APP CRASHED — with the line that caused it' }
 		]
 	},
 	{
@@ -95,14 +95,20 @@ export const projects: Project[] = [
 			outcome:
 				'$10M+ in registered assets across 1,200 items and 400 collectors. Shifting revenue to dealers signed 12 NYC shops whose 800 passports became verified items in buyers’ vaults in the first quarter, and a proactive audit found and closed two critical privilege-escalation paths the same day.'
 		},
-		slides: [1, 2, 3, 4, 5].map((n) => ({
+		slides: [
+			['Home: watch news and quick actions to add an item or search for stolen goods', 'Home screen with watch news and quick actions'],
+			['The vault: every registered piece in one collection', 'Vault listing a Rolex Datejust and a Cartier bracelet'],
+			['An item record: transfer it, report it stolen, or export a PDF', 'Rolex Datejust 41 item record with Transfer, Stolen and PDF actions'],
+			['Repair and ownership history logged by service centres', 'Item repair history with service costs, technicians and ratings'],
+			['A stolen-item search hit, verified against Interpol records', 'Search result flagging an Audemars Piguet as stolen, Interpol verified']
+		].map(([caption, what], i) => ({
 			kind: 'image' as const,
-			src: `/media/myne/myne-${n}.webp`,
+			src: `/media/myne/myne-${i + 1}.webp`,
 			width: 600,
-			height: 1300,
+			height: 1304,
 			frame: 'phone' as const,
-			alt: `Myne Global iOS app, App Store screenshot ${n} of 5`,
-			caption: ['Your vault', 'Item provenance', 'Myne Passport', 'Ownership transfer', 'Stolen-item check'][n - 1]
+			alt: `Myne Global iOS app — ${what}`,
+			caption
 		}))
 	},
 	{
