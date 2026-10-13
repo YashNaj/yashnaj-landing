@@ -14,6 +14,8 @@ const page = readFileSync(join(SRC, 'demo.html'), 'utf8')
 	.replace(/<title>[^<]*<\/title>/, `<title>${TITLE}</title>`)
 	.replace('src="/mobile/index.html"', 'src="/demo/mri/mobile/index.html"')
 	.replace("fetch(BASE + '/study/index.json')", "fetch(BASE + '/demo/mri/study/index.json')")
+	// Open each series mid-stack: slice 1 is the top of the skull, the middle shows the anatomy.
+	.replace("cmd({ type:'loadStack', imageIds:s.imageIds, index:0 });", "cmd({ type:'loadStack', imageIds:s.imageIds, index:Math.floor(s.imageIds.length / 2) });")
 	// Don't spin forever when the device can't start the viewer (e.g. no WebGL): give up after 15 s.
 	.replace(
 		"cmd({ type:'loadStack', imageIds:s.imageIds, index:0 });",

@@ -77,9 +77,7 @@ function selectSeries(s){
   activeId = s.id;
   overlay.style.display = 'flex'; overlay.textContent = 'Loading imaging…';
   [...strip.children].forEach(c => c.classList.toggle('active', c.dataset.id === s.id));
-  cmd({ type:'loadStack', imageIds:s.imageIds, index:0 });
-  clearTimeout(window.__loadTimer);
-  window.__loadTimer = setTimeout(() => { if (overlay.style.display !== 'none') overlay.textContent = 'This device could not start the imaging viewer (WebGL unavailable).'; }, 15000);
+  cmd({ type:'loadStack', imageIds:s.imageIds, index:Math.floor(s.imageIds.length / 2) });
 }
 
 function buildChrome(manifest){

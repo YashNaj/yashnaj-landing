@@ -6,6 +6,6 @@ test.use({ launchOptions: { args: ['--disable-gpu', '--disable-webgl', '--disabl
 test('without WebGL the viewer still renders (CPU fallback) instead of spinning', async ({ page }) => {
 	await page.goto('/demo/mri');
 	expect(await page.evaluate(() => !!document.createElement('canvas').getContext('webgl2'))).toBe(false);
-	await expect(page.locator('#sliceLabel')).toHaveText('1 / 22', { timeout: 20000 });
+	await expect(page.locator('#sliceLabel')).toHaveText('12 / 22', { timeout: 20000 });
 	await expect(page.locator('#overlay')).toBeHidden();
 });

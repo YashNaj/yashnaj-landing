@@ -9,7 +9,7 @@ const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--ena
 const page = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 });
 await page.goto('http://localhost:4180/demo/mri');
 const label = page.locator('#sliceLabel');
-await label.filter({ hasText: '1 / 22' }).waitFor({ timeout: 30000 });
+await label.filter({ hasText: '/ 22' }).waitFor({ timeout: 30000 });
 const shot = async (name: string) => {
 	await page.evaluate(() => (document.activeElement as HTMLElement | null)?.blur());
 	await page.waitForTimeout(800);
