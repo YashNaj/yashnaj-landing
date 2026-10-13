@@ -416,15 +416,18 @@ html.js .copy-btn { display: block; }
 .hero-head { grid-area: head; }
 .hero-body { grid-area: body; }
 .hero-photo { grid-area: photo; position: relative; z-index: -1; display: grid; }
-/* phones: a full-bleed plate tucked under the heading */
-.hero-plate { display: block; width: calc(100% + 2rem); max-width: 520px; height: auto; margin: -3.5rem -1rem -2.5rem; justify-self: center; opacity: 0.9; }
+/* phones: a full-bleed plate tucked under the heading, as tall as the first screen allows so the
+   actions stay above the browser's toolbar on first load (svh = the viewport with toolbars shown) */
+.hero-plate { display: block; width: calc(100% + 2rem); max-width: 520px; height: clamp(10rem, calc(100svh - 25rem), 100vw); object-fit: cover; object-position: 50% 42%; margin: -4rem -1rem -3rem; justify-self: center; opacity: 0.9;
+	/* the crop can cut into the baked vignette: feather the top and bottom again */
+	mask-image: linear-gradient(transparent, #000 24%, #000 72%, transparent); }
 @media (min-width: 768px) {
 	.hero { grid-template-columns: 1fr 22rem; grid-template-areas: 'head photo' 'body photo'; align-items: center; }
 	.hero-head { align-self: end; }
 	.hero-body { align-self: start; }
 	/* desktop: the plate sits behind the right side and bleeds under the type */
 	.hero-photo { align-self: stretch; align-content: center; grid-template-columns: minmax(0, 1fr); }
-	.hero-plate { width: 520px; max-width: none; margin: 0 -2rem 0 0; justify-self: end; opacity: 0.85; }
+	.hero-plate { width: 520px; max-width: none; height: auto; margin: 0 -2rem 0 0; justify-self: end; opacity: 0.85; mask-image: none; }
 }
 .btn-icon { display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; }
 .btn-icon svg { width: 18px; height: 18px; }

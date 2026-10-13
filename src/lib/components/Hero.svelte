@@ -10,7 +10,7 @@
 </script>
 
 <!-- mobile: heading, portrait, pitch, actions; desktop: text on the left, portrait on the right -->
-<section data-testid="hero" aria-labelledby="hero-name" class="hero grid gap-8 py-12 md:gap-x-10 md:gap-y-0 md:py-28">
+<section data-testid="hero" aria-labelledby="hero-name" class="hero grid gap-6 pt-8 pb-12 md:gap-x-10 md:gap-y-0 md:py-28">
 	<div class="hero-head min-w-0">
 		<p data-enter style="--e: 0" class="font-mono text-xs tracking-[0.3em] text-signal uppercase">Drawing no. YN-001</p>
 		<h1 id="hero-name" class="mt-4 text-5xl leading-[0.95] font-semibold tracking-tight sm:text-6xl md:text-7xl">
@@ -34,13 +34,13 @@
 	</div>
 
 	<div class="hero-body min-w-0">
-		<p class="max-w-2xl text-xl leading-snug md:mt-6 md:text-2xl">{profile.pitch}</p>
-		<p data-testid="availability" data-enter style="--e: 3" class="mt-5 inline-flex items-center gap-2 font-mono text-sm text-paper">
+		<p class="max-w-2xl text-lg leading-snug md:mt-6 md:text-2xl">{profile.pitch}</p>
+		<p data-testid="availability" data-enter style="--e: 3" class="mt-4 inline-flex items-center gap-2 font-mono text-sm text-paper">
 			<span aria-hidden="true" class="ping h-2 w-2 shrink-0 rounded-full bg-signal"></span>
 			{profile.availability}
 		</p>
 
-		<nav aria-label="Contact" data-enter style="--e: 4" class="mt-8 flex items-center gap-3">
+		<nav aria-label="Contact" data-enter style="--e: 4" class="mt-6 flex items-center gap-3 md:mt-8">
 			<a href={profile.resume} class="btn-draft flex-1 md:flex-none">Resume</a>
 			{#each socials as s}
 				<a href={s.href} class="btn-draft btn-icon" aria-label={s.label} title={s.label}>
