@@ -10,10 +10,10 @@
 	];
 </script>
 
-<header data-testid="hero" class="grid gap-10 py-16 md:grid-cols-[1fr_auto] md:items-center md:py-28">
+<section data-testid="hero" aria-labelledby="hero-name" class="grid gap-10 py-16 md:grid-cols-[1fr_auto] md:items-center md:py-28">
 	<div class="min-w-0">
 		<p class="font-mono text-xs tracking-[0.3em] text-signal uppercase">Drawing no. YN-001</p>
-		<h1 class="mt-4 text-5xl leading-[0.95] font-semibold tracking-tight sm:text-6xl md:text-7xl">
+		<h1 id="hero-name" class="mt-4 text-5xl leading-[0.95] font-semibold tracking-tight sm:text-6xl md:text-7xl">
 			{profile.name}
 		</h1>
 		<p class="mt-4 font-mono text-sm text-paper/85">{profile.role}</p>
@@ -54,4 +54,4 @@
 			<TitleBlock rows={[['Dwg no.', 'YN-001'], ['Rev', '2026'], ['Loc', profile.location]]} />
 		</div>
 	</div>
-</header>
+</section>

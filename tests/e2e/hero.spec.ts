@@ -26,3 +26,9 @@ test('PRESS START teaser is hidden until phase 2 ships', async ({ page }) => {
 	await page.goto('/');
 	await expect(page.getByTestId('press-start')).toHaveCount(0);
 });
+
+test('the hero is a labelled section, not a header inside main', async ({ page }) => {
+	await page.goto('/');
+	await expect(page.locator('main header')).toHaveCount(0);
+	await expect(page.getByRole('region', { name: 'Yashal Najeeb' })).toHaveAttribute('data-testid', 'hero');
+});
