@@ -168,6 +168,36 @@ html.restored :is([data-draw] :is(.c, .stroke, .after, .type tspan, .stamp, .cur
 /* ink lands heavy and settles to its weight */
 html.js:not(.restored) [data-draw]:not([data-drawn]) svg.story .stroke { stroke-width: 2.8; }
 html.js [data-draw] svg.story .stroke { transition: stroke-dashoffset var(--d, 900ms) var(--ease-draw) var(--t, 0ms), stroke-width 400ms var(--ease-out) calc(var(--t, 0ms) + var(--d, 900ms) * 0.7); }
+/* chauffeur — the tap that changes nothing; every part on one clock */
+[data-draw][data-live] svg.story.chauffeur { --loop: 4.2s; }
+[data-draw][data-live] svg.story.chauffeur .cursor { animation: st-cursor var(--loop) var(--ease-in-out) infinite; }
+[data-draw][data-live] svg.story.chauffeur .btn { animation: st-press var(--loop) var(--ease-out) infinite; }
+[data-draw][data-live] svg.story.chauffeur .tapdot { animation: st-dot var(--loop) var(--ease-out) infinite; }
+[data-draw][data-live] svg.story.chauffeur .ripple { animation: st-ripple var(--loop) var(--ease-out) infinite; }
+[data-draw][data-live] svg.story.chauffeur .ripple + .ripple { animation-delay: 0.15s; }
+[data-draw][data-live] svg.story.chauffeur .st-a { animation: st-type-a var(--loop) linear infinite; }
+[data-draw][data-live] svg.story.chauffeur .st-b { animation: st-type-b var(--loop) linear infinite; }
+[data-draw][data-live] svg.story.chauffeur .st-tick { animation: st-tick var(--loop) var(--ease-out) infinite; }
+[data-draw][data-live] svg.story.chauffeur .pulse { animation: st-pulse var(--loop) var(--ease-in-out) infinite; }
+[data-draw][data-live] svg.story.chauffeur .stamp { animation: st-stamp var(--loop) var(--ease-pop) infinite; }
+[data-draw][data-live] svg.story.chauffeur .st-one { animation: st-one var(--loop) linear infinite; }
+[data-draw][data-live] svg.story.chauffeur .st-zero { animation: st-zero var(--loop) linear infinite; }
+.drawing .face { transition: none; }
+.drawing .face-fill { fill: var(--color-ink); stroke: none; }
+.drawing .battery-fill { fill: var(--color-paper); }
+/* chauffeur beats: 0–20 cursor glides in · 22 tap · 24–46 ripples, fields type, box ticks · 48 "1 CHANGE" · 48–56 pulse to the stamp · 57 NO EFFECT thumps · 60 counter glitches back to 0 · 64–70 fields wipe · 74–88 cursor leaves */
+@keyframes st-cursor { 0% { opacity: 0; transform: translate(64px, 58px); } 8% { opacity: 1; } 20% { transform: translate(0, 0); } 22% { transform: translate(0, 0) scale(0.84); } 25%, 72% { transform: translate(0, 0) scale(1); } 74% { opacity: 1; } 88%, 100% { opacity: 0; transform: translate(58px, 66px); } }
+@keyframes st-press { 0%, 21.5% { transform: none; stroke: var(--color-line-dim); } 23% { transform: scale(0.94); stroke: var(--color-signal); } 30% { transform: none; stroke: var(--color-signal); } 40%, 100% { stroke: var(--color-line-dim); } }
+@keyframes st-dot { 0%, 21.5% { transform: scale(1); } 23.5% { transform: scale(2); } 30%, 100% { transform: scale(1); } }
+@keyframes st-ripple { 0%, 22.5% { opacity: 0; transform: scale(0.4); } 23% { opacity: 0.9; transform: scale(0.4); } 44%, 100% { opacity: 0; transform: scale(2.8); } }
+@keyframes st-type-a { 0%, 26% { stroke-dashoffset: 1; } 37%, 64% { stroke-dashoffset: 0; } 69%, 100% { stroke-dashoffset: -1; } }
+@keyframes st-type-b { 0%, 34% { stroke-dashoffset: 1; } 44%, 65% { stroke-dashoffset: 0; } 70%, 100% { stroke-dashoffset: -1; } }
+@keyframes st-tick { 0%, 44% { stroke-dashoffset: 1; } 47%, 66% { stroke-dashoffset: 0; } 68%, 100% { stroke-dashoffset: 1; } }
+@keyframes st-pulse { 0%, 47% { stroke-dashoffset: 1.08; opacity: 0; } 48% { opacity: 1; } 56% { stroke-dashoffset: 0; opacity: 1; } 60%, 100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes st-stamp { 0%, 55.5% { transform: rotate(-3deg); } 57% { transform: rotate(-7deg) scale(1.16); } 61%, 100% { transform: rotate(-3deg); } }
+@keyframes st-one { 0%, 47% { opacity: 0; transform: none; } 48%, 58% { opacity: 1; transform: none; } 59% { opacity: 0.2; transform: translateX(3px); } 59.6% { opacity: 1; transform: translateX(-2px); } 60.4%, 100% { opacity: 0; transform: none; } }
+@keyframes st-zero { 0%, 47% { opacity: 1; } 48%, 59.6% { opacity: 0; } 60.4% { opacity: 1; transform: translateX(-2px); } 61.4%, 100% { opacity: 1; transform: none; } }
+
 
 @media (prefers-reduced-motion: reduce), print {
 	html.js [data-draw] :is(.c, .stroke, .after, .type tspan, .stamp, .cursor, .unlock, .slide-out, .grow) {

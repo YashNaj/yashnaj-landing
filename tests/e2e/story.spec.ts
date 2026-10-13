@@ -82,3 +82,31 @@ test.describe('the turn', () => {
 		expect(urls.some((u) => /models[.-][\w-]+\.js/.test(u))).toBe(false);
 	});
 });
+
+test.describe('stories', () => {
+	test.use({ viewport: { width: 1280, height: 900 } });
+	const loopParts: Record<string, string> = { chauffeur: '.cursor, .btn, .ripple, .st-a, .st-b, .st-tick, .leader-pulse, .stamp, .st-one, .st-zero' };
+	for (const [slug, sel] of Object.entries(loopParts)) {
+		test(`${slug}: every loop part runs on the drawing's one clock, only while live`, async ({ page }) => {
+			await page.goto('/');
+			const fig = page.locator(`#${slug} figure.drawing`);
+			await fig.scrollIntoViewIfNeeded();
+			await expect(fig).toHaveAttribute('data-live', '', { timeout: 6000 });
+			const durs = await fig.locator(sel).evaluateAll((els) => els.map((e) => getComputedStyle(e).animationDuration));
+			const loop = await fig.locator('svg.story').evaluate((s) => getComputedStyle(s).getPropertyValue('--loop').trim());
+			expect(new Set(durs)).toEqual(new Set([loop]));
+			await page.evaluate(() => scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }));
+			await expect(fig).not.toHaveAttribute('data-live', '');
+			expect(await fig.locator(sel).evaluateAll((els) => els.every((e) => getComputedStyle(e).animationName === 'none'))).toBe(true);
+		});
+	}
+	test('chauffeur beats: "1 CHANGE" shows mid-loop, then the counter is back to 0', async ({ page }) => {
+		await page.goto('/');
+		const fig = page.locator('#chauffeur figure.drawing');
+		await fig.scrollIntoViewIfNeeded();
+		await expect(fig).toHaveAttribute('data-live', '', { timeout: 6000 });
+		const at = (f: number) => fig.locator('.st-one').evaluate((el, f) => { const a = el.getAnimations()[0]; a.pause(); a.currentTime = (a.effect!.getTiming().duration as number) * f; return getComputedStyle(el).opacity; }, f);
+		expect(await at(0.52)).toBe('1');
+		expect(await at(0.7)).toBe('0');
+	});
+});
