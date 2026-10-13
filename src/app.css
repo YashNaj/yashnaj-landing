@@ -410,3 +410,22 @@ html.js .copy-btn { display: block; }
 }
 @keyframes slide-depth { 0% { transform: perspective(900px) rotateY(10deg) scale(0.9); } 50% { transform: none; } 100% { transform: perspective(900px) rotateY(-10deg) scale(0.9); } }
 @keyframes slide-dim { 0%, 100% { filter: brightness(0.5) saturate(0.7); } 50% { filter: none; } }
+
+/* ---------- Hero layout: mobile reads heading → portrait → pitch → actions; desktop keeps the portrait on the right ---------- */
+.hero { position: relative; isolation: isolate; grid-template-areas: 'head' 'photo' 'body'; }
+.hero-head { grid-area: head; }
+.hero-body { grid-area: body; }
+.hero-photo { grid-area: photo; position: relative; z-index: -1; display: grid; }
+/* phones: a full-bleed plate tucked under the heading */
+.hero-plate { display: block; width: calc(100% + 2rem); max-width: 520px; height: auto; margin: -3.5rem -1rem -2.5rem; justify-self: center; opacity: 0.9; }
+@media (min-width: 768px) {
+	.hero { grid-template-columns: 1fr 22rem; grid-template-areas: 'head photo' 'body photo'; align-items: center; }
+	.hero-head { align-self: end; }
+	.hero-body { align-self: start; }
+	/* desktop: the plate sits behind the right side and bleeds under the type */
+	.hero-photo { align-self: stretch; align-content: center; grid-template-columns: minmax(0, 1fr); }
+	.hero-plate { width: 520px; max-width: none; margin: 0 -2rem 0 0; justify-self: end; opacity: 0.85; }
+}
+.btn-icon { display: inline-grid; place-items: center; width: 2.75rem; height: 2.75rem; padding: 0; }
+.btn-icon svg { width: 18px; height: 18px; }
+.hero nav .btn-draft { display: inline-grid; place-items: center; height: 2.75rem; }

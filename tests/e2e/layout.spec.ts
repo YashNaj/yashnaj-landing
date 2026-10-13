@@ -48,7 +48,7 @@ test('keyboard users reach the contact actions with a visible focus ring', async
 		const info = await page.evaluate(() => {
 			const el = document.activeElement as HTMLElement;
 			const cs = getComputedStyle(el);
-			return { text: el.textContent?.trim() ?? '', outline: cs.outlineStyle, color: cs.outlineColor };
+			return { text: el.getAttribute('aria-label') ?? el.textContent?.trim() ?? '', outline: cs.outlineStyle, color: cs.outlineColor };
 		});
 		seen.push(info.text);
 		if (info.text === 'Resume') {

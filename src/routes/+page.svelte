@@ -16,7 +16,7 @@
 	title="Yashal Najeeb — Full-Stack Product Engineer"
 	description="Yashal Najeeb is a full-stack product engineer (iOS, React Native, SvelteKit, Postgres) who takes products from zero to the App Store. Selected work: chauffeur, Myne Global, a mobile MRI/CT viewer and more."
 	path="/"
-	jsonLd={{ '@context': 'https://schema.org', '@type': 'Person', name: profile.name, alternateName: ['Yash Najeeb', 'yashnaj'], url: 'https://yashnaj.dev/', image: 'https://yashnaj.dev/img/yashal-460.webp', jobTitle: 'Full-Stack Product Engineer', sameAs: [profile.github, profile.linkedin] }}
+	jsonLd={{ '@context': 'https://schema.org', '@type': 'Person', name: profile.name, alternateName: ['Yash Najeeb', 'yashnaj'], url: 'https://yashnaj.dev/', image: 'https://yashnaj.dev/img/yashal-bg-800.webp', jobTitle: 'Full-Stack Product Engineer', sameAs: [profile.github, profile.linkedin] }}
 />
 <!-- models first, so its draw:start listener exists before any drawing starts -->
 <svelte:head><script src={modelsUrl} defer></script><script src={enhanceUrl} defer></script></svelte:head>

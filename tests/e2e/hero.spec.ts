@@ -37,7 +37,7 @@ test('hero secondary elements enter; the h1 and photo never animate (LCP)', asyn
 	await page.goto('/');
 	expect(await page.locator('h1').evaluate((el) => el.getAnimations().length)).toBe(0);
 	expect(await page.locator('[data-testid="hero"] img').evaluate((el) => el.getAnimations().length)).toBe(0);
-	expect(await page.locator('[data-enter]').count()).toBeGreaterThanOrEqual(6);
+	expect(await page.locator('[data-enter]').count()).toBeGreaterThanOrEqual(4); // the portrait is a frameless plate
 	expect(await page.locator('[data-enter]').first().evaluate((el) => el.getAnimations().length)).toBeGreaterThan(0);
 	expect(await page.getByTestId('availability').evaluate((el) => el.getAnimations({ subtree: true }).length)).toBeGreaterThan(0);
 });
