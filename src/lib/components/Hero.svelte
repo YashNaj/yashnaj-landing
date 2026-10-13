@@ -17,7 +17,11 @@
 			{profile.name}
 		</h1>
 		<p class="mt-4 font-mono text-sm text-paper/85">{profile.role}</p>
-		<p class="mt-6 max-w-xl text-xl leading-snug md:text-2xl">{profile.pitch}</p>
+		<p class="mt-6 max-w-2xl text-xl leading-snug md:text-2xl">{profile.pitch}</p>
+		<p data-testid="availability" class="mt-5 inline-flex items-center gap-2 font-mono text-sm text-paper">
+			<span aria-hidden="true" class="h-2 w-2 rounded-full bg-signal motion-safe:animate-pulse"></span>
+			{profile.availability}
+		</p>
 
 		<nav aria-label="Contact" class="mt-8 flex flex-wrap gap-3">
 			{#each actions as a}
@@ -29,13 +33,6 @@
 			{/each}
 		</nav>
 
-		<p
-			data-testid="press-start"
-			aria-disabled="true"
-			class="mt-8 inline-flex items-center gap-2 font-mono text-xs tracking-[0.3em] text-paper/70 uppercase"
-		>
-			<span class="text-signal motion-safe:animate-pulse">Press start ▸</span> coming soon
-		</p>
 	</div>
 
 	<div class="mx-auto w-56 md:w-72">

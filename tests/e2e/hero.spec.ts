@@ -11,7 +11,8 @@ test('hero shows role, pitch, photo and contact actions', async ({ page }) => {
 	await page.goto('/');
 	const hero = page.getByTestId('hero');
 	await expect(hero).toContainText('Full-Stack Product Engineer');
-	await expect(hero).toContainText('takes software from zero to the App Store');
+	await expect(hero).toContainText('$10M+');
+	await expect(hero.getByTestId('availability')).toContainText(/open to/i);
 	const img = hero.getByRole('img', { name: 'Portrait of Yashal Najeeb' });
 	await expect(img).toBeVisible();
 	expect(await img.evaluate((i: HTMLImageElement) => i.naturalWidth)).toBeGreaterThan(0);
@@ -21,9 +22,7 @@ test('hero shows role, pitch, photo and contact actions', async ({ page }) => {
 	await expect(hero.getByRole('link', { name: 'Email' })).toHaveAttribute('href', 'mailto:yashnaj@proton.me');
 });
 
-test('PRESS START is shown but disabled in phase 1', async ({ page }) => {
+test('PRESS START teaser is hidden until phase 2 ships', async ({ page }) => {
 	await page.goto('/');
-	const start = page.getByTestId('press-start');
-	await expect(start).toHaveAttribute('aria-disabled', 'true');
-	await expect(start).toContainText('coming soon');
+	await expect(page.getByTestId('press-start')).toHaveCount(0);
 });

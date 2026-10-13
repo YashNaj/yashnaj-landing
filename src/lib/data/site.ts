@@ -16,7 +16,9 @@ export type Project = {
 export const profile = {
 	name: 'Yashal Najeeb',
 	role: 'Full-Stack Product Engineer · iOS, React Native, TypeScript, Postgres',
-	pitch: 'Product engineer who takes software from zero to the App Store.',
+	pitch:
+		'I take products from zero to the App Store — most recently a provenance platform now holding $10M+ in luxury assets, and a five-repo HIPAA platform I rescued as its sole engineer.',
+	availability: 'Open to full-time and contract roles · Remote or Los Angeles area',
 	location: 'Corona, CA',
 	email: 'yashnaj@proton.me',
 	github: 'https://github.com/YashNaj',
@@ -36,7 +38,10 @@ export const projects: Project[] = [
 		metric:
 			'180-run benchmark vs Xcode 27’s MCP: under half the turns at ~1/6 the cost, 45/45 tasks verified on Opus.',
 		stack: ['Swift', 'MCP', 'XCTest', 'Homebrew'],
-		links: [{ label: 'GitHub', href: 'https://github.com/YashNaj/chauffeur' }],
+		links: [
+			{ label: 'GitHub', href: 'https://github.com/YashNaj/chauffeur' },
+			{ label: 'Watch the benchmark', href: 'https://github.com/YashNaj/chauffeur#benchmark' }
+		],
 		command: 'brew install yashnaj/chauffeur/chauffeur',
 		drawingLabel:
 			'Line drawing of a phone: a tap ripple lands on a greyed-out button and a NO EFFECT label stamps beside it.'
@@ -50,7 +55,10 @@ export const projects: Project[] = [
 			'Built end to end as lead engineer: SvelteKit API, Postgres with row-level security, a SwiftUI app and Stripe/StoreKit billing. Owner-held-key encryption carries every ownership transfer, dealers issue Myne Passports at the point of sale, and every buyer search checks a registry of 16,830 stolen-item records.',
 		metric: '$10M+ in registered assets · 400 collectors · 12 NYC dealers',
 		stack: ['SwiftUI', 'SvelteKit', 'Postgres', 'Supabase', 'Stripe', 'StoreKit 2'],
-		links: [{ label: 'myneglobal.com', href: 'https://myneglobal.com' }],
+		links: [
+			{ label: 'myneglobal.com', href: 'https://myneglobal.com' },
+			{ label: 'App Store', href: 'https://apps.apple.com/us/app/myne-global/id6757202169' }
+		],
 		drawingLabel:
 			'Exploded-view drawing of a vault door with a Myne Passport pulled out beside it, with callout labels.'
 	},
@@ -81,9 +89,17 @@ export const projects: Project[] = [
 	}
 ];
 
-export const alsoBuilt = [
-	{ name: 'Serveus', description: 'On-demand parcel delivery — App Store, 2026' },
-	{ name: 'Rider365', description: 'Motorcycle ride planning in Expo — App Store, 2026' },
+export const alsoBuilt: { name: string; description: string; href?: string }[] = [
+	{
+		name: 'Serveus',
+		description: 'On-demand parcel delivery — App Store, 2026',
+		href: 'https://apps.apple.com/us/app/serveus-peer-delivery/id6746662724'
+	},
+	{
+		name: 'Rider365',
+		description: 'Motorcycle ride planning in Expo — App Store, 2026',
+		href: 'https://apps.apple.com/us/app/rider-365-never-ride-alone/id6748325897'
+	},
 	{ name: 'AutoAce', description: 'Voice-tone and background-noise classifier for call recordings, built in 9 days' },
 	{ name: 'FieldDiligence', description: 'Jobber-to-QuickBooks invoice matcher that shrinks a month of invoices to a short review list' }
 ];

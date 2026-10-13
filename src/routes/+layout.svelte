@@ -8,13 +8,15 @@
 	let { children } = $props();
 
 	const title = `${profile.name} — Full-Stack Product Engineer`;
-	const description = `${profile.pitch} iOS, React Native, SvelteKit, Postgres. Selected work: chauffeur, Myne Global, a mobile MRI/CT viewer and more.`;
+	const description = `Yashal Najeeb is a full-stack product engineer (iOS, React Native, SvelteKit, Postgres) who takes products from zero to the App Store. Selected work: chauffeur, Myne Global, a mobile MRI/CT viewer and more.`;
 	const url = 'https://yashnaj.dev/';
 	const jsonLd = JSON.stringify({
 		'@context': 'https://schema.org',
 		'@type': 'Person',
 		name: profile.name,
+		alternateName: ['Yash Najeeb', 'yashnaj'],
 		url,
+		image: 'https://yashnaj.dev/img/yashal-460.webp',
 		jobTitle: 'Full-Stack Product Engineer',
 		sameAs: [profile.github, profile.linkedin]
 	});

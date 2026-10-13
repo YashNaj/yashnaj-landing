@@ -11,6 +11,7 @@ test('head has title, description, canonical, OG and JSON-LD without email', asy
 	expect(ld['@type']).toBe('Person');
 	expect(ld.sameAs).toEqual(['https://github.com/YashNaj', 'https://www.linkedin.com/in/yashnaj']);
 	expect(JSON.stringify(ld)).not.toContain('@proton.me');
+	expect(ld.alternateName).toEqual(expect.arrayContaining(['Yash Najeeb', 'yashnaj']));
 	const og = await request.get('/og.png');
 	expect(og.status()).toBe(200);
 	expect(og.headers()['content-type']).toBe('image/png');
@@ -63,4 +64,11 @@ test('the brew command is fully readable at 360px', async ({ page }) => {
 	const code = page.locator('#chauffeur code');
 	const { scroll, client } = await code.evaluate((el) => ({ scroll: el.scrollWidth, client: el.clientWidth }));
 	expect(scroll).toBeLessThanOrEqual(client);
+});
+
+test('sitemap lists the home page and robots.txt points to it', async ({ request }) => {
+	const sitemap = await request.get('/sitemap.xml');
+	expect(sitemap.status()).toBe(200);
+	expect(await sitemap.text()).toContain('<loc>https://yashnaj.dev/</loc>');
+	expect(await (await request.get('/robots.txt')).text()).toContain('Sitemap: https://yashnaj.dev/sitemap.xml');
 });

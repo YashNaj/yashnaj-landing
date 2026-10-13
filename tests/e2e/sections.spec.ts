@@ -5,6 +5,8 @@ test('also built lists four smaller projects', async ({ page }) => {
 	const section = page.locator('#also-built');
 	await expect(section.getByRole('heading', { level: 2 })).toHaveText('Also built');
 	await expect(section.locator('li strong')).toHaveText(['Serveus', 'Rider365', 'AutoAce', 'FieldDiligence']);
+	await expect(section.getByRole('link', { name: /Serveus/ })).toHaveAttribute('href', /apps\.apple\.com/);
+	await expect(section.getByRole('link', { name: /Rider365/ })).toHaveAttribute('href', /apps\.apple\.com/);
 });
 
 test('experience shows three roles, contract client unnamed', async ({ page }) => {
