@@ -1,0 +1,147 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import worker from '../../worker/index';
+
+const assets = vi.fn(async () => new Response('asset'));
+const env = { ASSETS: { fetch: assets }, RESEND_API_KEY: 're_test', TURNSTILE_SECRET: 'ts_test' };
+const good: Record<string, string | string[]> = {
+	name: 'Ana Ruiz',
+	business: 'Ana’s Tacos',
+	email: 'ana@example.com',
+	phone: '',
+	need: ['website'],
+	budget: '$1,000–2,500',
+	message: 'Need a site',
+	fax: '',
+	'cf-turnstile-response': 'tok'
+};
+
+function post(fields: Record<string, string | string[]>, accept = 'application/json') {
+	const body = new URLSearchParams();
+	for (const [k, v] of Object.entries(fields)) for (const x of [v].flat()) body.append(k, x);
+	return new Request('https://yashnaj.dev/api/quote', {
+		method: 'POST',
+		body,
+		headers: { accept, 'content-type': 'application/x-www-form-urlencoded', 'CF-Connecting-IP': '203.0.113.7' }
+	});
+}
+
+let calls: { url: string; init: RequestInit }[];
+let turnstile: 'ok' | 'fail' | 'down';
+let resend: 'ok' | 'fail' | 'down';
+beforeEach(() => {
+	calls = [];
+	turnstile = 'ok';
+	resend = 'ok';
+	assets.mockClear();
+	vi.stubGlobal(
+		'fetch',
+		vi.fn(async (url: string, init: RequestInit) => {
+			calls.push({ url: String(url), init });
+			const state = String(url).includes('challenges.cloudflare.com') ? turnstile : resend;
+			if (state === 'down') throw new TypeError('network down');
+			if (String(url).includes('challenges.cloudflare.com')) return Response.json({ success: state === 'ok' });
+			return new Response('{}', { status: state === 'ok' ? 200 : 500 });
+		})
+	);
+});
+afterEach(() => vi.unstubAllGlobals());
+
+const resendCall = () => calls.find((c) => c.url === 'https://api.resend.com/emails');
+
+describe('POST /api/quote', () => {
+	it('emails a valid quote to the inbox, reply-to the lead', async () => {
+		const res = await worker.fetch(post(good), env);
+		expect(res.status).toBe(200);
+		expect(await res.json()).toEqual({ ok: true });
+		const ts = calls.find((c) => c.url.includes('challenges.cloudflare.com'))!;
+		const tsBody = ts.init.body as FormData;
+		expect([tsBody.get('secret'), tsBody.get('response'), tsBody.get('remoteip')]).toEqual(['ts_test', 'tok', '203.0.113.7']);
+		const r = resendCall()!;
+		expect((r.init.headers as Record<string, string>).Authorization).toBe('Bearer re_test');
+		const mail = JSON.parse(String(r.init.body));
+		expect(mail.from).toBe('Yashnaj.dev quotes <quotes@yashnaj.dev>');
+		expect(mail.to).toEqual(['yashnaj@proton.me']);
+		expect(mail.reply_to).toBe('ana@example.com');
+		expect(mail.subject).toBe('Quote request: Website — Ana’s Tacos');
+		expect(mail.text).toContain('Business: Ana’s Tacos');
+		expect(mail.text).toContain('Budget: $1,000–2,500');
+		expect(mail.text).toContain('Need a site');
+	});
+
+	it('rejects missing required fields with per-field messages and calls nothing', async () => {
+		const res = await worker.fetch(post({ ...good, name: ' ', email: '', need: [] }), env);
+		expect(res.status).toBe(400);
+		const body = await res.json();
+		expect(body.error).toBe('invalid');
+		expect(Object.keys(body.fields).sort()).toEqual(['email', 'name', 'need']);
+		expect(calls).toEqual([]);
+	});
+
+	it('rejects a bad email, over-long fields, unknown needs and budgets', async () => {
+		const res = await worker.fetch(
+			post({ ...good, email: 'ana@', message: 'x'.repeat(5001), phone: '1'.repeat(41), need: ['rocket'], budget: '$1M' }),
+			env
+		);
+		const body = await res.json();
+		expect(Object.keys(body.fields).sort()).toEqual(['budget', 'email', 'message', 'need', 'phone']);
+		expect(calls).toEqual([]);
+	});
+
+	it('keeps hostile input as plain text and the subject on one line', async () => {
+		const res = await worker.fetch(post({ ...good, business: 'Evil\r\nBcc: x@y.z', message: '<script>alert(1)</script>\n"quoted"' }), env);
+		expect(res.status).toBe(200);
+		const mail = JSON.parse(String(resendCall()!.init.body));
+		expect(mail.subject).not.toMatch(/[\r\n]/);
+		expect(mail.text).toContain('<script>alert(1)</script>\n"quoted"');
+		expect(mail.html).toBeUndefined();
+	});
+
+	it('a filled honeypot gets a quiet success and sends nothing', async () => {
+		const res = await worker.fetch(post({ ...good, fax: '555' }), env);
+		expect(await res.json()).toEqual({ ok: true });
+		expect(calls).toEqual([]);
+	});
+
+	it('a failed or missing spam check is a 403 and sends nothing', async () => {
+		turnstile = 'fail';
+		const res = await worker.fetch(post(good), env);
+		expect(res.status).toBe(403);
+		expect((await res.json()).error).toBe('turnstile');
+		expect(resendCall()).toBeUndefined();
+		const none = await worker.fetch(post({ ...good, 'cf-turnstile-response': '' }), env);
+		expect(none.status).toBe(403);
+	});
+
+	it('a Resend rejection or network error is a 502', async () => {
+		resend = 'fail';
+		expect((await worker.fetch(post(good), env)).status).toBe(502);
+		resend = 'down';
+		const res = await worker.fetch(post(good), env);
+		expect(res.status).toBe(502);
+		expect((await res.json()).error).toBe('send');
+		turnstile = 'down';
+		expect((await worker.fetch(post(good), env)).status).toBe(403);
+	});
+
+	it('a form post without JS redirects to the static result pages', async () => {
+		const ok = await worker.fetch(post(good, 'text/html'), env);
+		expect([ok.status, ok.headers.get('location')]).toEqual([303, 'https://yashnaj.dev/services/sent']);
+		turnstile = 'fail';
+		const bad = await worker.fetch(post(good, 'text/html'), env);
+		expect([bad.status, bad.headers.get('location')]).toEqual([303, 'https://yashnaj.dev/services/error']);
+	});
+});
+
+describe('routing', () => {
+	it('only POST is allowed on /api/quote; other /api paths 404', async () => {
+		const get = await worker.fetch(new Request('https://yashnaj.dev/api/quote'), env);
+		expect([get.status, get.headers.get('allow')]).toEqual([405, 'POST']);
+		expect((await worker.fetch(new Request('https://yashnaj.dev/api/nope'), env)).status).toBe(404);
+		expect(assets).not.toHaveBeenCalled();
+	});
+	it('everything else is served from the static assets', async () => {
+		const res = await worker.fetch(new Request('https://yashnaj.dev/services'), env);
+		expect(await res.text()).toBe('asset');
+		expect(assets).toHaveBeenCalledOnce();
+	});
+});

@@ -1,6 +1,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "yashnaj-landing",
+	"main": "worker/index.ts",
 	"compatibility_date": "2026-10-01",
 	"build": {
 		"command": "bun run build"
@@ -12,7 +13,10 @@
 	],
 	"assets": {
 		"directory": "./build",
+		"binding": "ASSETS",
 		"not_found_handling": "404-page",
-		"html_handling": "drop-trailing-slash"
+		"html_handling": "drop-trailing-slash",
+		// only the quote API runs the script; every other request is served straight from build/
+		"run_worker_first": ["/api/*"]
 	}
 }
