@@ -53,10 +53,14 @@
 		form.querySelectorAll('[data-error-for]').forEach((p) => (p.textContent = ''));
 		say(['Sending…'], 'busy');
 		let res = null;
+		// a dropped connection must still end in the fallback: give up after 25 s
+		const ac = new AbortController();
+		const t = setTimeout(() => ac.abort(), 25000);
 		try {
-			const r = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { accept: 'application/json' } });
+			const r = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { accept: 'application/json' }, signal: ac.signal });
 			res = await r.json();
 		} catch (_) {}
+		clearTimeout(t);
 		btn.disabled = false;
 		const resetCheck = () => window.turnstile && window.turnstile.reset(box);
 		if (res && res.ok) {

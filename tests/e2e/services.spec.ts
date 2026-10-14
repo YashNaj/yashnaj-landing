@@ -171,3 +171,16 @@ test('a double click sends one request', async ({ page }) => {
 	await expect(page.locator('[data-status]')).toContainText('Thanks');
 	expect(n).toBe(1);
 });
+
+test('a request that never answers ends in the email fallback, not a hang', async ({ page }) => {
+	await page.clock.install();
+	await stubTurnstile(page);
+	await page.route('**/api/quote', () => {}); // never fulfilled: a phone that dropped its connection
+	await page.goto('/services');
+	await fillQuote(page);
+	await page.click('button[type="submit"]');
+	await expect(page.locator('[data-status]')).toHaveText('Sending…');
+	await page.clock.fastForward(30_000);
+	await expect(page.locator('[data-status] a[href^="mailto:yashnaj@proton.me"]')).toBeVisible();
+	await expect(page.locator('button[type="submit"]')).toBeEnabled();
+});
