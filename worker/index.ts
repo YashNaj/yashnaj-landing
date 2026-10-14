@@ -42,7 +42,10 @@ function validate(form: FormData): { fields: Fields; errors: Record<string, stri
 }
 
 async function verifyTurnstile(token: string, ip: string | null, secret: string): Promise<boolean> {
-	if (!token) return false;
+	if (!token) {
+		console.error('quote: turnstile no-token');
+		return false;
+	}
 	const body = new FormData();
 	body.append('secret', secret);
 	body.append('response', token);
@@ -53,7 +56,8 @@ async function verifyTurnstile(token: string, ip: string | null, secret: string)
 		// error codes only (spec: nothing about the lead is logged)
 		if (v.success !== true) console.error('quote: turnstile refused', (v['error-codes'] ?? []).join(',') || 'no-code');
 		return v.success === true;
-	} catch {
+	} catch (e) {
+		console.error('quote: turnstile unreachable', (e as Error)?.name ?? 'error');
 		return false;
 	}
 }

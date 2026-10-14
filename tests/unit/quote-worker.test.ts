@@ -150,6 +150,17 @@ describe('failure logging (error codes only, never lead data)', () => {
 	});
 });
 
+describe('failure logging for paths that never reach a verdict', () => {
+	it('logs a missing token and an unreachable or non-JSON siteverify', async () => {
+		const log = vi.spyOn(console, 'error').mockImplementation(() => {});
+		await worker.fetch(post({ ...good, 'cf-turnstile-response': '' }), env);
+		turnstile = 'down';
+		await worker.fetch(post(good), env);
+		expect(log.mock.calls.map((c) => c.join(' '))).toEqual(['quote: turnstile no-token', 'quote: turnstile unreachable TypeError']);
+		log.mockRestore();
+	});
+});
+
 describe('routing', () => {
 	it('only POST is allowed on /api/quote; other /api paths 404', async () => {
 		const get = await worker.fetch(new Request('https://yashnaj.dev/api/quote'), env);
