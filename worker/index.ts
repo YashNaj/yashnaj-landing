@@ -112,10 +112,10 @@ async function quote(req: Request, env: Env): Promise<Response> {
 	const { fields, errors } = validate(form);
 	if (Object.keys(errors).length) return reply(req, 400, { ok: false, error: 'invalid', fields: errors });
 	const token = String(form.get('cf-turnstile-response') ?? '');
-	if (!(await verifyTurnstile(token, req.headers.get('CF-Connecting-IP'), env.TURNSTILE_SECRET))) {
+	if (!(await verifyTurnstile(token, req.headers.get('CF-Connecting-IP'), (env.TURNSTILE_SECRET ?? '').trim()))) {
 		return reply(req, 403, { ok: false, error: 'turnstile' });
 	}
-	if (!(await send(fields, env.BREVO_API_KEY))) return reply(req, 502, { ok: false, error: 'send' });
+	if (!(await send(fields, (env.BREVO_API_KEY ?? '').trim()))) return reply(req, 502, { ok: false, error: 'send' });
 	return reply(req, 200, { ok: true });
 }
 

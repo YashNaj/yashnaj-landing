@@ -161,6 +161,16 @@ describe('failure logging for paths that never reach a verdict', () => {
 	});
 });
 
+describe('secrets pasted with stray whitespace', () => {
+	it('trims both secrets before using them', async () => {
+		const res = await worker.fetch(post(good), { ...env, TURNSTILE_SECRET: ' ts_test\n', BREVO_API_KEY: 'br_test\n' });
+		expect(res.status).toBe(200);
+		const ts = calls.find((c) => c.url.includes('challenges.cloudflare.com'))!;
+		expect((ts.init.body as FormData).get('secret')).toBe('ts_test');
+		expect((sendCall()!.init.headers as Record<string, string>)['api-key']).toBe('br_test');
+	});
+});
+
 describe('routing', () => {
 	it('only POST is allowed on /api/quote; other /api paths 404', async () => {
 		const get = await worker.fetch(new Request('https://yashnaj.dev/api/quote'), env);
