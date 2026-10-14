@@ -39,8 +39,11 @@ beforeEach(() => {
 			calls.push({ url: String(url), init });
 			const state = String(url).includes('challenges.cloudflare.com') ? turnstile : mailer;
 			if (state === 'down') throw new TypeError('network down');
-			if (String(url).includes('challenges.cloudflare.com')) return Response.json({ success: state === 'ok' });
-			return new Response('{"messageId":"<m@brevo>"}', { status: state === 'ok' ? 201 : 400 });
+			if (String(url).includes('challenges.cloudflare.com'))
+				return Response.json(state === 'ok' ? { success: true } : { success: false, 'error-codes': ['invalid-input-secret'] });
+			return state === 'ok'
+				? new Response('{"messageId":"<m@brevo>"}', { status: 201 })
+				: Response.json({ code: 'unauthorized', message: 'Key not found' }, { status: 401 });
 		})
 	);
 });
@@ -129,6 +132,21 @@ describe('POST /api/quote', () => {
 		turnstile = 'fail';
 		const bad = await worker.fetch(post(good, 'text/html'), env);
 		expect([bad.status, bad.headers.get('location')]).toEqual([303, 'https://yashnaj.dev/services/error']);
+	});
+});
+
+describe('failure logging (error codes only, never lead data)', () => {
+	it('logs why Turnstile or Brevo refused, without the lead’s details', async () => {
+		const log = vi.spyOn(console, 'error').mockImplementation(() => {});
+		turnstile = 'fail';
+		await worker.fetch(post(good), env);
+		turnstile = 'ok';
+		mailer = 'fail';
+		await worker.fetch(post(good), env);
+		const lines = log.mock.calls.map((c) => c.join(' '));
+		expect(lines).toEqual(['quote: turnstile refused invalid-input-secret', 'quote: brevo refused 401 unauthorized']);
+		expect(lines.join(' ')).not.toMatch(/ana|Ruiz|Tacos|tok|ts_test|br_test/i);
+		log.mockRestore();
 	});
 });
 

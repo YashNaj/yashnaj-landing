@@ -49,7 +49,10 @@ async function verifyTurnstile(token: string, ip: string | null, secret: string)
 	if (ip) body.append('remoteip', ip);
 	try {
 		const r = await fetch(SITEVERIFY, { method: 'POST', body, signal: AbortSignal.timeout(TIMEOUT) });
-		return ((await r.json()) as { success?: boolean }).success === true;
+		const v = (await r.json()) as { success?: boolean; 'error-codes'?: string[] };
+		// error codes only (spec: nothing about the lead is logged)
+		if (v.success !== true) console.error('quote: turnstile refused', (v['error-codes'] ?? []).join(',') || 'no-code');
+		return v.success === true;
 	} catch {
 		return false;
 	}
@@ -76,6 +79,10 @@ async function send(f: Fields, key: string): Promise<boolean> {
 			body: JSON.stringify({ sender: FROM, to: [{ email: INBOX }], replyTo: { email: f.email }, subject, textContent: text }),
 			signal: AbortSignal.timeout(TIMEOUT)
 		});
+		if (!r.ok) {
+			const e = (await r.json().catch(() => ({}))) as { code?: string };
+			console.error('quote: brevo refused', r.status, e.code ?? 'no-code');
+		}
 		return r.ok;
 	} catch {
 		return false;
