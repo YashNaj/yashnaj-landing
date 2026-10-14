@@ -57,7 +57,7 @@
 - **Turnstile test key until setup.** `TURNSTILE_SITE_KEY` starts as Cloudflare's always-pass test site key `1x00000000000000000000AA`. Task 5 swaps in the real key after the widget exists. *Cost if wrong:* none; the test key only passes with the test secret.
 - **Honeypot name `fax`.** It's hidden off-screen, `tabindex=-1`, `autocomplete=off`.
 
-- **Brevo instead of Resend (ruled during execution).** The user's only Resend team belongs to Myne Global and a second team is paid, so the Worker sends through Brevo's free transactional API (`POST https://api.brevo.com/v3/smtp/email`, `api-key` header, secret `BREVO_API_KEY`). Task 1's code blocks below show the original Resend version; the code in `worker/index.ts` is the source of truth. Task 5's Resend steps become the same steps in Brevo. *Cost if wrong:* one `send()` function to swap back.
+- **Brevo instead of Resend (ruled during execution).** The user's only Resend team belongs to Myne Global and a second team is paid, so the Worker sends through Brevo's free transactional API (`POST https://api.brevo.com/v3/smtp/email`, `api-key` header, secret `BREVO_API_KEY`). Task 1's code blocks below show the original Resend version; the code in `worker/index.ts` is the source of truth. Task 5's Resend steps become the same steps in Brevo, on the subdomain `send.yashnaj.dev` (sender `quotes@send.yashnaj.dev`), so no root record Proton relies on is involved. *Cost if wrong:* one `send()` function to swap back.
 
 ## Review Focus
 

@@ -11,7 +11,8 @@ type Fields = { name: string; business: string; email: string; phone: string; ne
 type Body = { ok: true } | { ok: false; error: 'invalid' | 'turnstile' | 'send'; fields?: Record<string, string> };
 
 const INBOX = 'yashnaj@proton.me';
-const FROM = { name: 'Yashnaj.dev quotes', email: 'quotes@yashnaj.dev' };
+// send.yashnaj.dev is the Brevo-authenticated subdomain; the root domain's mail records belong to Proton
+const FROM = { name: 'Yashnaj.dev quotes', email: 'quotes@send.yashnaj.dev' };
 const SITEVERIFY = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const TIMEOUT = 10_000;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

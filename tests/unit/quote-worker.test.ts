@@ -59,7 +59,7 @@ describe('POST /api/quote', () => {
 		const r = sendCall()!;
 		expect((r.init.headers as Record<string, string>)['api-key']).toBe('br_test');
 		const mail = JSON.parse(String(r.init.body));
-		expect(mail.sender).toEqual({ name: 'Yashnaj.dev quotes', email: 'quotes@yashnaj.dev' });
+		expect(mail.sender).toEqual({ name: 'Yashnaj.dev quotes', email: 'quotes@send.yashnaj.dev' });
 		expect(mail.to).toEqual([{ email: 'yashnaj@proton.me' }]);
 		expect(mail.replyTo).toEqual({ email: 'ana@example.com' });
 		expect(mail.subject).toBe('Quote request: Website — Ana’s Tacos');

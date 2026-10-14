@@ -116,7 +116,7 @@ A separate `/services` page that sells Yashal's services to local Inland Empire 
      - A filled honeypot gets a silent success with no email sent.
   3. **Spam check.** Verify the Turnstile token with `https://challenges.cloudflare.com/turnstile/v0/siteverify`, using the `TURNSTILE_SECRET` secret and the visitor's IP.
   4. **Send.** `POST https://api.brevo.com/v3/smtp/email` with the `BREVO_API_KEY` secret in the `api-key` header:
-     - sender `Yashnaj.dev quotes <quotes@yashnaj.dev>`;
+     - sender `Yashnaj.dev quotes <quotes@send.yashnaj.dev>` (Brevo authenticates the `send.` subdomain, so Proton's root records are never involved);
      - to `yashnaj@proton.me`;
      - `replyTo` set to the lead's email;
      - a plain-text body listing every field.
@@ -128,7 +128,7 @@ A separate `/services` page that sells Yashal's services to local Inland Empire 
 
 ### One-time setup (outside the repo)
 - **Brevo** (user's own account, in Chrome):
-  1. Add and authenticate the domain `yashnaj.dev`. Brevo adds its own records (a `brevo-code` TXT and DKIM); no existing Proton MX, SPF, DKIM or DMARC record is edited. If Brevo asks to change one, stop and ask the user.
+  1. Add and authenticate the subdomain `send.yashnaj.dev` (Brevo asks that a sending domain not be shared with another mail service, and the root belongs to Proton). Records: a `brevo-code` TXT on `send` and DKIM CNAMEs `brevo1._domainkey.send` / `brevo2._domainkey.send`; the root DMARC already covers it. No Proton record is edited.
   2. Create an API key for the Worker (Brevo keys can't be scoped to sending only; it's used only by this Worker).
   3. Hand the user one `!` command per DNS record Brevo shows.
   4. Hand the user `! bunx wrangler secret put BREVO_API_KEY`; the user pastes the key.
