@@ -8,7 +8,7 @@ A separate `/services` page that sells Yashal's services to local Inland Empire 
 - **Audience:** local small businesses in the Inland Empire / SoCal (Corona, Riverside, Temecula). The ads will be local; there's no ad budget yet.
 - **Pricing:** severely undercut the market without looking cheap. Pricing is per fixed package, never hourly.
 - **Lead path:** a quote form (main button) plus "Book a 15-min call" (Cal.com; the user has, or will create, an account).
-- **Form delivery:** a small Worker of our own sends through Resend, using a new send-only key restricted to yashnaj.dev. Myne Global's key is not reused.
+- **Form delivery:** a small Worker of our own sends through Brevo's transactional API (free tier, 300 emails a day), with its own key and its own account. Myne Global's Resend team and key are not used. (Resend was the first choice; the user's only Resend team belongs to Myne Global, and a second team is paid.)
 - **Home:** gets one small link to the page, not a redesign.
 
 **Success:** a local owner landing from search or an ad understands the offer and the price within one screen, and can send a quote request in under a minute, on a phone. Without JavaScript the offer still reads in full. The form can't pass the spam check, so it hands over the email address and the call link instead.
@@ -115,23 +115,23 @@ A separate `/services` page that sells Yashal's services to local Inland Empire 
      - "Need" values come from a fixed list.
      - A filled honeypot gets a silent success with no email sent.
   3. **Spam check.** Verify the Turnstile token with `https://challenges.cloudflare.com/turnstile/v0/siteverify`, using the `TURNSTILE_SECRET` secret and the visitor's IP.
-  4. **Send.** `POST https://api.resend.com/emails` with the `RESEND_API_KEY` secret:
-     - from `Yashnaj.dev quotes <quotes@yashnaj.dev>`;
+  4. **Send.** `POST https://api.brevo.com/v3/smtp/email` with the `BREVO_API_KEY` secret in the `api-key` header:
+     - sender `Yashnaj.dev quotes <quotes@yashnaj.dev>`;
      - to `yashnaj@proton.me`;
-     - `reply_to` set to the lead's email;
+     - `replyTo` set to the lead's email;
      - a plain-text body listing every field.
   5. **Respond.**
      - **Fetch** (`Accept: application/json`): `{ ok: true }`, or `{ ok: false, error, fields? }` with status 400, 403 or 502.
      - **No-JS form post:** a 303 redirect to the static pages `/services/sent` or `/services/error` (noindex). A pre-rendered page can't read a query string without JS.
   6. **Other methods or paths under `/api/`:** 405 or 404.
-- **Secrets:** `RESEND_API_KEY` and `TURNSTILE_SECRET`, set by the user with `wrangler secret put`. The Turnstile site key is public and lives in `services.ts`.
+- **Secrets:** `BREVO_API_KEY` and `TURNSTILE_SECRET`, set by the user with `wrangler secret put`. The Turnstile site key is public and lives in `services.ts`.
 
 ### One-time setup (outside the repo)
-- **Resend** (user's account, in Chrome):
-  1. Add the domain `yashnaj.dev`; Resend uses a `send.` subdomain, so no root or Proton records are touched.
-  2. Create a send-only API key restricted to that domain.
-  3. Hand the user one `!` command per DNS record: the DKIM TXT on `resend._domainkey`, plus the MX and SPF TXT on `send`.
-  4. Hand the user `! bunx wrangler secret put RESEND_API_KEY`; the user pastes the key.
+- **Brevo** (user's own account, in Chrome):
+  1. Add and authenticate the domain `yashnaj.dev`. Brevo adds its own records (a `brevo-code` TXT and DKIM); no existing Proton MX, SPF, DKIM or DMARC record is edited. If Brevo asks to change one, stop and ask the user.
+  2. Create an API key for the Worker (Brevo keys can't be scoped to sending only; it's used only by this Worker).
+  3. Hand the user one `!` command per DNS record Brevo shows.
+  4. Hand the user `! bunx wrangler secret put BREVO_API_KEY`; the user pastes the key.
 - **Turnstile:** create a widget for `yashnaj.dev`, then the same `wrangler secret put` hand-off for the secret.
 - **Cal.com:** the user creates or uses their account and provides the booking link (15-minute event).
 
@@ -139,17 +139,17 @@ A separate `/services` page that sells Yashal's services to local Inland Empire 
 
 - **Invalid input:** inline field messages; the visitor's input is kept. No-JS: the redirect carries the error code and the page explains it.
 - **Turnstile fails or isn't loaded** (no JS, or blocked): 403 with "please try again". No-JS visitors can't pass Turnstile, so the no-JS error message also shows the email address.
-- **Resend failure or timeout** (10 s): 502. The page shows the email fallback, with a `mailto:` prefilled with the visitor's message.
+- **Brevo failure or timeout** (10 s): 502. The page shows the email fallback, with a `mailto:` prefilled with the visitor's message.
 - **Bots:** the honeypot plus Turnstile. No rate-limit binding (YAGNI); revisit if spam appears.
-- **Privacy:** lead data goes only to the user's inbox through Resend. Nothing is stored. Nothing is logged except error codes.
+- **Privacy:** lead data goes only to the user's inbox through Brevo. Nothing is stored. Nothing is logged except error codes.
 
 ## Testing
 
-- **Unit (vitest)** for the Worker handler, faking only `fetch` to Turnstile and Resend:
+- **Unit (vitest)** for the Worker handler, faking only `fetch` to Turnstile and Brevo:
   - validation and length caps;
   - the honeypot (silent OK, no send);
   - Turnstile failure;
-  - Resend failure;
+  - Brevo failure;
   - JSON vs redirect responses;
   - non-`/api` paths fall through to `ASSETS`.
 - **E2E (Playwright):**

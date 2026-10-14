@@ -3,7 +3,7 @@ import { BUDGETS, NEEDS, QUOTE_LIMITS } from '../src/lib/data/services';
 
 export interface Env {
 	ASSETS: { fetch(req: Request): Promise<Response> };
-	RESEND_API_KEY: string;
+	BREVO_API_KEY: string;
 	TURNSTILE_SECRET: string;
 }
 
@@ -11,7 +11,7 @@ type Fields = { name: string; business: string; email: string; phone: string; ne
 type Body = { ok: true } | { ok: false; error: 'invalid' | 'turnstile' | 'send'; fields?: Record<string, string> };
 
 const INBOX = 'yashnaj@proton.me';
-const FROM = 'Yashnaj.dev quotes <quotes@yashnaj.dev>';
+const FROM = { name: 'Yashnaj.dev quotes', email: 'quotes@yashnaj.dev' };
 const SITEVERIFY = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
 const TIMEOUT = 10_000;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -68,10 +68,11 @@ async function send(f: Fields, key: string): Promise<boolean> {
 		f.message || '(no message)'
 	].join('\n');
 	try {
-		const r = await fetch('https://api.resend.com/emails', {
+		// Brevo transactional API: plain text only, so nothing the lead typed is ever rendered as HTML
+		const r = await fetch('https://api.brevo.com/v3/smtp/email', {
 			method: 'POST',
-			headers: { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-			body: JSON.stringify({ from: FROM, to: [INBOX], reply_to: f.email, subject, text }),
+			headers: { 'api-key': key, 'Content-Type': 'application/json', Accept: 'application/json' },
+			body: JSON.stringify({ sender: FROM, to: [{ email: INBOX }], replyTo: { email: f.email }, subject, textContent: text }),
 			signal: AbortSignal.timeout(TIMEOUT)
 		});
 		return r.ok;
@@ -102,7 +103,7 @@ async function quote(req: Request, env: Env): Promise<Response> {
 	if (!(await verifyTurnstile(token, req.headers.get('CF-Connecting-IP'), env.TURNSTILE_SECRET))) {
 		return reply(req, 403, { ok: false, error: 'turnstile' });
 	}
-	if (!(await send(fields, env.RESEND_API_KEY))) return reply(req, 502, { ok: false, error: 'send' });
+	if (!(await send(fields, env.BREVO_API_KEY))) return reply(req, 502, { ok: false, error: 'send' });
 	return reply(req, 200, { ok: true });
 }
 

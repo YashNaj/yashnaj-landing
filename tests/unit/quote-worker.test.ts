@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import worker from '../../worker/index';
 
 const assets = vi.fn(async () => new Response('asset'));
-const env = { ASSETS: { fetch: assets }, RESEND_API_KEY: 're_test', TURNSTILE_SECRET: 'ts_test' };
+const env = { ASSETS: { fetch: assets }, BREVO_API_KEY: 'br_test', TURNSTILE_SECRET: 'ts_test' };
 const good: Record<string, string | string[]> = {
 	name: 'Ana Ruiz',
 	business: 'Ana’s Tacos',
@@ -27,26 +27,26 @@ function post(fields: Record<string, string | string[]>, accept = 'application/j
 
 let calls: { url: string; init: RequestInit }[];
 let turnstile: 'ok' | 'fail' | 'down';
-let resend: 'ok' | 'fail' | 'down';
+let mailer: 'ok' | 'fail' | 'down';
 beforeEach(() => {
 	calls = [];
 	turnstile = 'ok';
-	resend = 'ok';
+	mailer = 'ok';
 	assets.mockClear();
 	vi.stubGlobal(
 		'fetch',
 		vi.fn(async (url: string, init: RequestInit) => {
 			calls.push({ url: String(url), init });
-			const state = String(url).includes('challenges.cloudflare.com') ? turnstile : resend;
+			const state = String(url).includes('challenges.cloudflare.com') ? turnstile : mailer;
 			if (state === 'down') throw new TypeError('network down');
 			if (String(url).includes('challenges.cloudflare.com')) return Response.json({ success: state === 'ok' });
-			return new Response('{}', { status: state === 'ok' ? 200 : 500 });
+			return new Response('{"messageId":"<m@brevo>"}', { status: state === 'ok' ? 201 : 400 });
 		})
 	);
 });
 afterEach(() => vi.unstubAllGlobals());
 
-const resendCall = () => calls.find((c) => c.url === 'https://api.resend.com/emails');
+const sendCall = () => calls.find((c) => c.url === 'https://api.brevo.com/v3/smtp/email');
 
 describe('POST /api/quote', () => {
 	it('emails a valid quote to the inbox, reply-to the lead', async () => {
@@ -56,16 +56,16 @@ describe('POST /api/quote', () => {
 		const ts = calls.find((c) => c.url.includes('challenges.cloudflare.com'))!;
 		const tsBody = ts.init.body as FormData;
 		expect([tsBody.get('secret'), tsBody.get('response'), tsBody.get('remoteip')]).toEqual(['ts_test', 'tok', '203.0.113.7']);
-		const r = resendCall()!;
-		expect((r.init.headers as Record<string, string>).Authorization).toBe('Bearer re_test');
+		const r = sendCall()!;
+		expect((r.init.headers as Record<string, string>)['api-key']).toBe('br_test');
 		const mail = JSON.parse(String(r.init.body));
-		expect(mail.from).toBe('Yashnaj.dev quotes <quotes@yashnaj.dev>');
-		expect(mail.to).toEqual(['yashnaj@proton.me']);
-		expect(mail.reply_to).toBe('ana@example.com');
+		expect(mail.sender).toEqual({ name: 'Yashnaj.dev quotes', email: 'quotes@yashnaj.dev' });
+		expect(mail.to).toEqual([{ email: 'yashnaj@proton.me' }]);
+		expect(mail.replyTo).toEqual({ email: 'ana@example.com' });
 		expect(mail.subject).toBe('Quote request: Website — Ana’s Tacos');
-		expect(mail.text).toContain('Business: Ana’s Tacos');
-		expect(mail.text).toContain('Budget: $1,000–2,500');
-		expect(mail.text).toContain('Need a site');
+		expect(mail.textContent).toContain('Business: Ana’s Tacos');
+		expect(mail.textContent).toContain('Budget: $1,000–2,500');
+		expect(mail.textContent).toContain('Need a site');
 	});
 
 	it('rejects missing required fields with per-field messages and calls nothing', async () => {
@@ -90,10 +90,10 @@ describe('POST /api/quote', () => {
 	it('keeps hostile input as plain text and the subject on one line', async () => {
 		const res = await worker.fetch(post({ ...good, business: 'Evil\r\nBcc: x@y.z', message: '<script>alert(1)</script>\n"quoted"' }), env);
 		expect(res.status).toBe(200);
-		const mail = JSON.parse(String(resendCall()!.init.body));
+		const mail = JSON.parse(String(sendCall()!.init.body));
 		expect(mail.subject).not.toMatch(/[\r\n]/);
-		expect(mail.text).toContain('<script>alert(1)</script>\n"quoted"');
-		expect(mail.html).toBeUndefined();
+		expect(mail.textContent).toContain('<script>alert(1)</script>\n"quoted"');
+		expect(mail.htmlContent).toBeUndefined();
 	});
 
 	it('a filled honeypot gets a quiet success and sends nothing', async () => {
@@ -107,15 +107,15 @@ describe('POST /api/quote', () => {
 		const res = await worker.fetch(post(good), env);
 		expect(res.status).toBe(403);
 		expect((await res.json()).error).toBe('turnstile');
-		expect(resendCall()).toBeUndefined();
+		expect(sendCall()).toBeUndefined();
 		const none = await worker.fetch(post({ ...good, 'cf-turnstile-response': '' }), env);
 		expect(none.status).toBe(403);
 	});
 
-	it('a Resend rejection or network error is a 502', async () => {
-		resend = 'fail';
+	it('an email-service rejection or network error is a 502', async () => {
+		mailer = 'fail';
 		expect((await worker.fetch(post(good), env)).status).toBe(502);
-		resend = 'down';
+		mailer = 'down';
 		const res = await worker.fetch(post(good), env);
 		expect(res.status).toBe(502);
 		expect((await res.json()).error).toBe('send');
