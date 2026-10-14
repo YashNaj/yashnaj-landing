@@ -4,8 +4,8 @@ export type Need = 'website' | 'landing' | 'store' | 'automation' | 'ai' | 'app'
 export type Package = { id: Need; name: string; price: string; note?: string; blurb: string; includes: string[] };
 
 export const CAL_URL = 'https://cal.com/yashal-najeeb-9noavq/15min';
-// Cloudflare's always-pass test key until the real widget exists (swapped at launch).
-export const TURNSTILE_SITE_KEY = '1x00000000000000000000AA';
+// Turnstile widget "yashnaj.dev quotes" (public site key; the secret is the TURNSTILE_SECRET Worker secret).
+export const TURNSTILE_SITE_KEY = '0x4AAAAAAFWKQuvi85qnlLts';
 
 export const packages: Package[] = [
 	{
