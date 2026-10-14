@@ -51,7 +51,13 @@ body {
 body::before {
 	content: '';
 	position: fixed;
-	inset: 0;
+	/* sized to the large viewport, not inset: 0, so the layer reaches under iOS Safari's floating toolbar
+	   instead of ending above it in a hard band */
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 100vh;
+	height: 100lvh;
 	z-index: 60;
 	pointer-events: none;
 	opacity: 0.045;
@@ -60,7 +66,13 @@ body::before {
 body::after {
 	content: '';
 	position: fixed;
-	inset: 0;
+	/* sized to the large viewport, not inset: 0, so the layer reaches under iOS Safari's floating toolbar
+	   instead of ending above it in a hard band */
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 100vh;
+	height: 100lvh;
 	z-index: -1;
 	pointer-events: none;
 	background: radial-gradient(130% 95% at 50% 0%, transparent 55%, rgb(3 10 22 / 0.55) 100%);
