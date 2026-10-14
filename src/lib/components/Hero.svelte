@@ -54,5 +54,6 @@
 				</a>
 			{/each}
 		</nav>
+		<p data-enter style="--e: 5" class="mt-5 font-mono text-sm"><a class="link-sweep" href="/services">Services for local businesses →</a></p>
 	</div>
 </section>

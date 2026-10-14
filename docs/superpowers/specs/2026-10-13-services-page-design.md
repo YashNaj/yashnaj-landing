@@ -122,7 +122,7 @@ A separate `/services` page that sells Yashal's services to local Inland Empire 
      - a plain-text body listing every field.
   5. **Respond.**
      - **Fetch** (`Accept: application/json`): `{ ok: true }`, or `{ ok: false, error, fields? }` with status 400, 403 or 502.
-     - **No-JS form post:** a 303 redirect to `/services?sent=1#quote`, or `/services?error=<code>#quote`. The page shows the matching message from the query string.
+     - **No-JS form post:** a 303 redirect to the static pages `/services/sent` or `/services/error` (noindex). A pre-rendered page can't read a query string without JS.
   6. **Other methods or paths under `/api/`:** 405 or 404.
 - **Secrets:** `RESEND_API_KEY` and `TURNSTILE_SECRET`, set by the user with `wrangler secret put`. The Turnstile site key is public and lives in `services.ts`.
 
@@ -157,7 +157,7 @@ A separate `/services` page that sells Yashal's services to local Inland Empire 
   - the CTAs point at `#quote` and the Cal.com URL;
   - the form's success, validation-error and send-failure states (`/api/quote` intercepted with `page.route`);
   - the no-JS form markup posts to `/api/quote`;
-  - `?sent=1` and `?error=` render their messages;
+  - `/services/sent` and `/services/error` render their messages (noindex);
   - no layout shift;
   - home links to `/services`.
 - **Budgets:** `/services` JS under 4,096 B (extend `budget.test.ts`); confidentiality test passes.

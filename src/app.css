@@ -462,6 +462,20 @@ html.js .copy-btn { display: block; }
 @keyframes slide-depth { 0% { transform: perspective(900px) rotateY(10deg) scale(0.9); } 50% { transform: none; } 100% { transform: perspective(900px) rotateY(-10deg) scale(0.9); } }
 @keyframes slide-dim { 0%, 100% { filter: brightness(0.5) saturate(0.7); } 50% { filter: none; } }
 
+/* ---------- Services ---------- */
+.quote .field { display: grid; gap: 0.4rem; font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.12em; text-transform: uppercase; color: rgb(242 234 216 / 0.8); }
+.quote :is(input:not([type='checkbox']), select, textarea) { width: 100%; border: 1px solid var(--color-line-dim); background: var(--color-ink); padding: 0.65rem 0.75rem; font-family: var(--font-sans); font-size: 1rem; letter-spacing: normal; text-transform: none; color: var(--color-paper); }
+.quote :is(input, select, textarea):focus-visible { outline: 2px solid var(--color-signal); outline-offset: 1px; }
+.quote .chip { display: inline-flex; align-items: center; gap: 0.45rem; border: 1px solid var(--color-line-dim); padding: 0.45rem 0.7rem; cursor: pointer; text-transform: none; letter-spacing: normal; font-size: 0.875rem; color: var(--color-paper); }
+.quote .chip:has(input:checked) { border-color: var(--color-signal); color: var(--color-signal); }
+.quote .chip input { accent-color: var(--color-signal); }
+.quote .field-error { min-height: 1em; color: var(--color-signal); text-transform: none; letter-spacing: normal; }
+.quote .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+/* reserve the widget's height so it can't shift the page when it appears */
+.quote .turnstile { min-height: 65px; }
+.quote .status[data-kind='ok'] { color: var(--color-signal); }
+.faq summary::marker { color: var(--color-signal); }
+
 /* ---------- Hero layout: mobile reads heading → portrait → pitch → actions; desktop keeps the portrait on the right ---------- */
 .hero { position: relative; isolation: isolate; grid-template-areas: 'head' 'photo' 'body'; }
 .hero-head { grid-area: head; }
