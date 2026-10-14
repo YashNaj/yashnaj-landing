@@ -3,6 +3,7 @@
 	import Seo from '$lib/components/Seo.svelte';
 	import { profile } from '$lib/data/site';
 	import { BUDGETS, CAL_URL, NEEDS, TURNSTILE_SITE_KEY, also, faq, packages, steps, why } from '$lib/data/services';
+	import quoteUrl from '$lib/client/quote.js?url';
 </script>
 
 <Seo
@@ -10,6 +11,8 @@
 	description="Fixed-price websites, online stores and tool automations for small businesses in Corona, Riverside, Temecula and the Inland Empire — about half the agency price, live in about a week."
 	path="/services"
 />
+
+<svelte:head><script src={quoteUrl} defer></script></svelte:head>
 
 <main class="mx-auto max-w-6xl px-4 md:px-8">
 	<a href="/" class="mt-10 inline-block font-mono text-xs tracking-[0.3em] text-paper/80 uppercase hover:text-signal">← yashnaj.dev</a>

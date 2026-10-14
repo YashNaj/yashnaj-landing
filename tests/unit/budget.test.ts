@@ -63,3 +63,14 @@ describe('3D model runtime budget', () => {
 		expect(readFileSync('build/work/chauffeur.html', 'utf8')).not.toMatch(/models[.-][\w-]+\.js/);
 	});
 });
+
+describe('services page JS budget', () => {
+	it('/services ships under 4 KB gzipped first-party JS', () => {
+		const html = readFileSync('build/services.html', 'utf8');
+		const urls = [...html.matchAll(/src="([^"]+\.js)"/g)].map((m) => m[1]);
+		expect(urls.some((u) => /quote[.-][\w-]+\.js$/.test(u))).toBe(true);
+		let total = gzipSync(html.match(/<script>[\s\S]*?<\/script>/g)?.join('') ?? '').length;
+		for (const u of urls) total += gzipSync(readFileSync(join('build', u.replace(/^\.?\//, '')))).length;
+		expect(total).toBeLessThan(4 * 1024);
+	});
+});

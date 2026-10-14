@@ -13,7 +13,7 @@ export default defineConfig({
 			apply: 'build',
 			async generateBundle(_, bundle) {
 				for (const f of Object.values(bundle)) {
-					if (f.type === 'asset' && /\/(enhance|carousel|models)\.[\w-]+\.js$/.test(f.fileName)) {
+					if (f.type === 'asset' && /\/(enhance|carousel|models|quote)\.[\w-]+\.js$/.test(f.fileName)) {
 						f.source = (await transformWithEsbuild(String(f.source), f.fileName, { minify: true })).code;
 					}
 				}
